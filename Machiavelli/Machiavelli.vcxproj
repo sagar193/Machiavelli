@@ -151,18 +151,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bouwmeester.h" />
+    <ClInclude Include="BuildingCard.h" />
+    <ClInclude Include="CharacterCard.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
+    <ClInclude Include="Condottiere.h" />
+    <ClInclude Include="Dief.h" />
+    <ClInclude Include="Koning.h" />
+    <ClInclude Include="Koopman.h" />
+    <ClInclude Include="Magier.h" />
+    <ClInclude Include="Moordenaar.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Prediker.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Sync_queue.h" />
     <ClInclude Include="throw.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Machiavelli.cpp" />
+    <ClCompile Include="Bouwmeester.cpp" />
+    <ClCompile Include="BuildingCard.cpp" />
+    <ClCompile Include="Condottiere.cpp" />
+    <ClCompile Include="Dief.cpp" />
+    <ClCompile Include="Koning.cpp" />
+    <ClCompile Include="Koopman.cpp" />
+    <ClCompile Include="Magier.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Moordenaar.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -170,6 +187,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Prediker.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="throw.cpp" />
   </ItemGroup>

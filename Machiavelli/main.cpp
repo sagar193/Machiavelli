@@ -41,14 +41,14 @@ void consume_command() // runs in its own thread
                 auto &player = clientInfo->get_player();
                 try {
                     // TODO handle command here
-                    client << player.get_name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
+                    client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
                 } catch (const exception& ex) {
-                    cerr << "*** exception in consumer thread for player " << player.get_name() << ": " << ex.what() << '\n';
+                    cerr << "*** exception in consumer thread for player " << player.name() << ": " << ex.what() << '\n';
                     if (client.is_open()) {
                         client.write("Sorry, something went wrong during handling of your request.\r\n");
                     }
                 } catch (...) {
-                    cerr << "*** exception in consumer thread for player " << player.get_name() << '\n';
+                    cerr << "*** exception in consumer thread for player " << player.name() << '\n';
                     if (client.is_open()) {
                         client.write("Sorry, something went wrong during handling of your request.\r\n");
                     }
@@ -64,14 +64,14 @@ std::shared_ptr<ClientInfo> init_client_session(Socket client) {
     client.write("Welcome to Server 1.0! To quit, type 'quit'.\r\n");
     client.write("What's your name?\r\n");
     client.write(machiavelli::prompt);
-    string name;
+    string name_;
     bool done { false };
     while(!done) {
-        done = client.readline([&name](std::string input) {
-            name = input;
+        done = client.readline([&name_](std::string input) {
+            name_ = input;
         });
     }
-    return make_shared<ClientInfo>(move(client), Player { name });
+    return make_shared<ClientInfo>(move(client), Player { name_ });
 }
 
 void handle_client(Socket client) // this function runs in a separate thread
@@ -80,14 +80,14 @@ void handle_client(Socket client) // this function runs in a separate thread
         auto client_info = init_client_session(move(client));
         auto &socket = client_info->get_socket();
         auto &player = client_info->get_player();
-        socket << "Welcome, " << player.get_name() << ", have fun playing our game!\r\n" << machiavelli::prompt;
+        socket << "Welcome, " << player.name() << ", have fun playing our game!\r\n" << machiavelli::prompt;
 
         while (running) { // game loop
             try {
                 // read first line of request
                 std::string cmd;
                 if (socket.readline([&cmd](std::string input) { cmd=input; })) {
-                    cerr << '[' << socket.get_dotted_ip() << " (" << socket.get_socket() << ") " << player.get_name() << "] " << cmd << "\r\n";
+                    cerr << '[' << socket.get_dotted_ip() << " (" << socket.get_socket() << ") " << player.name() << "] " << cmd << "\r\n";
 
                     if (cmd == "quit") {
                         socket.write("Bye!\r\n");

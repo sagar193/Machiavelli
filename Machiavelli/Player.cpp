@@ -9,3 +9,13 @@
 #include "pch.h"
 #include "Player.h"
 using namespace std;
+
+std::string const Player::name() const
+{
+	return name_;
+}
+
+void Player::name(const std::string& new_name)
+{
+	name_ = new_name;
+}
