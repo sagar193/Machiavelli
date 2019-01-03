@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\CharacterCard">
+      <UniqueIdentifier>{80b819a3-3f98-4d3a-ae54-7932a0964274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CharacterCard">
+      <UniqueIdentifier>{61f5642c-9075-4b16-99dd-86fb2e5a2e11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -39,12 +45,39 @@
     <ClInclude Include="throw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterCard.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Prediker.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Moordenaar.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Magier.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopman.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Koning.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Dief.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Condottiere.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="Bouwmeester.h">
+      <Filter>Header Files\CharacterCard</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Machiavelli.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -58,6 +91,33 @@
     </ClCompile>
     <ClCompile Include="throw.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingCard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bouwmeester.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Condottiere.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Dief.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Koning.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopman.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Magier.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Moordenaar.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Prediker.cpp">
+      <Filter>Source Files\CharacterCard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,13 +14,15 @@
 class Player {
 public:
     Player() {}
-    Player(const std::string& name) : name {name} {}
+    Player(const std::string& name_) : name_ {name_} {}
 
-    std::string get_name() const { return name; }
-    void set_name(const std::string& new_name) { name = new_name; }
+    std::string const name() const;
+	void name(const std::string& new_name);
+	int const age() const;
 
 private:
-    std::string name;
+    std::string name_;
+	int age_;
 };
 
 #endif /* Player_hpp */
