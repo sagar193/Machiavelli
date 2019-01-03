@@ -3,6 +3,10 @@
 
 class Dief : public CharacterCard
 {
+private:
+	std::string name_;
+	int rank_;
+
 public:
 	Dief();
 	Dief(const Dief& other) = delete;
@@ -10,5 +14,11 @@ public:
 	Dief(Dief&& other) = delete;
 	Dief& operator=(Dief&& other) = delete;
 	~Dief();
+
+	void act() override;
+	void rank(int const rank) override;
+	int const rank() const override;
+	void name(std::string const name) override;
+	std::string const name() const override;
 };
 

@@ -1,8 +1,12 @@
 #pragma once
+#include <string>
+
 class BuildingCard
 {
-	int color;
-
+private:
+	int color_;
+	std::string name_;
+	int gold_;
 
 public:
 	BuildingCard();
@@ -11,6 +15,14 @@ public:
 	BuildingCard(BuildingCard&& other) = delete;
 	BuildingCard& operator=(BuildingCard&& other) = delete;
 	~BuildingCard();
+
+	void color(int const color);
+	int const color() const;
+	void name(std::string const name);
+	std::string const name() const;
+	void gold(int const gold);
+	int const gold() const;
+
 
 	enum color
 	{
