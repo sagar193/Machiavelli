@@ -158,6 +158,7 @@
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="Condottiere.h" />
+    <ClInclude Include="Deck.h" />
     <ClInclude Include="Dief.h" />
     <ClInclude Include="Koning.h" />
     <ClInclude Include="Koopman.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Bouwmeester.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
     <ClCompile Include="Condottiere.cpp" />
+    <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Dief.cpp" />
     <ClCompile Include="Koning.cpp" />
     <ClCompile Include="Koopman.cpp" />

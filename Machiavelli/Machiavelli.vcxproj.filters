@@ -75,6 +75,9 @@
     <ClInclude Include="BuildingCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="Prediker.cpp">
       <Filter>Source Files\CharacterCard</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

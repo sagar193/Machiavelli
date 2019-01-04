@@ -21,6 +21,8 @@ using namespace std;
 #include "ClientCommand.h"
 #include "Player.h"
 #include "ClientInfo.h"
+///////////////////////////////////////////////////////////////////
+#include "deck.h"
 
 namespace machiavelli {
     const int tcp_port {1080};
@@ -130,6 +132,8 @@ void handle_client(Socket client) // this function runs in a separate thread
 
 int main(int argc, const char * argv[])
 {
+	Deck d;
+	d.load_cards();
     // start command consumer thread
     vector<thread> all_threads;
     all_threads.emplace_back(consume_command);
