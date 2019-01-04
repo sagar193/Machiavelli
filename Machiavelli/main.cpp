@@ -93,6 +93,8 @@ void handle_client(Socket client) // this function runs in a separate thread
         auto client_info = init_client_session(move(client));
         auto &socket = client_info->get_socket();
         auto &player = client_info->get_player();
+		player.socket(socket);
+		game.setPlayer(player);
         socket << "\n\rWelcome, " << player.name() << " of age "<< player.age() << ", have fun playing our game!\r\n" << machiavelli::prompt;
 
         while (running) { // game loop
