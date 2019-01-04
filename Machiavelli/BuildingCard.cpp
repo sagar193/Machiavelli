@@ -31,12 +31,12 @@ std::string const BuildingCard::name() const
 	return name_;
 }
 
-void BuildingCard::gold(int const gold)
+void BuildingCard::cost(int const cost)
 {
-	gold_ = gold;
+	cost_ = cost;
 }
 
-int const BuildingCard::gold() const
+int const BuildingCard::cost() const
 {
-	return gold_;
+	return cost_;
 }

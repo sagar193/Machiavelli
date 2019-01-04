@@ -6,7 +6,7 @@ class BuildingCard
 private:
 	int color_;
 	std::string name_;
-	int gold_;
+	int cost_;
 
 public:
 	BuildingCard();
@@ -20,8 +20,8 @@ public:
 	int const color() const;
 	void name(std::string const name);
 	std::string const name() const;
-	void gold(int const gold);
-	int const gold() const;
+	void cost(int const cost);
+	int const cost() const;
 
 
 	enum color
