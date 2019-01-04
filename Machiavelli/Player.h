@@ -14,7 +14,7 @@
 class Player {
 public:
     Player() {}
-    Player(const std::string& name_) : name_ {name_} {}
+	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age } {}
 
     std::string const name() const;
 	void name(const std::string& new_name);

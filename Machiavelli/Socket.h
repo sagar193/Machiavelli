@@ -101,6 +101,39 @@ public:
         }
         return false;
     }
+
+	template<typename Callback>
+	bool readint(Callback callback) const {
+		char c;
+		while (ssize_t n = ::recv(sock, &c, 1, 0)) {
+			if (n == 0) {
+				return false;
+			}
+			else if (n < 0) {
+				throw_unless_would_block();
+				break;
+			}
+
+			if (c == '\n') {
+				std::stringstream s{ "" };
+				for (int i{ 0 }; i < buffer.size(); ++i)
+					s << buffer[i];
+				buffer.clear();
+				int i = atoi(s.str().c_str());
+				if (i > 0) {
+					callback(i);
+					return true;
+				}
+				else
+					return false;
+
+			}
+			if (c != '\r') {
+				buffer.push_back(c);
+			}
+		}
+		return false;
+	}
 };
 
 //=============================================================================

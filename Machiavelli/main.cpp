@@ -65,13 +65,24 @@ std::shared_ptr<ClientInfo> init_client_session(Socket client) {
     client.write("What's your name?\r\n");
     client.write(machiavelli::prompt);
     string name_;
+	int age_;
     bool done { false };
     while(!done) {
         done = client.readline([&name_](std::string input) {
             name_ = input;
         });
     }
-    return make_shared<ClientInfo>(move(client), Player { name_ });
+
+	done = false;
+	client.write("What's your age?\r\n");
+	client.write(machiavelli::prompt);
+	while (!done) {
+		done = client.readint([&age_](int input)
+		{
+			age_ = input;
+		});
+	}
+    return make_shared<ClientInfo>(move(client), Player { name_, age_ });
 }
 
 void handle_client(Socket client) // this function runs in a separate thread
@@ -80,7 +91,7 @@ void handle_client(Socket client) // this function runs in a separate thread
         auto client_info = init_client_session(move(client));
         auto &socket = client_info->get_socket();
         auto &player = client_info->get_player();
-        socket << "Welcome, " << player.name() << ", have fun playing our game!\r\n" << machiavelli::prompt;
+        socket << "\n\rWelcome, " << player.name() << " of age "<< player.age() << ", have fun playing our game!\r\n" << machiavelli::prompt;
 
         while (running) { // game loop
             try {

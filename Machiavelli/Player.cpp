@@ -19,3 +19,8 @@ void Player::name(const std::string& new_name)
 {
 	name_ = new_name;
 }
+
+int const Player::age() const
+{
+	return age_;
+}
