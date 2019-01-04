@@ -3,6 +3,10 @@
 
 class Moordenaar : public CharacterCard
 {
+private:
+	std::string name_;
+	int rank_;
+
 public:
 	Moordenaar();
 	Moordenaar(const Moordenaar& other) = delete;
@@ -10,5 +14,11 @@ public:
 	Moordenaar(Moordenaar&& other) = delete;
 	Moordenaar& operator=(Moordenaar&& other) = delete;
 	~Moordenaar();
+
+	void act() override;
+	void rank(int const rank) override;
+	int const rank() const override;
+	void name(std::string const name) override;
+	std::string const name() const override;
 };
 
