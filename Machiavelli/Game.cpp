@@ -12,159 +12,24 @@
 
 #include <algorithm>
 #include <numeric>
+#include "State.h"
+#include "DealCardState.h"
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include "BuildingCard.h"
+#include "PlayerTurnState.h"
 
 void Game::startGame()
 {
-	if (!running_ && player1_ != nullptr && player2_ != nullptr)
+	if (!running_ && players_->get_count_players()==2)
 	{
 		running_ = true;
-		player1_->socket() << "\r\nWelcome to Machiavelli the most convoluted game that \"nobunny\" likes to play.\r\nYou are Player1\r\n";
-		player2_->socket() << "\r\nWelcome to Machiavelli the most convoluted game that \"nobunny\" likes to play.\r\nYou are Player2\r\n";
-		if(player1_->age()>=player2_->age())
-		{
-			player1_->socket() << "Based on your age you are king. Enjoy it.\r\nIt is you turn\r\n";
-			player1_->makeKing();
-			current_player_ = 1;
-			//current_state_ = PICKINGCHARACTERCARDS;
-			player2_->socket() << "Based on your age Player1 is king. You loser.\r\nIt is Player1's turn\r\n";
-		}else
-		{
-			player1_->socket() << "Based on your age Player2 is king. You loser.\r\nIt is Player2's turn\r\n";
-			player2_->socket() << "Based on your age you are king. Enjoy it.\r\nIt is your turn\r\n";
-			player2_->makeKing();
-			current_player_ = 2;
-			//current_state_ = PICKINGCHARACTERCARDS;
-		}
-		//enterDealState();
-		//playGame();
-		current_state_ = DEALINGCARDS;
-		current_activity_ = PICKINGCHARACTERCARDS;
-		getCurrentPlayer().socket() << "Kies een kaart die je wilt omdraaien door zijn nummer te enteren\r\n";
-		printChooseAbleCharacters(getCurrentPlayer());
-		
-		//printEnterPickCardState(getCurrentPlayer());
+		set_current_state(DEALINGCARDS);
 	}
 }
 
-/*
-void Game::playGame()
-{
-	dealCards();
-}
-*/
-/*
-void Game::dealCards()
-{
-	while (getUnownedCharacterCards() >= 0) {
-		for (int i = 0;i < 2;i++) {
-			bool pickedCard = false;
-			bool placedCard = false;
-			while (!pickedCard)
-			{
-
-				player_index_[current_player_]->socket() << "Kies een characterkaart door zijn nummer in te voeren\r\n\r\n";
-				auto map = mapDeckCards();
-				for (const auto el : map)
-				{
-					player_index_[current_player_]->socket() << '[' << el.first << ']' << " : " << character_cards_[el.second]->name() << "\r\n";
-				}
-
-				std::string cmd;
-				auto done = false;
-				while (!done) {
-					done = player_index_[current_player_]->socket().readline([&cmd](std::string input) {cmd = input;});
-
-				}
-
-				try
-				{
-					const auto index = std::stoi(cmd);
-					if (index >= 0 && index < map.size() - 1)
-					{
-						if (current_player_ == 1) {
-							character_cards_[index]->owner(PLAYER1);
-						}
-						else
-						{
-							character_cards_[index]->owner(PLAYER2);
-						}
-						pickedCard = true;
-					}
-					else
-					{
-						player_index_[current_player_]->socket() << "Kies een kaart uit de lijst!";
-					}
-				}
-				catch (...)
-				{
-					player_index_[current_player_]->socket() << "Kies een kaart uit de lijst!";
-				}
-			}
-
-			while (!placedCard)
-			{
-				//todo::lock
-				player_index_[current_player_]->socket() << "Plaats een van de kaarten in de afgelegde stapel door zij nummer in te voeren\r\n\r\n";
-				auto map = mapDeckCards();
-				for (auto el : map)
-				{
-					auto& kk = character_cards_[el.second];
-					player_index_[current_player_]->socket() << '[' << el.first << ']' << " : " << character_cards_[el.second]->name() << "\r\n";
-				}
-
-				std::string cmd;
-				auto done = false;
-				while (!done) {
-					done = player_index_[current_player_]->socket().readline([&cmd](std::string input) {cmd = input;});
-
-				}
-
-				try
-				{
-					const auto index = std::stoi(cmd);
-					if (index >= 0 && index < map.size() - 1)
-					{
-						character_cards_[index]->owner(GRAVE);
-						placedCard = true;
-					}
-					else
-					{
-						player_index_[current_player_]->socket() << "Kies een kaart uit de lijst!";
-					}
-				}
-				catch (...)
-				{
-					player_index_[current_player_]->socket() << "Kies een kaart uit de lijst!";
-				}
-			}
-			switchPlayer();
-		}
-	}
-}
-*/
-/*
-void Game::dealCards(Player & const player, std::map<int, int> deckMap, std::string cmd)
-{
-	try
-	{
-		auto index = std::stoi(cmd);
-		if(index>=0 && index < deckMap.size())
-		{
-			character_cards_[index]->owner(playerOwnerMap[&player]);
-			switchPlayer();
-		}
-		else
-		{
-			player.socket() << "kies een kaart uit de lijst";
-		}
-	}
-	catch(...)
-	{
-		player.socket() << "kies een kaart uit de lijst";
-	}
-	
-}
-*/
 
 void Game::handleCommand(Player & const player, std::string cmd)
 {
@@ -173,14 +38,15 @@ void Game::handleCommand(Player & const player, std::string cmd)
 	}
 	else {
 		bool received_input{ false };
-		if (&getCurrentPlayer() != &player)
+		if (!players_->is_current_player(player))
 		{
 			player.socket() << "Wait your turn.\r\n";
 		}
 		else
 		{
-			if (current_state_ == DEALINGCARDS) {
-				if (current_activity_ == PICKINGCHARACTERCARDS)
+			//if (current_state_ == DEALINGCARDS) {
+				states_[current_state_]->act(cmd, *this);
+				/*if (current_activity_ == PICKINGCHARACTERCARDS)
 				{
 					const auto map = mapDeckCards();
 					if (pickCharacterCard(player, map, cmd)) {
@@ -206,49 +72,24 @@ void Game::handleCommand(Player & const player, std::string cmd)
 							current_state_ = PLAYERTURN;
 							setCurrentPlayer();
 							printPlayerTurnStateOptions(getCurrentPlayer());
-							//todo print options
 						}
 					}
 					else
 					{
 						printChooseAbleCharacters(getCurrentPlayer());
 					}
-				}
-			} 
-			else if(current_state_ == PLAYERTURN)
-			{
+				}*/
+			//} 
+			//else if(current_state_ == PLAYERTURN)
+			//{
 				
-			}
+			//}
 		}
 	}
 }
 
 
-
-/*int Game::getUnownedCharacterCards() const
-{
-	return std::accumulate(character_cards_.begin(), character_cards_.end(), 0, [](int current_sum,const std::unique_ptr<CharacterCard>& card)
-	{
-		if (card->owner() == Game::cardOwners::DECK)
-		{
-			return current_sum + 1;
-		}
-		return current_sum;
-	});
-	//return 0;
-}*/
-/*void Game::printUnownedCharacterCards() const
-{
-	//std::for_each(character_cards_.begin(), character_cards_.end(),
-	//	[](const std::unique_ptr<CharacterCard>& card)
-	//{
-	//	
-	//});
-}*/
-
-
-
-int Game::getAmountCharacterCardsOwned(cardOwners owner) const
+int Game::getAmountCharacterCardsOwned(CardOwners owner) const
 {
 	return std::accumulate(character_cards_.begin(),character_cards_.end(),
 		0,[&owner](int total,const std::unique_ptr<CharacterCard>& card)
@@ -270,7 +111,7 @@ int Game::getAmountCharacterCardsOwnedByCurrentPlayer() const
 	return getAmountCharacterCardsOwned(PLAYER2);
 }
 
-std::map<int, int> Game::mapDeckCards() const
+std::map<int, int> Game::mapDeckCards(CardOwners owner) const
 {
 	std::map<int, int> map;
 	const auto l = [&map](int i, int j) {map[i] = j;};
@@ -279,7 +120,7 @@ std::map<int, int> Game::mapDeckCards() const
 	int current_count_list = 0;
 	std::for_each(character_cards_.begin(), character_cards_.end(),[&](const std::unique_ptr<CharacterCard>& card)
 	{
-		if(card->owner() == DECK)
+		if(card->owner() == owner)
 		{
 			map[current_count_map] = current_count_list;
 			current_count_map++;
@@ -288,115 +129,8 @@ std::map<int, int> Game::mapDeckCards() const
 	});
 	return map;
 }
-///<summary>
-///DEALINGCARDS
-///</summary>
-bool Game::pickCharacterCard(Player & player, std::map<int, int> deckMap, std::string cmd)
-{
-	try
-	{
-		const auto index = std::stoi(cmd);
-		if (index >= 0 && index < deckMap.size())
-		{
-			character_cards_[deckMap[index]]->owner(playerOwnerMap[&player]);
-			return true;
-		}
-		player.socket() << "kies een kaart uit de lijst\r\n";
-		return false;
-		
-	}
-	catch (...)
-	{
-		player.socket() << "kies een kaart uit de lijst\r\n";
-		return false;
-	}
 
-}
-bool Game::turnCharacterCard(Player & player, std::map<int, int> deckMap, std::string cmd)
-{
-	try
-	{
-		const auto index = std::stoi(cmd);
-		if (index >= 0 && index < deckMap.size())
-		{
-			character_cards_[deckMap[index]]->owner(GRAVE);
-			return true;
-		}
-		player.socket() << "kies een kaart uit de lijst\n";
-		return false;
-	}
-	catch (...)
-	{
-		player.socket() << "kies een kaart uit de lijst\n";
-		return false;
-	}
 
-}
-
-bool Game::handlePayerTurnStateCMD(Player & player, std::map<int, int> deckMap, std::string cmd)
-{
-	try
-	{
-		const auto index = std::stoi(cmd);
-		switch (index)
-		{
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			setCurrentPlayer();
-			break;
-		default:
-			player.socket() << "kies een optie uit de lijst\r\n";
-			break;
-		}
-		return false;
-
-	}
-	catch (...)
-	{
-		player.socket() << "kies een optie uit de lijst\r\n";
-		return false;
-	}
-}
-
-///<summary>
-///get players
-///</summary>
-Player & Game::getCurrentPlayer() const
-{
-	if (current_player_ == 1)
-	{
-		return *player1_;
-	}
-	return *player2_;
-}
-Player & Game::getOtherPlayer() const
-{
-	if(current_player_ == 1)
-	{
-		return *player2_;
-	}
-	return *player1_;
-}
-
-/*bool Game::isCurrentPlayer(const Player & player)
-{
-	bool isCurrent = false;
-	try
-	{
-		isCurrent = player_index_[current_player_] == &player;
-		return isCurrent;
-	} catch(...)
-	{
-		return false;
-	}
-}*/
-
-///<summary>
-///print
-///</summary>
 void Game::printDeckMap(Player & player, std::map<int, int> map) const
 {
 	for (const auto el : map)
@@ -406,112 +140,50 @@ void Game::printDeckMap(Player & player, std::map<int, int> map) const
 }
 void Game::printChooseAbleCharacters(Player & player) const
 {
-	printDeckMap(player, mapDeckCards());
-}
-void Game::printEnterPickCardState(Player & player) const
-{
-	player.socket() << "Kies een characterkaart door zijn nummer te enteren\r\n";
-	printChooseAbleCharacters(player);
-}
-void Game::printEnterTurnCardState(Player & player) const
-{
-	player.socket() << "Kies een kaart die je wilt omdraaien door zijn nummer te enteren\r\n";
-	printChooseAbleCharacters(player);
-}
-
-void Game::printPlayerTurnStateOptions(Player & player) const
-{
-	player.socket() << "Kies een van de volgende opties door het nummer te enteren\r\n\r\n";
-	player.socket() << "[1] : Gebruik characterkaart\r\n";
-	player.socket() << "[2] : Plaats een gebouwkaart\r\n";
-	player.socket() << "[3] : Eind beurt\r\n";
+	printDeckMap(player, mapDeckCards(DECK));
 }
 
 void Game::shuffleCharacterCards()
 {
 	std::for_each(character_cards_.begin(), character_cards_.end(),
-		[](std::unique_ptr<CharacterCard>& card) {card->owner(DECK);});
+		[](std::unique_ptr<CharacterCard>& card) {card->reset();});
 }
 
-///<summary>
-///enter
-///</summary>
-void Game::enterDealState()
+void Game::ownCharacterCard(int cardIndex, CardOwners owner)
 {
-	if(player_index_[current_player_] == player1_)
-	{
-		player1_->socket() << "please choose on of the following cards\r\n";
-		printChooseAbleCharacters(*player1_);
-	} 
-	else
-	{
-		player2_->socket() << "please choose on of the following cards\r\n";
-		printChooseAbleCharacters(*player2_);
-	}
+	character_cards_[cardIndex]->owner(owner);
 }
 
-///<summary>
-///set current player
-///</summary>
-void Game::setCurrentPlayer()
+void Game::set_current_state(state newState)
 {
-	if(current_state_ == DEALINGCARDS)
+	current_state_ = newState;
+	states_[current_state_]->enter(*this);
+}
+int Game::get_first_unused_owned_character_card() const
+{
+	int count = 0;
+	const auto currentCharacter = std::find_if(character_cards_.begin(), character_cards_.end(),
+		[&count](const std::unique_ptr<CharacterCard>& card)
 	{
-		if(player1_->king())
+		if (((card->owner() == PLAYER1) || (card->owner() == PLAYER2))&& !card->used())
 		{
-			current_player_ = 1;
+			return true;
 		}
-		else
-		{
-			current_player_ = 2;
-		}
-	} 
-	else if(current_state_ == PLAYERTURN)
-	{
-		int count = 0;
-		const auto currentCharacter = std::find_if(character_cards_.begin(), character_cards_.end(), 
-			[&count](const std::unique_ptr<CharacterCard>& card)
-		{
-			if((card->owner() == PLAYER1) || (card->owner() == PLAYER2))
-			{
-				return true;
-			}
-			count++;
-			return false;
-		});
-		
-		if(currentCharacter == character_cards_.end())
-		{
-			currentCharacterIndex = 0;
-			current_state_ = DEALINGCARDS;
-			setCurrentPlayer();
-		}
-		else {
-			currentCharacterIndex = count;
-			if ((*currentCharacter)->owner() == PLAYER1)
-			{
-				current_player_ = 1;
-			}
-			else
-			{
-				current_player_ = 2;
-			}
-		}
-	}
+		count++;
+		return false;
+	});
 
+	if (currentCharacter == character_cards_.end())
+	{
+		return -1;
+	}
+	return count;
 }
-void Game::switchPlayer()
+std::unique_ptr<CharacterCard>& Game::get_card_at(int index)
 {
-	if(current_player_ == 1)
-	{
-		current_player_ = 2;
-	}
-	else
-	{
-		current_player_ = 1;
-	}
-	playerSwitched++;
+	return character_cards_.at(index);
 }
+
 
 ///<summary>
 ///inits
@@ -527,7 +199,6 @@ Game::Game()
 
 	running_ = false;
 	current_state_ = WAITINGPLAYERS;
-	current_activity_ = PICKINGCHARACTERCARDS;
 	currentCharacterIndex = 0;
 	initGame();
 }
@@ -548,9 +219,59 @@ void Game::initGame()
 	playerOwnerMap[player2_] = PLAYER2;
 	ownerPlayerMap[PLAYER2] = player2_;
 
+	states_[DEALINGCARDS] = std::make_unique<DealCardState>();
+	states_[PLAYERTURN] = std::make_unique<PlayerTurnState>();
+
+}
+void Game::load_building_cards()
+{
+	std::ifstream is("..\\Files\\Bouwkaarten.csv", std::ifstream::binary);
+	if (is) {
+
+		std::vector<std::unique_ptr<BuildingCard>> buffer;
+		std::string line;
+		//try {
+		while (std::getline(is, line)) {
+			std::istringstream ss(line);
+
+			std::string name;
+			std::string costString;
+			std::string colorString;
+			std::getline(ss, name, ';');
+			std::getline(ss, costString, ';');
+			std::getline(ss, colorString, ';');
+
+			auto color = BuildingCard::color(colorString);
+			if (color != BuildingCard::NONE) {
+				//todo try cost
+				buffer.push_back(std::make_unique<BuildingCard>(name, std::stoi(costString), color));
+			}
+			else
+			{
+				std::cout << "color :" << colorString << " does not exist \n";
+			}
+			//else
+			//{
+			//	throw std::exception("color does not exist");
+			//}
+		}
+		this->building_cards_ = std::move(buffer);
+		//} 
+		//catch (std::exception &e)
+		//{
+		//	int k = 0;
+		//}
+	}
+	else
+	{
+		std::cout << "file could not be loaded" << std::endl;
+	}
+	is.close();
 }
 void Game::setPlayer(Player& const player)
 {
+	players_->set_player(player);
+	/*
 	if (player1_ == nullptr) {
 		player1_ = &player;
 
@@ -566,7 +287,7 @@ void Game::setPlayer(Player& const player)
 	else {
 		player.socket() << "fuck off, game is full!!!!!!!!!!";
 		throw std::exception("Game already full");
-	}
+	}*/
 }
 Game::~Game()
 {

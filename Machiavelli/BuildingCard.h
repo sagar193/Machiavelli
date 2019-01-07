@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <ostream>
+#include "Game.h"
 
 class BuildingCard
 {
@@ -13,7 +14,7 @@ public:
 		ROOD,
 		NONE
 	};
-	BuildingCard() = default;
+	BuildingCard();
 	BuildingCard(std::string name,int cost,colorTypes color);
 	//BuildingCard(const BuildingCard& other) = delete;
 	//BuildingCard& operator =(const BuildingCard& other) = delete;
@@ -30,9 +31,13 @@ public:
 	std::string const name() const;
 	void cost(int const cost);
 	int const cost() const;
-	static colorTypes getCollor(std::string color);
+	static colorTypes color(std::string color);
+	CardOwners owner() const { return owner_; }
+	void owner(CardOwners owner) { owner_ = owner; }
+	void reset() { owner_ = DECK; }
 private:
 	colorTypes color_;
 	std::string name_;
 	int cost_;
+	CardOwners owner_;
 };

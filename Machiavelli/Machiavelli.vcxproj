@@ -153,7 +153,11 @@
   <ItemGroup>
     <ClInclude Include="Bouwmeester.h" />
     <ClInclude Include="BuildingCard.h" />
+    <ClInclude Include="BuildingDeck.h" />
+    <ClInclude Include="CardOwners.h" />
     <ClInclude Include="CharacterCard.h" />
+    <ClInclude Include="CharacterDeck.h" />
+    <ClInclude Include="PlayerTurnState.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
@@ -178,6 +182,10 @@
   <ItemGroup>
     <ClCompile Include="Bouwmeester.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
+    <ClCompile Include="BuildingDeck.cpp" />
+    <ClCompile Include="CardOwners.cpp" />
+    <ClCompile Include="CharacterDeck.cpp" />
+    <ClCompile Include="PlayerTurnState.cpp" />
     <ClCompile Include="Condottiere.cpp" />
     <ClCompile Include="DealCardState.cpp" />
     <ClCompile Include="Deck.cpp" />

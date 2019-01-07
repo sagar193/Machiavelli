@@ -1,11 +1,20 @@
 #include "pch.h"
 #include "BuildingCard.h"
 
+BuildingCard::BuildingCard()
+{
+
+	color_ = NONE;
+	cost_ = 0;
+	owner_ = DECK;
+}
+
 BuildingCard::BuildingCard(std::string name, int cost, colorTypes color)
 {
 	name_ = name;
 	cost_ = cost;
 	color_ = color;
+	owner_ = DECK;
 }
 
 BuildingCard::~BuildingCard()
@@ -48,7 +57,7 @@ int const BuildingCard::cost() const
 	return cost_;
 }
 
-BuildingCard::colorTypes BuildingCard::getCollor(std::string color)
+BuildingCard::colorTypes BuildingCard::color(std::string color)
 {
 	if (color._Equal("geel"))
 	{

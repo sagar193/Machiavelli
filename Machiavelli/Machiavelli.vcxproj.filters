@@ -90,6 +90,18 @@
     <ClInclude Include="Players.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterDeck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingDeck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTurnState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CardOwners.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -147,6 +159,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DealCardState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterDeck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingDeck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTurnState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CardOwners.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,60 +4,15 @@
 
 #include <map>
 #include "Players.h"
-//#include "CharacterCard.h"
+#include "CardOwners.h"
+//#include "BuildingCard.h"
 
+class BuildingCard;
 class CharacterCard;
+class State;
 class Game
 {
 public:
-	enum cardOwners
-	{
-		PLAYER1,
-		PLAYER2,
-		DECK,
-		GRAVE
-	};
-
-	void startGame();
-	//void playGame();
-	//void dealCards();
-	//void dealCards(Player& const player, std::map<int,int> deckMap,std::string cmd);
-
-	void handleCommand(Player& const player,std::string cmd);
-
-	Game();
-	void setPlayer(Player& const player);
-	~Game();
-
-	//int getUnownedCharacterCards() const;
-	//void printUnownedCharacterCards() const;
-	void printDeckMap(Player& player, std::map<int, int> map) const;
-
-	int getAmountCharacterCardsOwned(cardOwners owner) const;
-	int getAmountCharacterCardsOwnedByCurrentPlayer() const;
-
-	std::map<int, int> mapDeckCards() const;
-
-	bool pickCharacterCard(Player& player, std::map<int, int> deckMap, std::string cmd);
-	bool turnCharacterCard(Player& player, std::map<int, int> deckMap, std::string cmd);
-
-	bool handlePayerTurnStateCMD(Player& player, std::map<int, int> deckMap, std::string cmd);
-
-	Player& getCurrentPlayer() const;
-	Player& getOtherPlayer() const;
-
-	//bool isCurrentPlayer(const Player & player);
-
-	void printChooseAbleCharacters(Player & player) const;
-	void enterDealState();
-
-	void printEnterPickCardState(Player & player) const;
-	void printEnterTurnCardState(Player & player) const;
-	void printPlayerTurnStateOptions(Player & player) const;
-	void shuffleCharacterCards();
-	void setCurrentPlayer();
-	Players& players() const { return *players_; }
-private:
 	enum state
 	{
 		WAITINGPLAYERS,
@@ -65,16 +20,37 @@ private:
 		PLAYERTURN,
 	};
 
-	enum activity
-	{
-		PICKINGCHARACTERCARDS,
-		TURNINGCHARACTERCARDS,
-		USECHARACTERCARD,
-		BUILD,
-	};
+	void startGame();
 
-	void switchPlayer();
+	void handleCommand(Player& const player,std::string cmd);
 
+	Game();
+	void setPlayer(Player& const player);
+	~Game();
+
+	void printDeckMap(Player& player, std::map<int, int> map) const;
+
+	int getAmountCharacterCardsOwned(CardOwners owner) const;
+	int getAmountCharacterCardsOwnedByCurrentPlayer() const;
+
+	std::map<int, int> mapCharacterCards(CardOwners owner) const;
+
+
+
+	void printChooseAbleCharacters(Player & player) const;
+
+
+	void shuffleCharacterCards();
+	Players& players() const { return *players_; }
+	//std::vector<std::unique_ptr<BuildingCard>>& building_cards() { return building_cards_; }
+
+	void ownCharacterCard(int cardIndex,CardOwners owner);
+
+	void set_current_state(state newState);
+	int get_first_unused_owned_character_card() const;
+	std::unique_ptr<CharacterCard>& get_card_at(int index);
+	
+private:
 	void initGame();
 	std::unique_ptr<Players> players_;
 	Player* player1_;
@@ -84,17 +60,18 @@ private:
 	int currentCharacterIndex;
 
 	std::vector<std::unique_ptr<CharacterCard>> character_cards_;
+	std::vector< std::unique_ptr<BuildingCard>> building_cards_;
 	std::map<std::unique_ptr<CharacterCard>, Player*> character_distribution_;
-	std::map<cardOwners, Player*> ownerPlayerMap;
-	std::map<Player*, cardOwners> playerOwnerMap;
-
+	std::map<CardOwners, Player*> ownerPlayerMap;
+	std::map<Player*, CardOwners> playerOwnerMap;
+	std::map<state,std::unique_ptr<State>> states_;
 
 	bool running_;
 	state current_state_;
-	activity current_activity_;
 	int current_player_;
 
 
 	std::map<int, Player*> player_index_;
+	void load_building_cards();
 };
 

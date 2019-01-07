@@ -7,27 +7,24 @@ class CharacterCard
 public:
 	CharacterCard()
 	{
-	//	rank_ = 0;
-	//	gold_ = 0;
-		owner_ = Game::cardOwners::DECK;
+		owner_ = DECK;
+		used_ = false;
 	}
+	virtual ~CharacterCard() = default;
 	virtual void act() = 0;
-	//void rank(int const rank) { rank_ = rank; }
-	//int const rank() const { return rank_; }
+	std::string name() const { return name_; }
+	CardOwners owner() const { return owner_; }
+	void owner(CardOwners new_owner) { owner_ = new_owner; }
+	bool used() const { return used_; }
+	void reset()
+	{
+		used_ = false;
+		owner_ = DECK;
+	}
 	
-	std::string const name() const { return name_; }
-	//void gold(int const gold) { gold_ = gold; }
-	//int const gold() const { return gold_; }
-	Game::cardOwners owner() { return owner_; }
-	void owner(Game::cardOwners newOwner) { owner_ = newOwner; }
-	//void owner(Game::cardOwners newOwner) { owner_ = newOwner };
-	//virtual ~CharacterCard() = 0;
 protected:
-	//void name(std::string name) { name_ = name; }
-
-	//int rank_;
 	std::string name_;
-	//int gold_;
-	Game::cardOwners owner_;
+	CardOwners owner_;
+	bool used_;
 };
 

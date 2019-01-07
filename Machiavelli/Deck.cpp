@@ -30,7 +30,7 @@ void Deck::load_cards()
 			std::getline(ss, costString, ';');
 			std::getline(ss, colorString, ';');
 
-			auto color = BuildingCard::getCollor(colorString);
+			auto color = BuildingCard::color(colorString);
 			if (color != BuildingCard::NONE) {
 				BuildingCard card(name, std::stoi(costString), color);
 				//std::cout << card;
