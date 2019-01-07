@@ -10,7 +10,8 @@ public:
 	Deck();
 	~Deck();
 	void load_cards();
-private:
 	std::vector<BuildingCard> building_cards_;
+//private:
+//	std::vector<BuildingCard> building_cards_;
 };
 

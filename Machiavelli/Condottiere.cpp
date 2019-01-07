@@ -2,8 +2,9 @@
 #include "Condottiere.h"
 
 
-Condottiere::Condottiere()
+Condottiere::Condottiere() : CharacterCard()
 {
+	this->name_ = "Condottiere";
 }
 
 
@@ -13,4 +14,5 @@ Condottiere::~Condottiere()
 
 void Condottiere::act()
 {
+	std::cout << "ehollo";
 }

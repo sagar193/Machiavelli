@@ -18,9 +18,21 @@ std::string const Player::name() const
 void Player::name(const std::string& new_name)
 {
 	name_ = new_name;
+	gold_ = 0;
+	king_ = false;
 }
 
 int const Player::age() const
 {
 	return age_;
+}
+
+void Player::makeKing()
+{
+	king_ = true;
+}
+
+void Player::unKing()
+{
+	king_ = false;
 }

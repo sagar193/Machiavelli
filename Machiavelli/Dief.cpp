@@ -2,8 +2,9 @@
 #include "Dief.h"
 
 
-Dief::Dief()
+Dief::Dief() : CharacterCard()
 {
+	this->name_ = "Dief";
 }
 
 

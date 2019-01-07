@@ -2,8 +2,9 @@
 #include "Magier.h"
 
 
-Magier::Magier()
+Magier::Magier() : CharacterCard()
 {
+	this->name_ = "Magier";
 }
 
 

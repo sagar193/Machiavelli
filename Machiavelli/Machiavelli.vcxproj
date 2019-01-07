@@ -158,6 +158,7 @@
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="Condottiere.h" />
+    <ClInclude Include="DealState.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Dief.h" />
     <ClInclude Include="Game.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Prediker.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Sync_queue.h" />
     <ClInclude Include="throw.h" />
   </ItemGroup>
@@ -176,6 +178,7 @@
     <ClCompile Include="Bouwmeester.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
     <ClCompile Include="Condottiere.cpp" />
+    <ClCompile Include="DealState.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Dief.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -193,6 +196,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Prediker.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="throw.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -40,12 +40,15 @@ void consume_command() // runs in its own thread
     try {
         while (running) {
             ClientCommand command {queue.get()}; // will block here unless there are still command objects in the queue
-            if (auto clientInfo = command.get_client_info().lock()) {
+        	if (auto clientInfo = command.get_client_info().lock()) {
                 auto &client = clientInfo->get_socket();
                 auto &player = clientInfo->get_player();
                 try {
                     // TODO handle command here
-                    client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
+					//game.handleCommand(player);
+					game.handleCommand(player, command.get_cmd());
+					// k = command.get_cmd();
+                    //client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
                 } catch (const exception& ex) {
                     cerr << "*** exception in consumer thread for player " << player.name() << ": " << ex.what() << '\n';
                     if (client.is_open()) {
@@ -99,6 +102,8 @@ void handle_client(Socket client) // this function runs in a separate thread
 		game.setPlayer(player);
         socket << "\n\rWelcome, " << player.name() << " of age "<< player.age() << ", have fun playing our game!\r\n" << machiavelli::prompt;
 
+		game.startGame();
+
         while (running) { // game loop
             try {
                 // read first line of request
@@ -115,7 +120,9 @@ void handle_client(Socket client) // this function runs in a separate thread
                     }
 
                     ClientCommand command {cmd, client_info};
-                    queue.put(command);
+					//if (game.isCurrentPlayer(player)) {
+						queue.put(command);
+					//}
                 };
 
             } catch (const exception& ex) {

@@ -2,8 +2,9 @@
 #include "Koning.h"
 
 
-Koning::Koning()
+Koning::Koning() : CharacterCard()
 {
+	this->name_ = "Koning";
 }
 
 

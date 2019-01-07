@@ -2,8 +2,9 @@
 #include "Prediker.h"
 
 
-Prediker::Prediker()
+Prediker::Prediker() : CharacterCard()
 {
+	this->name_ = "Prediker";
 }
 
 
