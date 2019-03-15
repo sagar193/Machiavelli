@@ -39,6 +39,16 @@ Players::player Players::get_current_player_code() const
 	return current_player_;
 }
 
+
+CardOwners Players::get_player_owner_code(player player) const
+{
+	if(player == PLAYER1)
+	{
+		return CardOwners::PLAYER1;
+	}
+	return CardOwners::PLAYER2;
+}
+
 Player & Players::get_other_player_value() const
 {
 	if(current_player_ == PLAYER1)

@@ -18,12 +18,11 @@ BuildingCard::BuildingCard(std::string name, int cost, colorTypes color)
 }
 
 BuildingCard::~BuildingCard()
-{
-}
+= default;
 
 std::ostream & BuildingCard::operator<<(std::ostream & os) const
 {
-	os << name_ << " " << cost_ << " ";
+	os << "name: " << name_ << "cost: " << cost_ << "color: " << color_;
 	return os;
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 #include <map>
+#include "CardOwners.h"
 
 class Players
 {
@@ -21,6 +22,7 @@ public:
 	Player& get_player2() const;
 	Player& get_current_player_value() const;
 	player get_current_player_code() const;
+	CardOwners get_player_owner_code(player player) const;
 	Player& get_other_player_value() const;
 	player get_other_player_code() const;
 	

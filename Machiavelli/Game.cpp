@@ -18,8 +18,47 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <random>
 #include "BuildingCard.h"
 #include "PlayerTurnState.h"
+#include <time.h>
+
+std::ostream & operator<<(std::ostream & os, BuildingCard& card)
+{
+	os << "name: " << card.name() << "  color: " << card.color() << "  cost: " << card.cost();
+	return os;
+}
+
+/*
+std::istream & operator>>(std::istream & os, BuildingCard& card)
+{
+	/*
+	std::string name;
+	std::string colorstring;
+	BuildingCard::colorTypes color;
+	int cost;
+
+	if(os >> name >> colorstring >> cost)
+	{
+		if (colorstring._Equal("geel"))
+		{
+			color = BuildingCard::colorTypes::GEEL;
+		}
+		else if (colorstring._Equal("blauw"))
+		{
+			color = BuildingCard::colorTypes::BLAUW;
+		}
+		else if (colorstring._Equal("groen"))
+		{
+			color = BuildingCard::colorTypes::GROEN;
+		}
+		else if (colorstring._Equal("rood"))
+		{
+			color = BuildingCard::colorTypes::ROOD;
+		}
+	}
+	return os;
+}*/
 
 void Game::startGame()
 {
@@ -111,7 +150,7 @@ int Game::getAmountCharacterCardsOwnedByCurrentPlayer() const
 	return getAmountCharacterCardsOwned(PLAYER2);
 }
 
-std::map<int, int> Game::mapDeckCards(CardOwners owner) const
+std::map<int, int> Game::mapCharacterCards(CardOwners owner) const
 {
 	std::map<int, int> map;
 	const auto l = [&map](int i, int j) {map[i] = j;};
@@ -130,17 +169,50 @@ std::map<int, int> Game::mapDeckCards(CardOwners owner) const
 	return map;
 }
 
+std::map<int, int> Game::mapBuildingCards(CardOwners owner) const
+{
+	std::map<int, int> map;
 
-void Game::printDeckMap(Player & player, std::map<int, int> map) const
+	int current_count_map = 0;
+	int current_count_list = 0;
+	std::for_each(building_cards_.begin(), building_cards_.end(), [&](const std::unique_ptr<BuildingCard>& card)
+	{
+		if (card->owner() == owner)
+		{
+			map[current_count_map] = current_count_list;
+			current_count_map++;
+		}
+		current_count_list++;
+	});
+	return map;
+}
+
+
+void Game::printCharacterMap(Player & player, std::map<int, int> map) const
 {
 	for (const auto el : map)
 	{
 		player.socket() << '[' << el.first << ']' << " : " << character_cards_[el.second]->name() << "\r\n";
 	}
 }
+void Game::printBuildingMap(Player & player, std::map<int, int> map)
+{
+	for (const auto el : map)
+	{
+		std::stringstream ss;
+		ss << *get_buildingcard_at(el.second);
+		player.socket() << '[' << el.first << ']' << " : " << ss.str() << "\r\n";
+	}
+}
+
 void Game::printChooseAbleCharacters(Player & player) const
 {
-	printDeckMap(player, mapDeckCards(DECK));
+	printCharacterMap(player, mapCharacterCards(DECK));
+}
+
+void Game::printChooseAbleBuildings(Player & player)
+{
+	printBuildingMap(player, mapBuildingCards(DECK));
 }
 
 void Game::shuffleCharacterCards()
@@ -149,9 +221,33 @@ void Game::shuffleCharacterCards()
 		[](std::unique_ptr<CharacterCard>& card) {card->reset();});
 }
 
+void Game::shuffleBuildingCards()
+{
+	//const auto half = std::floor(building_cards_.size() / 2);
+	//const auto half = 0;
+
+	std::default_random_engine generator;
+	generator.seed(time(0));
+	std::uniform_int_distribution<int> distribution(0, building_cards_.size()-1);
+	
+	for(auto i = 0;i<building_card_map_.size();i++)
+	{
+		const auto f = distribution(generator);
+		const auto s = distribution(generator);
+		const auto buffer = building_card_map_[s];
+		building_card_map_[s] = building_card_map_[f];
+		building_card_map_[f] = buffer;
+	}
+}
+
 void Game::ownCharacterCard(int cardIndex, CardOwners owner)
 {
 	character_cards_[cardIndex]->owner(owner);
+}
+
+void Game::ownBuildingCard(int cardIndex, CardOwners owner)
+{
+	building_cards_[cardIndex]->owner(owner);
 }
 
 void Game::set_current_state(state newState)
@@ -184,6 +280,11 @@ std::unique_ptr<CharacterCard>& Game::get_card_at(int index)
 	return character_cards_.at(index);
 }
 
+
+std::unique_ptr<BuildingCard>& Game::get_buildingcard_at(int index)
+{
+	return building_cards_.at(building_card_map_[index]);
+}
 
 ///<summary>
 ///inits
@@ -221,6 +322,13 @@ void Game::initGame()
 
 	states_[DEALINGCARDS] = std::make_unique<DealCardState>();
 	states_[PLAYERTURN] = std::make_unique<PlayerTurnState>();
+	load_building_cards();
+
+	for(int i = 0;i<building_cards_.size();i++)
+	{
+		building_card_map_[i] = i;
+	}
+
 
 }
 void Game::load_building_cards()

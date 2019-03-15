@@ -15,18 +15,21 @@
 class Player {
 public:
 	Player() = delete;
-	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age }, king_{ false } {}
+	Player(const std::string name, const int age) : name_{ name }, age_{ age }, king_{ false }, gold_{ 0 }, socket_{nullptr} {}
 
     std::string const name() const;
 	void name(const std::string& new_name);
-	int const age() const;
-	void socket(Socket& const socket) { socket_ = &socket; }
-	Socket& const socket() { return *socket_; }
+	int age() const;
+	void socket(Socket& socket) { socket_ = &socket; }
+	Socket& socket() { return *socket_; }
 	
 	////////////////////////////////////////////////
+	void ad_gold(const int gold) { gold_ += gold; }
+	int gold() const { return gold_; }
 	void makeKing();
 	void unKing();
 	bool king() const { return king_; }
+	void print_line() const { *socket_ << "==============================\r\n"; }
 private:
     std::string name_;
 	int age_;

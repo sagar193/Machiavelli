@@ -89,6 +89,7 @@ void DealCardState::set_current_player(Game & game) const
 			game.players().set_current_player(Players::PLAYER2);
 		}
 		game.players().get_current_player_value().socket() << "Omdat jij de oudste bent, ben jij nu koning\r\n";
+		game.players().get_current_player_value().makeKing();
 		game.players().get_other_player_value().socket() << "Omdat jij de jongste bent, ben jij als tweede aan de beurt\r\n";
 	}
 }
@@ -96,7 +97,7 @@ void DealCardState::set_current_player(Game & game) const
 void DealCardState::print_dialogue(Game & game) const
 {
 	const auto map = game.mapCharacterCards(DECK);
-	game.printDeckMap(game.players().get_current_player_value(), map);
+	game.printCharacterMap(game.players().get_current_player_value(), map);
 }
 
 bool DealCardState::pick_card(Game & game)

@@ -13,6 +13,8 @@ private:
 	{
 		choosing,
 		drawing,
+		picking_cards,
+		turning_cards,
 		using_character_card,
 		building,
 		looking
@@ -29,14 +31,17 @@ private:
 	void act_choosing(std::string cmd, Game& game);
 	void print_act_drawing(Game& game);
 	void act_drawing(std::string cmd, Game& game);
-	
+	void print_act_picking_cards(Game& game);
+	void act_picking_cards(std::string cmd, Game& game);
+
 	void act_using_character_card(std::string cmd, Game& game);
 	void print_act_building(Game& game);
 	void act_building(std::string cmd, Game& game);
 	void act_looking(std::string cmd, Game& game);
 
 	void set_current_player(Game& game);
-	void print_start_dialogue(Game& game) const;
+	void print_start_dialogue(Game& game);
+	void print_stats(Game& game);
 };
 
 

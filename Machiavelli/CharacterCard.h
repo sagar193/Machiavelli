@@ -16,6 +16,7 @@ public:
 	CardOwners owner() const { return owner_; }
 	void owner(CardOwners new_owner) { owner_ = new_owner; }
 	bool used() const { return used_; }
+	void use() { used_ = true; }
 	void reset()
 	{
 		used_ = false;

@@ -22,7 +22,7 @@ void Player::name(const std::string& new_name)
 	king_ = false;
 }
 
-int const Player::age() const
+int Player::age() const
 {
 	return age_;
 }
@@ -36,3 +36,5 @@ void Player::unKing()
 {
 	king_ = false;
 }
+
+
