@@ -11,8 +11,8 @@ public:
 	Bouwmeester();
 	Bouwmeester(const Bouwmeester& other) = delete;
 	Bouwmeester& operator =(const Bouwmeester& other) = delete;
-	Bouwmeester(Bouwmeester&& other) = delete;
-	Bouwmeester& operator=(Bouwmeester&& other) = delete;
+	//Bouwmeester(Bouwmeester&& other) = delete;
+	//Bouwmeester& operator=(Bouwmeester&& other) = delete;
 	~Bouwmeester();
 
 	void act() override;

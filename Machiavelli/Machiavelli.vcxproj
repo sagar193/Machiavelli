@@ -158,25 +158,32 @@
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="Condottiere.h" />
+    <ClInclude Include="DealCardState.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Dief.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Koning.h" />
     <ClInclude Include="Koopman.h" />
     <ClInclude Include="Magier.h" />
     <ClInclude Include="Moordenaar.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Prediker.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Sync_queue.h" />
     <ClInclude Include="throw.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bouwmeester.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
+    <ClCompile Include="CharacterCard.cpp" />
     <ClCompile Include="Condottiere.cpp" />
+    <ClCompile Include="DealCardState.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Dief.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Koning.cpp" />
     <ClCompile Include="Koopman.cpp" />
     <ClCompile Include="Magier.cpp" />
@@ -189,8 +196,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Prediker.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="throw.cpp" />
   </ItemGroup>
   <ItemGroup>

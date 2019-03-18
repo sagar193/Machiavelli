@@ -23,6 +23,8 @@ using namespace std;
 #include "ClientInfo.h"
 ///////////////////////////////////////////////////////////////////
 #include "deck.h"
+#include "Bouwmeester.h"
+#include "Game.h"
 
 namespace machiavelli {
     const int tcp_port {1080};
@@ -30,7 +32,8 @@ namespace machiavelli {
 }
 
 static bool running = true;
-
+//todo: static??
+static Game game;
 static Sync_queue<ClientCommand> queue;
 
 void consume_command() // runs in its own thread
@@ -43,6 +46,8 @@ void consume_command() // runs in its own thread
                 auto &player = clientInfo->get_player();
                 try {
                     // TODO handle command here
+					game.handleCommand(player, command.get_cmd());
+
                     client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
                 } catch (const exception& ex) {
                     cerr << "*** exception in consumer thread for player " << player.name() << ": " << ex.what() << '\n';
@@ -93,6 +98,11 @@ void handle_client(Socket client) // this function runs in a separate thread
         auto client_info = init_client_session(move(client));
         auto &socket = client_info->get_socket();
         auto &player = client_info->get_player();
+
+		//todo: socket reference?
+		player.socket(socket);
+		game.setPlayer(player);
+
         socket << "\n\rWelcome, " << player.name() << " of age "<< player.age() << ", have fun playing our game!\r\n" << machiavelli::prompt;
 
         while (running) { // game loop
@@ -132,8 +142,6 @@ void handle_client(Socket client) // this function runs in a separate thread
 
 int main(int argc, const char * argv[])
 {
-	Deck d;
-	d.load_cards();
     // start command consumer thread
     vector<thread> all_threads;
     all_threads.emplace_back(consume_command);

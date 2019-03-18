@@ -10,17 +10,33 @@
 #define Player_hpp
 
 #include <string>
+#include "Socket.h"
 
 class Player {
 public:
     Player() {}
-	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age } {}
+	//todo: in cpp
+	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age } 
+	{ 
+		isKing_ = false; 
+		gold_ = 0; 
+	}
 
     std::string const name() const;
 	void name(const std::string& new_name);
 	int const age() const;
-
+	void socket(Socket& const socket) { socket_ = &socket; }
+	Socket& const socket() { return *socket_; }
+	bool isKing() { return isKing_; }
+	void isKing(bool isKing) { this->isKing_ = isKing; }
+	int gold() { return gold_; }
+	void gold(int gold) { gold_ = gold; }
 private:
+	//todo: socket pointer reference?
+	//todo: vector?
+	bool isKing_;
+	int gold_;
+	Socket* socket_;
     std::string name_;
 	int age_;
 };
