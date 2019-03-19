@@ -18,13 +18,21 @@
 void Game::loadCharacterCards()
 {
 	characterCards_.push_back(std::make_unique<Moordenaar>());
-	//characterCards_.push_back(std::make_unique<Dief>());
-	//characterCards_.push_back(std::make_unique<Magier>());
-	//characterCards_.push_back(std::make_unique<Koning>());
-	//characterCards_.push_back(std::make_unique<Prediker>());
-	//characterCards_.push_back(std::make_unique<Koopman>());
-	//characterCards_.push_back(std::make_unique<Bouwmeester>());
-	//characterCards_.push_back(std::make_unique<Condottiere>());
+	characterCards_.push_back(std::make_unique<Dief>());
+	characterCards_.push_back(std::make_unique<Magier>());
+	characterCards_.push_back(std::make_unique<Koning>());
+	characterCards_.push_back(std::make_unique<Prediker>());
+	characterCards_.push_back(std::make_unique<Koopman>());
+	characterCards_.push_back(std::make_unique<Bouwmeester>());
+	characterCards_.push_back(std::make_unique<Condottiere>());
+}
+
+void Game::switchCurrentClientInfo()
+{
+	if (&(*client_info1) == currentClient_)
+		currentClient_ = &(*client_info2);
+	else
+		currentClient_ = &(*client_info1);
 }
 
 Game::Game()
@@ -46,10 +54,12 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 	if (client_info1 == nullptr) {
 		client_info1 = clientInfo;
 		client_info1->get_socket() << "jij bent speler1";
+		client_info1->get_player().ownertag(CharacterCard::Owner::Player1);
 	}
 	else if (client_info2 == nullptr) {
 		client_info2 = clientInfo;
 		client_info2->get_socket() << "jij bent speler2";
+		client_info2->get_player().ownertag(CharacterCard::Owner::Player2);
 	}
 	else {
 		//todo: je moet eerst iets schrijven is niet mooi nicht richtig
@@ -65,7 +75,11 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd)
 {
 	if (currentClient_ == &(*clientInfo)) {
-		currentState_->act(*clientInfo, cmd);
+		auto callback = currentState_->act(*clientInfo, cmd);
+		if (callback == true) {
+			switchCurrentClientInfo();
+		}
+
 	}
 	else {
 		clientInfo->get_socket() << "je bent niet aan de beurt";

@@ -2,8 +2,9 @@
 #include "Condottiere.h"
 
 
-Condottiere::Condottiere() : CharacterCard{}
+Condottiere::Condottiere()  : CharacterCard()
 {
+	this->name_ = "Condonttiere";
 }
 
 

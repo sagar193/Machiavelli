@@ -10,8 +10,9 @@ void PlayingState::onEnter()
 {
 }
 
-void PlayingState::act(ClientInfo& clientInfo,std::string cmd)
+bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 {
+	throw "not implemented";
 }
 
 void PlayingState::onLeave()

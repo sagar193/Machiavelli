@@ -3,5 +3,5 @@
 
 CharacterCard::CharacterCard()
 {
-	owner_ = None;
+	owner_ = Deck;
 }

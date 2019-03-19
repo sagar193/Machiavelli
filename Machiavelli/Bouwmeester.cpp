@@ -2,9 +2,9 @@
 #include "Bouwmeester.h"
 
 
-Bouwmeester::Bouwmeester() : CharacterCard{}
+Bouwmeester::Bouwmeester() : CharacterCard()
 {
-
+	this->name_ = "Bouwmeester";
 }
 
 

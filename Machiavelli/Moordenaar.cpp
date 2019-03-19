@@ -2,8 +2,9 @@
 #include "Moordenaar.h"
 
 
-Moordenaar::Moordenaar() : CharacterCard{}
+Moordenaar::Moordenaar() : CharacterCard()
 {
+	this->name_ = "Moordenaar";
 }
 
 

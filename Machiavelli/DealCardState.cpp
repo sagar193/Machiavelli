@@ -4,18 +4,30 @@
 #include "Bouwmeester.h"
 
 
-DealCardState::DealCardState(Game& game) : State(game)
+DealCardState::DealCardState(Game& game) : State(game),chooseCharacterState(game), removeCharacterState(game)
 {
+	currentState = &chooseCharacterState;
 }
 
 void DealCardState::onEnter()
 {
 }
 
-void DealCardState::act(ClientInfo& clientInfo,std::string cmd)
+bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 {
-	printCharacterCards(clientInfo);
-	return;
+	auto callback = currentState->act(clientInfo, cmd);
+	if (callback == true) {
+		if (currentState == &chooseCharacterState) {
+			currentState = &removeCharacterState;
+			return false;
+		}
+		else if (currentState == &removeCharacterState) {
+			currentState = &chooseCharacterState;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void DealCardState::onLeave()
@@ -24,15 +36,13 @@ void DealCardState::onLeave()
 
 void DealCardState::printCharacterCards(ClientInfo & clientInfo)
 {
-	std::map<int, int> map;
-	const auto l = [&map](int i, int j) {map[i] = j;};
 
-	int count = 0;
-	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard> card)
+	int count = 1;
+	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
 	{
 		if (card->owner() == CharacterCard::Owner::Deck)
 		{
-			clientInfo.get_socket() << count << ": " << card->name() <<'\n';
+			clientInfo.get_socket() << count << ": " << card->name() <<"\r\n";
 		}
 		count++;
 	});

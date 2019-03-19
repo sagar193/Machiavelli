@@ -10,6 +10,12 @@
 #include "Player.h"
 using namespace std;
 
+Player::Player() {
+	ownertag_ = CharacterCard::None;
+	isKing_ = false;
+	gold_ = 0;
+}
+
 std::string const Player::name() const
 {
 	return name_;

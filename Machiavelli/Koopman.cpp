@@ -2,8 +2,9 @@
 #include "Koopman.h"
 
 
-Koopman::Koopman() : CharacterCard{}
+Koopman::Koopman() : CharacterCard()
 {
+	this->name_ = "Koopman";
 }
 
 

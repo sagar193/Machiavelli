@@ -154,6 +154,7 @@
     <ClInclude Include="Bouwmeester.h" />
     <ClInclude Include="BuildingCard.h" />
     <ClInclude Include="CharacterCard.h" />
+    <ClInclude Include="ChooseCharacterState.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientCommand.h" />
     <ClInclude Include="ClientInfo.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Prediker.h" />
+    <ClInclude Include="RemoveCharacterState.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Sync_queue.h" />
@@ -179,6 +181,7 @@
     <ClCompile Include="Bouwmeester.cpp" />
     <ClCompile Include="BuildingCard.cpp" />
     <ClCompile Include="CharacterCard.cpp" />
+    <ClCompile Include="ChooseCharacterState.cpp" />
     <ClCompile Include="Condottiere.cpp" />
     <ClCompile Include="DealCardState.cpp" />
     <ClCompile Include="Deck.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Prediker.cpp" />
+    <ClCompile Include="RemoveCharacterState.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="throw.cpp" />

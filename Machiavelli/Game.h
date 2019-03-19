@@ -38,10 +38,11 @@ private:
 	State* currentState_;
 
 	void loadCharacterCards();
+	void switchCurrentClientInfo();
 
 public:
-	std::vector<std::unique_ptr<CharacterCard>> characterCards() { return characterCards_; }
-	std::vector<BuildingCard> buildingCards() { return buildingCards_; }
+	std::vector<std::unique_ptr<CharacterCard>>& characterCards() { return characterCards_; }
+	std::vector<BuildingCard>& buildingCards() { return buildingCards_; }
 
 
 
