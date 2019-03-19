@@ -9,10 +9,6 @@ private:
 
 public:
 	Dief();
-	Dief(const Dief& other) = delete;
-	Dief& operator =(const Dief& other) = delete;
-	Dief(Dief&& other) = delete;
-	Dief& operator=(Dief&& other) = delete;
 	~Dief();
 
 	void act() override;

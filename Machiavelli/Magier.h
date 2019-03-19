@@ -9,10 +9,6 @@ private:
 
 public:
 	Magier();
-	Magier(const Magier& other) = delete;
-	Magier& operator =(const Magier& other) = delete;
-	Magier(Magier&& other) = delete;
-	Magier& operator=(Magier&& other) = delete;
 	~Magier();
 
 	void act() override;

@@ -9,10 +9,6 @@ private:
 
 public:
 	Prediker();
-	Prediker(const Prediker& other) = delete;
-	Prediker& operator =(const Prediker& other) = delete;
-	Prediker(Prediker&& other) = delete;
-	Prediker& operator=(Prediker&& other) = delete;
 	~Prediker();
 
 	void act() override;

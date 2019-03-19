@@ -22,11 +22,16 @@ public:
 		gold_ = 0; 
 	}
 
+	//todo: rule of fif
+	//Player& operator=(Player & other) = delete;
+	//Player(const Player & other) = delete;
+
+
     std::string const name() const;
 	void name(const std::string& new_name);
 	int const age() const;
-	void socket(Socket& const socket) { socket_ = &socket; }
-	Socket& const socket() { return *socket_; }
+	//void socket(Socket& const socket) { socket_ = &socket; }
+	//Socket& const socket() { return *socket_; }
 	bool isKing() { return isKing_; }
 	void isKing(bool isKing) { this->isKing_ = isKing; }
 	int gold() { return gold_; }
@@ -36,7 +41,6 @@ private:
 	//todo: vector?
 	bool isKing_;
 	int gold_;
-	Socket* socket_;
     std::string name_;
 	int age_;
 };

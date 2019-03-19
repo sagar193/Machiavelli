@@ -9,10 +9,6 @@ private:
 
 public:
 	Koopman();
-	Koopman(const Koopman& other) = delete;
-	Koopman& operator =(const Koopman& other) = delete;
-	Koopman(Koopman&& other) = delete;
-	Koopman& operator=(Koopman&& other) = delete;
 	~Koopman();
 
 	void act() override;

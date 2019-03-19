@@ -2,7 +2,7 @@
 #include "PlayingState.h"
 
 
-PlayingState::PlayingState(Game& game)// : State(game)
+PlayingState::PlayingState(Game& game) : State(game)
 {
 }
 
@@ -10,7 +10,7 @@ void PlayingState::onEnter()
 {
 }
 
-void PlayingState::act(std::string cmd)
+void PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 {
 }
 

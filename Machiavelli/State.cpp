@@ -2,7 +2,7 @@
 #include "State.h"
 
 
-//State::State(Game& game) : game_(game) 
-//{
-//}
+State::State(Game& game) : game_(game) 
+{
+}
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "State.h"
 
-class PlayingState : State
+class PlayingState : public State
 {
 public:
 	PlayingState(Game& game);
 	void onEnter() override;
-	void act(std::string cmd) override;
+	void act(ClientInfo& clientInfo,std::string cmd) override;
 	void onLeave() override;
 	~PlayingState();
 };

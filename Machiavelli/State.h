@@ -3,11 +3,11 @@
 class State
 {
 public:
-	//State(Game& game);
+	State(Game& game);
 	virtual void onEnter() = 0;
-	virtual void act(std::string cmd) = 0;
+	virtual void act(ClientInfo& clientInfo, std::string cmd) = 0;
 	virtual void onLeave() = 0;
-private:
-	//Game& game_;
+protected:
+	Game& game_;
 };
 

@@ -9,10 +9,6 @@ private:
 
 public:
 	Koning();
-	Koning(const Koning& other) = delete;
-	Koning& operator =(const Koning& other) = delete;
-	Koning(Koning&& other) = delete;
-	Koning& operator=(Koning&& other) = delete;
 	~Koning();
 
 	void act() override;
