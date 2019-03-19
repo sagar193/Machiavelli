@@ -1,26 +1,40 @@
 #include "pch.h"
 #include "ChooseCharacterState.h"
 #include <algorithm>
-#include "ClientInfo.h"
 
 
 ChooseCharacterState::ChooseCharacterState(Game& game) : State(game)
 {
 }
 
-bool ChooseCharacterState::act(ClientInfo & clientInfo, std::string cmd)
+void ChooseCharacterState::onEnter()
 {
-	clientInfo.get_socket() << "kies een van de volgende kaarten" << "\r\n";
+	game_.currentClient().get_socket() << "kies een van de volgende kaarten" << "\r\n";
 
 	int count = 1;
 	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
 	{
 		if (card->owner() == CharacterCard::Owner::Deck)
 		{
-			clientInfo.get_socket() << count << ": " << card->name() << "\r\n";
+			game_.currentClient().get_socket() << count << ": " << card->name() << "\r\n";
 		}
 		count++;
 	});
+}
+
+bool ChooseCharacterState::act(ClientInfo & clientInfo, std::string cmd)
+{
+	//clientInfo.get_socket() << "kies een van de volgende kaarten" << "\r\n";
+	//
+	//int count = 1;
+	//std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
+	//{
+	//	if (card->owner() == CharacterCard::Owner::Deck)
+	//	{
+	//		clientInfo.get_socket() << count << ": " << card->name() << "\r\n";
+	//	}
+	//	count++;
+	//});
 
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd) - 1;

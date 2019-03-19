@@ -11,12 +11,33 @@ class ClientInfo;
 class State;
 class Game
 {
-private:
+public:
 	enum States
 	{
 		DealCards,
 		Playing,
 	};
+	std::vector<std::unique_ptr<CharacterCard>>& characterCards() { return characterCards_; }
+	std::vector<BuildingCard>& buildingCards() { return buildingCards_; }
+
+	State& currentState() { return *currentState_; }
+
+	void switchCurrentClientInfo();
+
+
+	Game();
+	void setPlayer(std::shared_ptr<ClientInfo> const clientInfo);
+	void handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
+
+	ClientInfo& currentClient() { return *currentClient_; }
+	void setState(States state);
+
+	//void setPlayer(Player& const player);
+	//void handleCommand(Player& const player, std::string cmd);
+	void startGame();
+	~Game();
+private:
+
 	enum Players
 	{
 		Player1,
@@ -24,10 +45,10 @@ private:
 	};
 
 	std::map<Players, std::unique_ptr<Player>> players_;
-	
+
 	std::shared_ptr<ClientInfo> client_info1;
 	std::shared_ptr<ClientInfo> client_info2;
-	
+
 	//Player* player1_;
 	//Player* player2_;
 	ClientInfo* currentClient_;
@@ -38,21 +59,6 @@ private:
 	State* currentState_;
 
 	void loadCharacterCards();
-	void switchCurrentClientInfo();
 
-public:
-	std::vector<std::unique_ptr<CharacterCard>>& characterCards() { return characterCards_; }
-	std::vector<BuildingCard>& buildingCards() { return buildingCards_; }
-
-
-
-
-	Game();
-	void setPlayer(std::shared_ptr<ClientInfo> const clientInfo);
-	void handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
-	//void setPlayer(Player& const player);
-	//void handleCommand(Player& const player, std::string cmd);
-	void startGame();
-	~Game();
 };
 

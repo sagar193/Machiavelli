@@ -1,16 +1,19 @@
 #include "pch.h"
 #include "DealCardState.h"
-#include "ClientInfo.h"
 #include "Bouwmeester.h"
-
+#include <algorithm>
 
 DealCardState::DealCardState(Game& game) : State(game),chooseCharacterState(game), removeCharacterState(game)
 {
 	currentState = &chooseCharacterState;
+	firstTurn = true;
 }
 
 void DealCardState::onEnter()
 {
+	//todo: remove random card
+	game_.characterCards()[0]->owner(CharacterCard::None);
+	currentState->onEnter();
 }
 
 bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
@@ -18,11 +21,39 @@ bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 	auto callback = currentState->act(clientInfo, cmd);
 	if (callback == true) {
 		if (currentState == &chooseCharacterState) {
+			if (firstTurn) 
+			{
+				firstTurn = false;
+				game_.switchCurrentClientInfo();
+				currentState->onEnter();
+				clientInfo.get_socket() << "de andere speler mag nu kiezen\r\n";
+				return true;
+			}
 			currentState = &removeCharacterState;
+			currentState->onEnter();
 			return false;
 		}
-		else if (currentState == &removeCharacterState) {
+		else if (currentState == &removeCharacterState && !firstTurn) {
 			currentState = &chooseCharacterState;
+			
+			int totalLeft = std::count_if(game_.characterCards().begin(), game_.characterCards().end(), [](std::unique_ptr<CharacterCard>& card)
+			{
+				if (card->owner() == CharacterCard::Deck) {
+					return true;
+				} 
+				return false;
+			});
+
+			if (totalLeft == 0) {
+				game_.setState(Game::States::Playing);
+				game_.currentState().onEnter();
+				firstTurn = true;
+			}
+			else {
+				clientInfo.get_socket() << "de andere speler mag nu kiezen\r\n";
+				game_.switchCurrentClientInfo();
+				currentState->onEnter();
+			}
 			return true;
 		}
 	}

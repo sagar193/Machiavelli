@@ -48,7 +48,7 @@ void consume_command() // runs in its own thread
                     // TODO handle command here
 					game.handleCommand(clientInfo, command.get_cmd());
 
-                    client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
+                    //client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
                 } catch (const exception& ex) {
                     cerr << "*** exception in consumer thread for player " << player.name() << ": " << ex.what() << '\n';
                     if (client.is_open()) {
@@ -101,9 +101,10 @@ void handle_client(Socket client) // this function runs in a separate thread
 
 		//todo: socket reference?
 		//player.socket(socket);
-		game.setPlayer(client_info);
 
         socket << "\n\rWelcome, " << player.name() << " of age "<< player.age() << ", have fun playing our game!\r\n" << machiavelli::prompt;
+		
+		game.setPlayer(client_info);
 
         while (running) { // game loop
             try {

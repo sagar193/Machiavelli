@@ -77,13 +77,25 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	if (currentClient_ == &(*clientInfo)) {
 		auto callback = currentState_->act(*clientInfo, cmd);
 		if (callback == true) {
-			switchCurrentClientInfo();
+			//if ()
+			//{
+			//	currentState_ = states_[States::Playing].get();
+			//}
+			//else {
+			//	switchCurrentClientInfo();
+			//	currentState_->onEnter();
+			//}
 		}
 
 	}
 	else {
 		clientInfo->get_socket() << "je bent niet aan de beurt";
 	}
+}
+
+void Game::setState(States state)
+{
+	currentState_ = states_[state].get();
 }
 
 
@@ -132,6 +144,7 @@ void Game::startGame()
 	}
 	
 	currentState_ = states_[States::DealCards].get();
+	currentState_->onEnter();
 
 	//if (player1_->age() >= player2_->age()) {
 	//	player1_->socket() << "jij bent koning!";

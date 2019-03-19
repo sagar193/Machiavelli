@@ -10,7 +10,7 @@ private:
 	State* currentState;
 	ChooseCharacterState chooseCharacterState;
 	RemoveCharacterState removeCharacterState;
-
+	bool firstTurn;
 public:
 	DealCardState(Game& game);
 	void onEnter() override;
