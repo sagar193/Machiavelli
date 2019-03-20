@@ -141,36 +141,12 @@ void Game::setState(States state)
 
 void Game::startGame()
 {
-	if (client_info1->get_player().age()>= client_info2->get_player().age()) {
-		client_info1->get_socket() << "jij bent koning!";
-		client_info2->get_socket() << "speler1 is koning";
-		client_info1->get_player().isKing(true);
-		currentClient_ = &(*client_info1);
-		
-	}
-	else {
-		client_info2->get_socket() << "jij bent koning!";
-		client_info1->get_socket() << "speler2 is koning";
-		client_info2->get_player().isKing(true);
-		currentClient_ = &(*client_info2);
-	}
+	
 	
 	currentState_ = states_[States::DealCards].get();
 	currentState_->onEnter();
 
-	//if (player1_->age() >= player2_->age()) {
-	//	player1_->socket() << "jij bent koning!";
-	//	player2_->socket() << "speler1 is koning";
-	//	player1_->isKing(true);
-	//	
-	//}
-	//else {
-	//	player2_->socket() << "jij bent koning!";
-	//	player1_->socket() << "speler2 is koning";
-	//	player2_->isKing(true);
-	//}
-	//
-	//currentState_ = nullptr;
+	
 }
 
 

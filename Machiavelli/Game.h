@@ -26,6 +26,9 @@ public:
 	std::vector<std::unique_ptr<CharacterCard>>& characterCards() { return characterCards_; }
 	std::vector<BuildingCard>& buildingCards() { return buildingCards_; }
 
+	ClientInfo& client1() { return *client_info1; }
+	ClientInfo& client2() { return *client_info2; }
+
 	State& currentState() { return *currentState_; }
 
 	void switchCurrentClientInfo();
