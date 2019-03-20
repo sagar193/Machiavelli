@@ -14,6 +14,36 @@ void DealCardState::onEnter()
 	//todo: remove random card
 	//todo: setstate
 	//todo: setking
+	
+	if (game_.client1().get_player().isKing()) 
+	{
+		game_.client1().get_socket() << "jij bent koning!";
+		game_.client2().get_socket() << "speler1 is koning";
+		game_.setCurrentClient(Game::Players::Player1);
+	}
+	else if (game_.client2().get_player().isKing()) 
+	{
+		game_.client2().get_socket() << "jij bent koning!";
+		game_.client1().get_socket() << "speler2 is koning";
+		game_.setCurrentClient(Game::Players::Player2);
+	}
+	else
+	{
+		if (game_.client1().get_player().age() >= game_.client2().get_player().age()) {
+			game_.client1().get_player().isKing(true);
+			game_.client1().get_socket() << "jij bent koning!";
+			game_.client2().get_socket() << "speler1 is koning";
+			game_.setCurrentClient(Game::Players::Player1);
+		}
+		else {
+			game_.client2().get_player().isKing(true);
+			game_.client2().get_socket() << "jij bent koning!";
+			game_.client1().get_socket() << "speler2 is koning";
+			game_.setCurrentClient(Game::Players::Player2);
+		}
+	}
+	
+	//todo: reset all charactercards
 	game_.characterCards()[0]->owner(CharacterCard::None);
 	currentState->onEnter();
 }

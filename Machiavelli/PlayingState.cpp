@@ -117,6 +117,7 @@ void PlayingState::onLeave()
 	if (currentCharacterIndex == -1) 
 	{
 		game_.setState(Game::DealCards);
+		game_.currentState().onEnter();
 	}
 }
 
@@ -155,7 +156,12 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
 		if (cmdi == -1) {
-			return true;
+			if (initState_) {
+				return true;
+			}
+			else {
+				game_.currentClient().get_socket() << "de beurt mag niet eindigen zonder dat optie 1 gekozen is\r\n";
+			}
 		}
 		else if (cmdi == 1 && !initState_) {
 			currentState_ = InitState;
