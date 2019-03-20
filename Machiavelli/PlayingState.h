@@ -5,6 +5,7 @@ class PlayingState : public State
 {
 public:
 	enum States {
+		InitState,
 		ChooseState,
 		PlaceBuildingCard,
 		UseCharacterCard
@@ -16,9 +17,12 @@ public:
 	~PlayingState();
 private:
 	States currentState_;
-	void chooseState(ClientInfo& clientInfo, std::string cmd);
-	void placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
-	void useCharacterCard(ClientInfo& clientInfo, std::string cmd);
+	bool initState(ClientInfo& clientInfo, std::string cmd);
+	bool chooseState(ClientInfo& clientInfo, std::string cmd);
+	bool placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
+	bool useCharacterCard(ClientInfo& clientInfo, std::string cmd);
+	bool placedBuildingCard_;
+	bool usedCharacterCard_;
 
 };
 

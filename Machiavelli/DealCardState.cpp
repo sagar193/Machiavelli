@@ -12,6 +12,7 @@ DealCardState::DealCardState(Game& game) : State(game),chooseCharacterState(game
 void DealCardState::onEnter()
 {
 	//todo: remove random card
+	//todo: setstate
 	game_.characterCards()[0]->owner(CharacterCard::None);
 	currentState->onEnter();
 }
