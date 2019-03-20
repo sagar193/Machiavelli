@@ -13,6 +13,13 @@ public:
 		ROOD,
 		NONE
 	};
+	enum Owner
+	{
+		Player1,
+		Player2,
+		Deck,
+		None
+	};
 	BuildingCard() = default;
 	BuildingCard(std::string name,int cost,colorTypes color);
 	//BuildingCard(const BuildingCard& other) = delete;
@@ -31,8 +38,11 @@ public:
 	void cost(int const cost);
 	int const cost() const;
 	static colorTypes getCollor(std::string color);
+	Owner owner() { return owner_; } const
+	void owner(Owner const owner) { owner_ = owner; }
 private:
 	colorTypes color_;
 	std::string name_;
 	int cost_;
+	Owner owner_;
 };

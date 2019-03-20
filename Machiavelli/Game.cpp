@@ -93,6 +93,11 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	}
 }
 
+void Game::sendToCurrentPlayer(const std::string message) const
+{
+	currentClient_->get_socket() << message << "/r/n";
+}
+
 void Game::setState(States state)
 {
 	currentState_ = states_[state].get();

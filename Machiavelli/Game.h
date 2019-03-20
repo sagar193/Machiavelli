@@ -6,6 +6,7 @@
 #include "BuildingCard.h"
 #include <map>
 #include <memory>
+#include "ClientInfo.h"
 
 class ClientInfo;
 class State;
@@ -30,6 +31,8 @@ public:
 	void handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
 
 	ClientInfo& currentClient() { return *currentClient_; }
+	Player& currentPlayer() { return currentClient_->get_player(); }
+	void sendToCurrentPlayer(const std::string message) const;
 	void setState(States state);
 
 	//void setPlayer(Player& const player);
