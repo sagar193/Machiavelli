@@ -15,6 +15,9 @@ void PlayingState::onEnter()
 
 bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 {
+	//if (cmd == "quit") {
+	//	return true;
+	//}
 	switch (currentState_)
 	{
 	case States::ChooseState:

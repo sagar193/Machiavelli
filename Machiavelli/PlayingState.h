@@ -17,7 +17,7 @@ public:
 private:
 	States currentState_;
 	void chooseState(ClientInfo& clientInfo, std::string cmd);
-	void placeBuidlingCard(ClientInfo& clientInfo, std::string cmd);
+	void placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
 	void useCharacterCard(ClientInfo& clientInfo, std::string cmd);
 
 };
