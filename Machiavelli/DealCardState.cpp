@@ -13,6 +13,7 @@ void DealCardState::onEnter()
 {
 	//todo: remove random card
 	//todo: setstate
+	//todo: setking
 	game_.characterCards()[0]->owner(CharacterCard::None);
 	currentState->onEnter();
 }

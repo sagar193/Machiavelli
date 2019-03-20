@@ -12,6 +12,12 @@ class State;
 class Game
 {
 public:
+	enum Players
+	{
+		Player1,
+		Player2
+	};
+
 	enum States
 	{
 		DealCards,
@@ -23,7 +29,7 @@ public:
 	State& currentState() { return *currentState_; }
 
 	void switchCurrentClientInfo();
-
+	void setCurrentClient(Game::Players player);
 
 	Game();
 	void setPlayer(std::shared_ptr<ClientInfo> const clientInfo);
@@ -37,12 +43,6 @@ public:
 	void startGame();
 	~Game();
 private:
-
-	enum Players
-	{
-		Player1,
-		Player2
-	};
 
 	std::map<Players, std::unique_ptr<Player>> players_;
 

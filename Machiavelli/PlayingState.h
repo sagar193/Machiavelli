@@ -21,8 +21,11 @@ private:
 	bool chooseState(ClientInfo& clientInfo, std::string cmd);
 	bool placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
 	bool useCharacterCard(ClientInfo& clientInfo, std::string cmd);
+	bool initState_;
 	bool placedBuildingCard_;
 	bool usedCharacterCard_;
+	int currentCharacterIndex;
+	void printChooseStateOptions();
 
 };
 
