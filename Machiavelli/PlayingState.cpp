@@ -4,17 +4,32 @@
 
 PlayingState::PlayingState(Game& game) : State(game)
 {
+	currentState_ = States::ChooseState;
 }
 
 void PlayingState::onEnter()
 {
-	game_.currentClient().get_socket() << "Kill frodo" << "\r\n";
+	currentState_ = States::ChooseState;
+	//game_.currentClient().get_socket() << "Kill frodo" << "\r\n";
 }
 
 bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 {
+	switch (currentState_)
+	{
+	case States::ChooseState:
+		chooseState(clientInfo, cmd);
+		break;
+	case States::PlaceBuildingCard:
+		placeBuildingCard(clientInfo, cmd);
+		break;
+	case States::UseCharacterCard:
+		useCharacterCard(clientInfo, cmd);
+		break;
+	default:
+		break;
+	}
 	return true;
-	//throw "not implemented";
 }
 
 void PlayingState::onLeave()
@@ -23,5 +38,17 @@ void PlayingState::onLeave()
 
 
 PlayingState::~PlayingState()
+{
+}
+
+void PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
+{
+}
+
+void PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
+{
+}
+
+void PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
 {
 }

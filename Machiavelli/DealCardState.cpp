@@ -26,7 +26,7 @@ bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 				firstTurn = false;
 				game_.switchCurrentClientInfo();
 				currentState->onEnter();
-				clientInfo.get_socket() << "de andere speler mag nu kiezen\r\n";
+				game_.currentClient().get_socket() << "de andere speler mag nu kiezen\r\n";
 				return true;
 			}
 			currentState = &removeCharacterState;
@@ -50,7 +50,7 @@ bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 				firstTurn = true;
 			}
 			else {
-				clientInfo.get_socket() << "de andere speler mag nu kiezen\r\n";
+				game_.currentClient().get_socket() << "de andere speler mag nu kiezen\r\n";
 				game_.switchCurrentClientInfo();
 				currentState->onEnter();
 			}
