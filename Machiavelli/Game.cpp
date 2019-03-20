@@ -35,6 +35,18 @@ void Game::switchCurrentClientInfo()
 		currentClient_ = &(*client_info1);
 }
 
+void Game::setCurrentClient(Players player)
+{
+	if (player == Players::Player1) 
+	{
+		currentClient_ = &(*client_info1);
+	}
+	else if (player == Players::Player2)
+	{
+		currentClient_ = &(*client_info2);
+	}
+}
+
 Game::Game()
 {
 	client_info1 = nullptr;
