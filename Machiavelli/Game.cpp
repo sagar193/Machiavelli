@@ -29,6 +29,7 @@ void Game::loadCharacterCards()
 
 void Game::switchCurrentClientInfo()
 {
+	currentClient().get_socket() << "de andere speler is nu aan de beurt\r\n";
 	if (&(*client_info1) == currentClient_)
 		currentClient_ = &(*client_info2);
 	else
@@ -116,33 +117,6 @@ void Game::setState(States state)
 }
 
 
-
-//void Game::setPlayer(Player& const player)
-//{
-	//players_[Players::Player1] = std::make_unique<Player>();
-	//if (player1_ == nullptr) {
-	//	player1_ = &player;
-	//	player1_->socket() << "jij bent speler1";
-	//}
-	//else if (player2_ == nullptr) {
-	//	player2_ = &player;
-	//	player2_->socket() << "jij bent speler2";
-	//}
-	//else {
-	//	//todo: je moet eerst iets schrijven is niet mooi nicht richtig
-	//	player.socket() << "fuck off, game is full!!!!!!!!!!";
-	//	throw std::exception("Game already full");
-	//}
-	//
-	//if (player1_ != nullptr && player2_ != nullptr) {
-	//	startGame();
-	//}
-//}
-
-//void Game::handleCommand(Player & const player, std::string cmd)
-//{
-//	
-//}
 
 void Game::startGame()
 {
