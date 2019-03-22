@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "PlayingState.h"
+#include "random.h"
 #include <algorithm>
-
 
 PlayingState::PlayingState(Game& game) : State(game)
 {
 	currentState_ = States::InitState;
 	placedBuildingCard_ = false;
 	usedCharacterCard_ = false;
+	drawnBuildingCard1 = nullptr;
+	drawnBuildingCard2 = nullptr;
 	initState_ = false;
 
 	currentCharacterIndex = 0;
@@ -126,7 +128,27 @@ PlayingState::~PlayingState()
 
 bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 {
-	return true;
+	if (!cmd.empty()) {
+		int cmdi = std::stoi(cmd);
+		if (cmdi == 1){
+			game_.currentPlayer().gold(game_.currentPlayer().gold() + 2);
+
+		}
+		else if (cmdi == 2) {
+			drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
+			drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
+			game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
+			"1 " + drawnBuildingCard1->name() + " \r\n"
+			"2 " + drawnBuildingCard2->name() + "\r\n"
+			"Kies een van de 2 kaarten om weg te doen");
+		}
+		else
+		{
+			this->game_.sendToCurrentPlayer("ongeldige input \r\n");
+			onEnter();
+		}
+	}
+	return false;
 }
 
 bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
@@ -165,21 +187,88 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 
 bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 {
-	std::vector<int> unused;
-	int count = 0;
-	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card)
+	if (!cmd.empty())
 	{
-		if (card->owner() == CharacterCard::Deck) {
-			unused.push_back(count);
+		int cmdi = stoi(cmd) - 1;
+		if (cmdi == -1)
+		{
+			return true;
 		}
-		count++;
-	});
-	return true;
+		BuildingCard& chosenCard = game_.buildingCards().at(cmdi);
+		if (chosenCard.owner() != game_.currentPlayer().ownertag()) {
+			game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
+			printAvailableBuildingCards();
+			return false;
+		}
+		else {
+			if (chosenCard.cost() > game_.currentPlayer().gold()) {
+				game_.sendToCurrentPlayer("You don't have enough gold for the chosen building card \r\n");
+				printAvailableBuildingCards();
+				return false;
+			}
+			else {
+				game_.currentPlayer().gold(game_.currentPlayer().gold() - chosenCard.cost());
+				///place card
+				return true;
+			}
+		}
+	}
 }
 
 bool PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
 {
-	return true;
+	return false;
+}
+
+bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
+{
+	if (!cmd.empty()) {
+		int cmdi = stoi(cmd);
+		if (cmdi == 1) {
+			drawnBuildingCard1 = nullptr;
+			drawnBuildingCard1->owner((BuildingCard::Owner)game_.currentPlayer().ownertag());
+			return true;
+		}
+		else if (cmdi == 2) {
+			drawnBuildingCard2 = nullptr;
+			drawnBuildingCard1->owner((BuildingCard::Owner)game_.currentPlayer().ownertag());
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+}
+
+BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
+{
+	std::vector<int> unused;
+	int count = 0;
+	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+	{
+		if (card.owner() == BuildingCard::Deck) {
+			unused.push_back(count);
+		}
+		count++;
+	});
+	int randomint = random_int(0, unused.size() -1);
+	return game_.buildingCards().at(randomint);
+
+}
+
+void PlayingState::printAvailableBuildingCards() const
+{
+	game_.sendToCurrentPlayer("Available cards: \r\n");
+	int count = 1;
+	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+	{
+		if (card.owner() == game_.currentPlayer().ownertag()) {
+			game_.sendToCurrentPlayer(count + " ");
+			game_.sendToCurrentPlayer("cardname: " + card.name() + "cost: " + static_cast<char>(card.cost()) + "\r\n");
+		}
+	});
+	game_.sendToCurrentPlayer("press 0 to don't place any buildings\r\n");
 }
 
 void PlayingState::printChooseStateOptions()

@@ -171,6 +171,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Prediker.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="RemoveCharacterState.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="State.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Prediker.cpp" />
+    <ClCompile Include="random.cpp" />
     <ClCompile Include="RemoveCharacterState.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="State.cpp" />
