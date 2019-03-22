@@ -111,6 +111,12 @@ void Game::sendToCurrentPlayer(const std::string message) const
 	currentClient_->get_socket() << message << "/r/n";
 }
 
+void Game::sendToAllPlayers(const std::string message) const
+{
+	client_info1->get_socket() << message << "/r/n";
+	client_info2->get_socket() << message << "/r/n";
+}
+
 void Game::setState(States state)
 {
 	currentState_ = states_[state].get();
