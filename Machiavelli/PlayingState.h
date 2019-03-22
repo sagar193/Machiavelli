@@ -8,7 +8,8 @@ public:
 		InitState,
 		ChooseState,
 		PlaceBuildingCard,
-		UseCharacterCard
+		UseCharacterCard,
+		FoldBuildingCard
 	};
 	PlayingState(Game& game);
 	void onEnter() override;
@@ -27,6 +28,7 @@ private:
 	bool usedCharacterCard_;
 	bool foldBuildingCard_;
 	BuildingCard& getRandomBuildingCardFromDeck() const;
+	//BuildingCard& getBuildingCardFromPlayer() const;
 	BuildingCard* drawnBuildingCard1;
 	BuildingCard* drawnBuildingCard2;
 	void drawBuildingCards();

@@ -97,6 +97,13 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 				currentState_ = ChooseState;
 			}
 			break;
+		case PlayingState::FoldBuildingCard:
+			if (foldBuildingCard(clientInfo, cmd))
+			{
+				initState_ = true;
+				currentState_ = ChooseState;
+			}
+			break;
 		}
 
 		//todo:leave
@@ -138,13 +145,9 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		else if (cmdi == 2) {
-			if (foldBuildingCard_ == true) {
-				return foldBuildingCard(clientInfo, cmd);
-			}
-			else {
-				drawBuildingCards();
-				return false;
-			}
+			drawBuildingCards();
+			currentState_ = FoldBuildingCard;
+			return false;
 		}
 		else
 		{
@@ -214,7 +217,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			}
 			else {
 				game_.currentPlayer().gold(game_.currentPlayer().gold() - chosenCard.cost());
-				///place card
+				chosenCard.active(true);
 				return true;
 			}
 		}
@@ -238,7 +241,7 @@ bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		else if (cmdi == 2) {
-			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+			drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
 			drawnBuildingCard2 = nullptr;
 			drawnBuildingCard1->owner(Owner::None);
 			drawnBuildingCard1 = nullptr;
@@ -270,16 +273,16 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 
 void PlayingState::printAvailableBuildingCards() const
 {
-	game_.sendToCurrentPlayer("Available cards: \r\n");
+	game_.sendToCurrentPlayer("Available cards:");
 	int count = 1;
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
 		if (card.owner() == game_.currentPlayer().ownertag()) {
-			game_.sendToCurrentPlayer(count + " ");
-			game_.sendToCurrentPlayer("cardname: " + card.name() + "cost: " + static_cast<char>(card.cost()) + "\r\n");
+			game_.sendToCurrentPlayer(std::to_string(count)+" cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
 		}
+		count++;
 	});
-	game_.sendToCurrentPlayer("press 0 to don't place any buildings\r\n");
+	game_.sendToCurrentPlayer("press 0 to don't place any buildings");
 }
 
 void PlayingState::drawBuildingCards()
