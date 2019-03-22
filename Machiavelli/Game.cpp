@@ -78,11 +78,13 @@ void Game::loadBuildingCards()
 
 void Game::switchCurrentClientInfo()
 {
-	currentClient().get_socket() << "de andere speler is nu aan de beurt\r\n";
+	sendToCurrentPlayer("de andere speler is nu aan de beurt");
 	if (&(*client_info1) == currentClient_)
 		currentClient_ = &(*client_info2);
 	else
 		currentClient_ = &(*client_info1);
+	sendToCurrentPlayer("het is jouw beurt");
+
 }
 
 void Game::setCurrentClient(Players player)
@@ -116,17 +118,17 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 {
 	if (client_info1 == nullptr) {
 		client_info1 = clientInfo;
-		client_info1->get_socket() << "jij bent speler1";
+		client_info1->get_socket() << "jij bent speler1\r\n";
 		client_info1->get_player().ownertag(Owner::Player1);
 	}
 	else if (client_info2 == nullptr) {
 		client_info2 = clientInfo;
-		client_info2->get_socket() << "jij bent speler2";
+		client_info2->get_socket() << "jij bent speler2\r\n";
 		client_info2->get_player().ownertag(Owner::Player2);
 	}
 	else {
 		//todo: je moet eerst iets schrijven is niet mooi nicht richtig
-		clientInfo->get_socket() << "fuck off, game is full!!!!!!!!!!";
+		clientInfo->get_socket() << "fuck off, game is full!!!!!!!!!!\r\n";
 		throw std::exception("Game already full");
 	}
 	
@@ -152,19 +154,19 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 
 	}
 	else {
-		clientInfo->get_socket() << "je bent niet aan de beurt";
+		clientInfo->get_socket() << "je bent niet aan de beurt\r\n";
 	}
 }
 
 void Game::sendToCurrentPlayer(const std::string message) const
 {
-	currentClient_->get_socket() << message << "/r/n";
+	currentClient_->get_socket() << message << "\r\n";
 }
 
 void Game::sendToAllPlayers(const std::string message) const
 {
-	client_info1->get_socket() << message << "/r/n";
-	client_info2->get_socket() << message << "/r/n";
+	client_info1->get_socket() << message << "\r\n";
+	client_info2->get_socket() << message << "\r\n";
 }
 
 void Game::setState(States state)

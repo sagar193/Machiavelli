@@ -39,10 +39,12 @@ void PlayingState::onEnter()
 		//todo: vertel aan de andere speler dat die moet wachten
 		if (game_.characterCards()[currentCharacterIndex]->owner() == Owner::Player1) {
 			game_.setCurrentClient(Game::Players::Player1);
+			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " (speler1) is aan de beurt\r\n");
 		}
 		else 
 		{
 			game_.setCurrentClient(Game::Players::Player2);
+			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " (speler2) is aan de beurt\r\n");
 		}
 		printChooseStateOptions();
 	}
@@ -157,7 +159,7 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
-		if (cmdi == -1) {
+		if (cmdi == 0) {
 			if (initState_) {
 				return true;
 			}
@@ -296,13 +298,13 @@ void PlayingState::drawBuildingCards()
 void PlayingState::printChooseStateOptions()
 {
 	if (!initState_) {
-		game_.currentClient().get_socket() << "1: pak 2 munten of pak 1 en leg 1 gebouwkaart weg\r\n";
+		game_.sendToCurrentPlayer("1: pak 2 munten of pak 1 en leg 1 gebouwkaart weg");
 	}
 	if (!placedBuildingCard_) {
-		game_.currentClient().get_socket() << "2: plaats gebouw\r\n";
+		game_.sendToCurrentPlayer("2: plaats gebouw");
 	}
 	if (!usedCharacterCard_) {
-		game_.currentClient().get_socket() << "3: gebuik karakterkaart\r\n";
+		game_.sendToCurrentPlayer("3: gebuik karakterkaart");
 	}
-	game_.currentClient().get_socket() << "-1: stop beurt\r\n";
+	game_.sendToCurrentPlayer("0: stop beurt");
 }
