@@ -42,6 +42,7 @@ public:
 	ClientInfo& currentClient() { return *currentClient_; }
 	Player& currentPlayer() { return currentClient_->get_player(); }
 	void sendToCurrentPlayer(const std::string message) const;
+	void sendToAllPlayers(const std::string message) const;
 	void setState(States state);
 
 	//void setPlayer(Player& const player);
