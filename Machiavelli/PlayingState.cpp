@@ -132,7 +132,7 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = std::stoi(cmd);
 		if (cmdi == 1){
 			game_.currentPlayer().gold(game_.currentPlayer().gold() + 2);
-
+			return true;
 		}
 		else if (cmdi == 2) {
 			drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
@@ -141,6 +141,7 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 			"1 " + drawnBuildingCard1->name() + " \r\n"
 			"2 " + drawnBuildingCard2->name() + "\r\n"
 			"Kies een van de 2 kaarten om weg te doen");
+			//todo: foldcard return true
 		}
 		else
 		{
@@ -157,6 +158,7 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = stoi(cmd);
 		if (cmdi == -1) {
 			if (initState_) {
+				game_.currentClient().get_socket() << "de andere speler is nu aan de beurt\r\n";
 				return true;
 			}
 			else {
@@ -173,6 +175,7 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 		else if (cmdi == 2 && !placedBuildingCard_) {
 			currentState_ = PlaceBuildingCard;
 			//todo:text opties
+			printAvailableBuildingCards();
 		}
 		else if (cmdi == 3 && !usedCharacterCard_) {
 			currentState_ = UseCharacterCard;
@@ -194,6 +197,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 		{
 			return true;
 		}
+		//todo: out of range error
 		BuildingCard& chosenCard = game_.buildingCards().at(cmdi);
 		if (chosenCard.owner() != game_.currentPlayer().ownertag()) {
 			game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
