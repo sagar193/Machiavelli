@@ -51,6 +51,7 @@ void PlayingState::onEnter()
 		//todo: niet netjes
 		placedBuildingCard_ = true;
 		usedCharacterCard_ = true;
+		foldBuildingCard_ = false;
 		initState_ = true;
 		currentCharacterIndex = -1;
 	}
@@ -135,13 +136,13 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		else if (cmdi == 2) {
-			drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
-			drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
-			game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
-			"1 " + drawnBuildingCard1->name() + " \r\n"
-			"2 " + drawnBuildingCard2->name() + "\r\n"
-			"Kies een van de 2 kaarten om weg te doen");
-			//todo: foldcard return true
+			if (foldBuildingCard_ == true) {
+				return foldBuildingCard(clientInfo, cmd);
+			}
+			else {
+				drawBuildingCards();
+				return false;
+			}
 		}
 		else
 		{
@@ -228,16 +229,21 @@ bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
 		if (cmdi == 1) {
-			drawnBuildingCard1 = nullptr;
 			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+			drawnBuildingCard1 = nullptr;
+			drawnBuildingCard2->owner(Owner::None);
+			drawnBuildingCard2 = nullptr;
 			return true;
 		}
 		else if (cmdi == 2) {
-			drawnBuildingCard2 = nullptr;
 			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+			drawnBuildingCard2 = nullptr;
+			drawnBuildingCard1->owner(Owner::None);
+			drawnBuildingCard1 = nullptr;
 			return true;
 		}
 		else {
+			game_.sendToCurrentPlayer("Verkeerde keuze, kies kaart 1 of 2");
 			return false;
 		}
 	}
@@ -272,6 +278,19 @@ void PlayingState::printAvailableBuildingCards() const
 		}
 	});
 	game_.sendToCurrentPlayer("press 0 to don't place any buildings\r\n");
+}
+
+void PlayingState::drawBuildingCards()
+{
+	drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+	drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
+	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
+		"1 " + drawnBuildingCard1->name() + " \r\n"
+		"2 " + drawnBuildingCard2->name() + "\r\n"
+		"Kies een van de 2 kaarten om te houden, de andere word weggelegd");
+	foldBuildingCard_ = true;
 }
 
 void PlayingState::printChooseStateOptions()
