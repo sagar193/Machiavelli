@@ -1,17 +1,11 @@
 #pragma once
 #include <string>
+#include "Owner.h"
 
 class CharacterCard
 {
 public:
 	CharacterCard();
-	enum Owner
-	{
-		Player1,
-		Player2,
-		Deck,
-		None
-	};
 	virtual void act() = 0;
 	virtual void rank(int const rank) = 0;
 	virtual int const rank() const = 0;

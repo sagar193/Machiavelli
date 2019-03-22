@@ -20,7 +20,7 @@ void PlayingState::onEnter()
 	int count = 0;
 	auto position = std::find_if(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 	{
-		if (card->owner() != CharacterCard::Deck && card->owner() != CharacterCard::None) {
+		if (card->owner() != Owner::Deck && card->owner() != Owner::None) {
 			return true;
 		}
 		count++;
@@ -37,7 +37,7 @@ void PlayingState::onEnter()
 
 		//todo: set current player lelijk
 		//todo: vertel aan de andere speler dat die moet wachten
-		if (game_.characterCards()[currentCharacterIndex]->owner() == CharacterCard::Player1) {
+		if (game_.characterCards()[currentCharacterIndex]->owner() == Owner::Player1) {
 			game_.setCurrentClient(Game::Players::Player1);
 		}
 		else 
@@ -112,7 +112,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 
 void PlayingState::onLeave()
 {
-	game_.characterCards()[currentCharacterIndex]->owner(CharacterCard::None);
+	game_.characterCards()[currentCharacterIndex]->owner(Owner::None);
 	onEnter();
 	if (currentCharacterIndex == -1) 
 	{
@@ -226,12 +226,12 @@ bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = stoi(cmd);
 		if (cmdi == 1) {
 			drawnBuildingCard1 = nullptr;
-			drawnBuildingCard1->owner((BuildingCard::Owner)game_.currentPlayer().ownertag());
+			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
 			return true;
 		}
 		else if (cmdi == 2) {
 			drawnBuildingCard2 = nullptr;
-			drawnBuildingCard1->owner((BuildingCard::Owner)game_.currentPlayer().ownertag());
+			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
 			return true;
 		}
 		else {
@@ -247,7 +247,7 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 	int count = 0;
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
-		if (card.owner() == BuildingCard::Deck) {
+		if (card.owner() == Owner::Deck) {
 			unused.push_back(count);
 		}
 		count++;

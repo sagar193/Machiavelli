@@ -167,6 +167,7 @@
     <ClInclude Include="Koopman.h" />
     <ClInclude Include="Magier.h" />
     <ClInclude Include="Moordenaar.h" />
+    <ClInclude Include="Owner.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayingState.h" />

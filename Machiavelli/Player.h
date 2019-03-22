@@ -12,6 +12,7 @@
 #include <string>
 #include "Socket.h"
 #include "CharacterCard.h"
+#include "Owner.h"
 
 class Player {
 public:
@@ -21,7 +22,7 @@ public:
 	{ 
 		isKing_ = false; 
 		gold_ = 0; 
-		ownertag_ = CharacterCard::None;
+		ownertag_ = None;
 	}
 
 	//todo: rule of fif
@@ -36,14 +37,14 @@ public:
 	void isKing(bool isKing) { this->isKing_ = isKing; }
 	int gold() { return gold_; }
 	void gold(int gold) { gold_ = gold; }
-	CharacterCard::Owner ownertag() { return ownertag_; }
-	void ownertag(CharacterCard::Owner owner) { ownertag_ = owner; }
+	Owner ownertag() { return ownertag_; }
+	void ownertag(Owner owner) { ownertag_ = owner; }
 
 
 private:
 	//todo: socket pointer reference?
 	//todo: vector?
-	CharacterCard::Owner ownertag_;
+	Owner ownertag_;
 	bool isKing_;
 	int gold_;
     std::string name_;

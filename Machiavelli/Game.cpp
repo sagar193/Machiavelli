@@ -66,12 +66,12 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 	if (client_info1 == nullptr) {
 		client_info1 = clientInfo;
 		client_info1->get_socket() << "jij bent speler1";
-		client_info1->get_player().ownertag(CharacterCard::Owner::Player1);
+		client_info1->get_player().ownertag(Owner::Player1);
 	}
 	else if (client_info2 == nullptr) {
 		client_info2 = clientInfo;
 		client_info2->get_socket() << "jij bent speler2";
-		client_info2->get_player().ownertag(CharacterCard::Owner::Player2);
+		client_info2->get_player().ownertag(Owner::Player2);
 	}
 	else {
 		//todo: je moet eerst iets schrijven is niet mooi nicht richtig
