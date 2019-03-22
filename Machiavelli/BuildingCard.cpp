@@ -6,6 +6,8 @@ BuildingCard::BuildingCard(std::string name, int cost, colorTypes color)
 	name_ = name;
 	cost_ = cost;
 	color_ = color;
+	active_ = false;
+	owner_ = Deck;
 }
 
 BuildingCard::~BuildingCard()

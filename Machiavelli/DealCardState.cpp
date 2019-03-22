@@ -44,7 +44,7 @@ void DealCardState::onEnter()
 	}
 	
 	//todo: reset all charactercards
-	game_.characterCards()[0]->owner(CharacterCard::None);
+	game_.characterCards()[0]->owner(None);
 	currentState->onEnter();
 }
 
@@ -56,9 +56,9 @@ bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 			if (firstTurn) 
 			{
 				firstTurn = false;
+				game_.currentClient().get_socket() << "/r/nDe andere speler mag nu kiezen\r\n";
 				game_.switchCurrentClientInfo();
 				currentState->onEnter();
-				game_.currentClient().get_socket() << "de andere speler mag nu kiezen\r\n";
 				return true;
 			}
 			currentState = &removeCharacterState;
@@ -70,7 +70,7 @@ bool DealCardState::act(ClientInfo& clientInfo,std::string cmd)
 			
 			int totalLeft = std::count_if(game_.characterCards().begin(), game_.characterCards().end(), [](std::unique_ptr<CharacterCard>& card)
 			{
-				if (card->owner() == CharacterCard::Deck) {
+				if (card->owner() == Owner::Deck) {
 					return true;
 				} 
 				return false;
@@ -103,7 +103,7 @@ void DealCardState::printCharacterCards(ClientInfo & clientInfo)
 	int count = 1;
 	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
 	{
-		if (card->owner() == CharacterCard::Owner::Deck)
+		if (card->owner() == Owner::Deck)
 		{
 			clientInfo.get_socket() << count << ": " << card->name() <<"\r\n";
 		}

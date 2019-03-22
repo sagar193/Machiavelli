@@ -11,7 +11,7 @@
 using namespace std;
 
 Player::Player() {
-	ownertag_ = CharacterCard::None;
+	ownertag_ = Owner::None;
 	isKing_ = false;
 	gold_ = 0;
 }
