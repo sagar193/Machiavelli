@@ -158,7 +158,6 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = stoi(cmd);
 		if (cmdi == -1) {
 			if (initState_) {
-				game_.currentClient().get_socket() << "de andere speler is nu aan de beurt\r\n";
 				return true;
 			}
 			else {
