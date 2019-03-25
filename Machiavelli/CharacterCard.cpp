@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "CharacterCard.h"
+#include "ClientInfo.h"
+#include "Game.h"
 
 CharacterCard::CharacterCard(Game& game) : State(game)
 {

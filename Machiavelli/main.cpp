@@ -14,16 +14,14 @@
 #include <memory>
 #include <utility>
 #include <chrono>
-using namespace std;
 
 #include "Socket.h"
 #include "Sync_queue.h"
 #include "ClientCommand.h"
 #include "Player.h"
 #include "ClientInfo.h"
+using namespace std;
 ///////////////////////////////////////////////////////////////////
-#include "deck.h"
-#include "Bouwmeester.h"
 #include "Game.h"
 
 namespace machiavelli {

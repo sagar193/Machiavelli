@@ -1,6 +1,9 @@
 #pragma once
 #include "State.h"
 
+class Game;
+class ClientInfo;
+class BuildingCard;
 class PlayingState : public State
 {
 public:

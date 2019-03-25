@@ -108,6 +108,11 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	}
 }
 
+Player & Game::currentPlayer()
+{
+	return currentClient_->get_player();
+}
+
 void Game::sendToCurrentPlayer(const std::string message) const
 {
 	currentClient_->get_socket() << message << "\r\n";

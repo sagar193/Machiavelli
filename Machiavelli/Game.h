@@ -2,12 +2,13 @@
 #include "Player.h"
 
 #include "Socket.h"
-#include "CharacterCard.h"
+//#include "CharacterCard.h"
 #include "BuildingCard.h"
 #include <map>
 #include <memory>
-#include "ClientInfo.h"
+//#include "ClientInfo.h"
 
+class CharacterCard;
 class ClientInfo;
 class State;
 class Game
@@ -40,7 +41,7 @@ public:
 	void handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
 
 	ClientInfo& currentClient() { return *currentClient_; }
-	Player& currentPlayer() { return currentClient_->get_player(); }
+	Player& currentPlayer();
 	void sendToCurrentPlayer(const std::string message) const;
 	void sendToAllPlayers(const std::string message) const;
 	void setState(States state);
