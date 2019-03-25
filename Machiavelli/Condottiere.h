@@ -10,7 +10,8 @@ private:
 public:
 	Condottiere(Game& game);
 	~Condottiere();
-
+	void onEnter() override {};
+	void onLeave() override {};
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 	void rank(int const rank) override;
 	int const rank() const override;
