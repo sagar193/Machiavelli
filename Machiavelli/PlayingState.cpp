@@ -55,6 +55,7 @@ void PlayingState::onEnter()
 		//todo: niet netjes
 		placedBuildingCard_ = true;
 		usedCharacterCard_ = true;
+		foldBuildingCard_ = false;
 		initState_ = true;
 		currentCharacterIndex = -1;
 	}
@@ -95,6 +96,13 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			if (useCharacterCard(clientInfo, cmd))
 			{
 				usedCharacterCard_ = true;
+				currentState_ = ChooseState;
+			}
+			break;
+		case PlayingState::FoldBuildingCard:
+			if (foldBuildingCard(clientInfo, cmd))
+			{
+				initState_ = true;
 				currentState_ = ChooseState;
 			}
 			break;
@@ -139,13 +147,9 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		else if (cmdi == 2) {
-			drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
-			drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
-			game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
-			"1 " + drawnBuildingCard1->name() + " \r\n"
-			"2 " + drawnBuildingCard2->name() + "\r\n"
-			"Kies een van de 2 kaarten om weg te doen");
-			//todo: foldcard return true
+			drawBuildingCards();
+			currentState_ = FoldBuildingCard;
+			return false;
 		}
 		else
 		{
@@ -216,7 +220,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			}
 			else {
 				game_.currentPlayer().gold(game_.currentPlayer().gold() - chosenCard.cost());
-				///place card
+				chosenCard.active(true);
 				return true;
 			}
 		}
@@ -233,16 +237,21 @@ bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
 		if (cmdi == 1) {
-			drawnBuildingCard1 = nullptr;
 			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+			drawnBuildingCard1 = nullptr;
+			drawnBuildingCard2->owner(Owner::None);
+			drawnBuildingCard2 = nullptr;
 			return true;
 		}
 		else if (cmdi == 2) {
+			drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
 			drawnBuildingCard2 = nullptr;
-			drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+			drawnBuildingCard1->owner(Owner::None);
+			drawnBuildingCard1 = nullptr;
 			return true;
 		}
 		else {
+			game_.sendToCurrentPlayer("Verkeerde keuze, kies kaart 1 of 2");
 			return false;
 		}
 	}
@@ -267,16 +276,29 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 
 void PlayingState::printAvailableBuildingCards() const
 {
-	game_.sendToCurrentPlayer("Available cards: \r\n");
+	game_.sendToCurrentPlayer("Available cards:");
 	int count = 1;
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
 		if (card.owner() == game_.currentPlayer().ownertag()) {
-			game_.sendToCurrentPlayer(count + " ");
-			game_.sendToCurrentPlayer("cardname: " + card.name() + "cost: " + static_cast<char>(card.cost()) + "\r\n");
+			game_.sendToCurrentPlayer(std::to_string(count)+" cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
 		}
+		count++;
 	});
-	game_.sendToCurrentPlayer("press 0 to don't place any buildings\r\n");
+	game_.sendToCurrentPlayer("press 0 to don't place any buildings");
+}
+
+void PlayingState::drawBuildingCards()
+{
+	drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
+	drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
+	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
+		"1 " + drawnBuildingCard1->name() + " \r\n"
+		"2 " + drawnBuildingCard2->name() + "\r\n"
+		"Kies een van de 2 kaarten om te houden, de andere word weggelegd");
+	foldBuildingCard_ = true;
 }
 
 void PlayingState::printChooseStateOptions()

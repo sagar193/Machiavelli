@@ -67,6 +67,7 @@ private:
 	State* currentState_;
 
 	void loadCharacterCards();
+	void loadBuildingCards();
 
 };
 

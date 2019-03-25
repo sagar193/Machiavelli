@@ -31,8 +31,10 @@ private:
 	bool usedCharacterCard_;
 	bool foldBuildingCard_;
 	BuildingCard& getRandomBuildingCardFromDeck() const;
+	//BuildingCard& getBuildingCardFromPlayer() const;
 	BuildingCard* drawnBuildingCard1;
 	BuildingCard* drawnBuildingCard2;
+	void drawBuildingCards();
 	int currentCharacterIndex;
 	void printChooseStateOptions();
 

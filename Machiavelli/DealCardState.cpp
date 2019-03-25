@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "Game.h"
 #include "ClientInfo.h"
+#include "random.h"
 
 DealCardState::DealCardState(Game& game) : State(game),chooseCharacterState(game), removeCharacterState(game)
 {
@@ -47,7 +48,8 @@ void DealCardState::onEnter()
 	}
 	
 	//todo: reset all charactercards
-	game_.characterCards()[0]->owner(None);
+	const int toRemove = random_int(0, 7);
+	game_.characterCards()[toRemove]->owner(None);
 	currentState->onEnter();
 }
 

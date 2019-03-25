@@ -12,6 +12,8 @@
 #include "Koopman.h"
 #include "Bouwmeester.h"
 #include "Condottiere.h"
+#include <fstream>
+#include <sstream>
 
 //todo: player1 leave 
 
@@ -25,6 +27,53 @@ void Game::loadCharacterCards()
 	characterCards_.push_back(std::make_unique<Koopman>(*this));
 	characterCards_.push_back(std::make_unique<Bouwmeester>(*this));
 	characterCards_.push_back(std::make_unique<Condottiere>(*this));
+}
+
+void Game::loadBuildingCards()
+{
+	std::ifstream is("..\\Files\\Bouwkaarten.csv", std::ifstream::binary);
+	if (is) {
+
+		std::vector<BuildingCard> buffer;
+		std::string line;
+		//try {
+		while (std::getline(is, line)) {
+			std::istringstream ss(line);
+
+			std::string name;
+			std::string costString;
+			std::string colorString;
+			std::getline(ss, name, ';');
+			std::getline(ss, costString, ';');
+			std::getline(ss, colorString, ';');
+
+			auto color = BuildingCard::getCollor(colorString);
+			if (color != BuildingCard::NONE) {
+				BuildingCard card(name, std::stoi(costString), color);
+				//std::cout << card;
+				buffer.push_back(card);
+			}
+			else
+			{
+				std::cout << "color :" << colorString << " does not exist \n";
+			}
+			//else
+			//{
+			//	throw std::exception("color does not exist");
+			//}
+		}
+		this->buildingCards_ = buffer;
+		//} 
+		//catch (std::exception &e)
+		//{
+		//	int k = 0;
+		//}
+	}
+	else
+	{
+		std::cout << "file could not be loaded" << std::endl;
+	}
+	is.close();
 }
 
 void Game::switchCurrentClientInfo()
@@ -62,6 +111,7 @@ Game::Game()
 	states_[Game::States::Playing] = std::make_unique<PlayingState>(*this);
 	currentState_ = nullptr;
 	loadCharacterCards();
+	loadBuildingCards();
 }
 
 void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
