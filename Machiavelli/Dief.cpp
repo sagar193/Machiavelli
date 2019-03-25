@@ -2,7 +2,7 @@
 #include "Dief.h"
 #include "ClientInfo.h"
 
-Dief::Dief() : CharacterCard()
+Dief::Dief(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Dief";
 }

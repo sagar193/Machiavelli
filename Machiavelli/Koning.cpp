@@ -2,7 +2,7 @@
 #include "Koning.h"
 #include "ClientInfo.h"
 
-Koning::Koning() : CharacterCard()
+Koning::Koning(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koning";
 }

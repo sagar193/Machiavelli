@@ -8,7 +8,7 @@ private:
 	int rank_;
 
 public:
-	Koning();
+	Koning(Game& game);
 	~Koning();
 
 	bool act(ClientInfo& clientInfo, std::string cmd) override;

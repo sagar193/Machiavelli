@@ -8,7 +8,7 @@ private:
 	int rank_;
 
 public:
-	Magier();
+	Magier(Game& game);
 	~Magier();
 
 	bool act(ClientInfo& clientInfo, std::string cmd) override;

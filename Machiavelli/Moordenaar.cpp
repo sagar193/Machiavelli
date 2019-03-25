@@ -2,7 +2,7 @@
 #include "Moordenaar.h"
 #include "ClientInfo.h"
 
-Moordenaar::Moordenaar() : CharacterCard()
+Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
 }

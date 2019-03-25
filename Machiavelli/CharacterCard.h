@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include "Owner.h"
+#include "State.h"
 
 class CharacterCard : public State
 {
 public:
-	CharacterCard();
+	CharacterCard(Game& game);
 	virtual void onEnter() override =0;
 	virtual bool act(ClientInfo& clientInfo, std::string cmd) override = 0;
 	virtual void onLeave() override = 0;
@@ -15,6 +16,8 @@ public:
 	virtual std::string const name() const = 0;
 	Owner owner() { return owner_; }
 	void owner(Owner owner) { owner_ = owner; }
+
+	virtual void removeBuildingCard(int index);
 private:
 	Owner owner_;
 };

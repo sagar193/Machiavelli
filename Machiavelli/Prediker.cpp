@@ -2,7 +2,7 @@
 #include "Prediker.h"
 #include "ClientInfo.h"
 
-Prediker::Prediker() : CharacterCard()
+Prediker::Prediker(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Prediker";
 }

@@ -2,7 +2,7 @@
 #include "Condottiere.h"
 #include "ClientInfo.h"
 
-Condottiere::Condottiere()  : CharacterCard()
+Condottiere::Condottiere(Game& game)  : CharacterCard(game)
 {
 	this->name_ = "Condonttiere";
 }

@@ -2,7 +2,7 @@
 #include "Koopman.h"
 #include "ClientInfo.h"
 
-Koopman::Koopman() : CharacterCard()
+Koopman::Koopman(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koopman";
 }

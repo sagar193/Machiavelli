@@ -8,7 +8,7 @@ private:
 	int rank_;
 
 public:
-	Dief();
+	Dief(Game& game);
 	~Dief();
 
 	bool act(ClientInfo& clientInfo, std::string cmd) override;

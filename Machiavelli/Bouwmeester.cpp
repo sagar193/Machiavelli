@@ -2,7 +2,7 @@
 #include "Bouwmeester.h"
 #include "ClientInfo.h"
 
-Bouwmeester::Bouwmeester() : CharacterCard()
+Bouwmeester::Bouwmeester(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Bouwmeester";
 }

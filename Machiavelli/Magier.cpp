@@ -2,7 +2,7 @@
 #include "Magier.h"
 #include "ClientInfo.h"
 
-Magier::Magier() : CharacterCard()
+Magier::Magier(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Magier";
 }
