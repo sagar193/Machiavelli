@@ -187,6 +187,7 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 		else if (cmdi == 3 && !usedCharacterCard_) {
 			currentState_ = UseCharacterCard;
 			//todo:text opties
+			game_.characterCards()[currentCharacterIndex]->onEnter();
 		}
 		else {
 			game_.currentClient().get_socket() << "ongeldige keuze\r\n";
@@ -228,7 +229,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 
 bool PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
 {
-	return false;
+	return game_.characterCards()[currentCharacterIndex]->act(clientInfo,cmd);
 }
 
 bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)

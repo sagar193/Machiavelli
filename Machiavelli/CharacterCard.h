@@ -10,9 +10,9 @@ class CharacterCard : public State
 public:
 	CharacterCard(Game& game);
 	
-	virtual void onEnter() override {};
+	virtual void onEnter() override = 0;
 	virtual bool act(ClientInfo& clientInfo, std::string cmd) override = 0;
-	virtual void onLeave() override {};
+	virtual void onLeave() override = 0;
 
 	virtual void rank(int const rank) = 0;
 	virtual int const rank() const = 0;

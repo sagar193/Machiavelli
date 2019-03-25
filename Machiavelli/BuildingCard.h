@@ -25,6 +25,7 @@ public:
 	//friend std::istream &operator>>(std::istream &strm,BuildingCard &card);
 	std::ostream &operator<<(std::ostream &os) const;
 
+	colorTypes color() { return color_; }
 	void color(colorTypes color);
 	int const color() const;
 	void name(std::string const name);
