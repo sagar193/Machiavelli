@@ -7,7 +7,6 @@
 Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
-	this->inputState_ = false;
 }
 
 
@@ -15,31 +14,27 @@ Moordenaar::~Moordenaar()
 {
 }
 
+void Moordenaar::onEnter()
+{
+	this->game_.sendToCurrentPlayer("Welke karakter wil je vermoorden?");
+	printAllCharacters();
+}
+
 bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
-	if (inputState_ == true)
-	{
-		if (!cmd.empty()) {
-			int cmdi = std::stoi(cmd) - 1;
-			if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
-				CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
-				chosenCard.owner(Owner::None);
-				game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + "vermoord.");
-				return true;
-			}
+	if (!cmd.empty()) {
+		int cmdi = std::stoi(cmd) - 1;
+		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
+			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+			chosenCard.owner(Owner::None);
+			game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + " vermoord.");
+			return true;
 		}
-		this->game_.sendToCurrentPlayer("Ongeldige input.");
-		printAllCharacters();
+	}
+	this->game_.sendToCurrentPlayer("Ongeldige input.");
+	printAllCharacters();
 
-		return false;
-	}
-	else
-	{
-		this->game_.sendToCurrentPlayer("Welke karakter wil je vermoorden?");
-		printAllCharacters();
-		inputState_ = true;
-		return false;
-	}
+	return false;
 }
 
 void Moordenaar::printAllCharacters() const
