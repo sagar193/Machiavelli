@@ -43,6 +43,10 @@ bool ChooseCharacterState::act(ClientInfo & clientInfo, std::string cmd)
 			game_.characterCards()[cmdi]->owner(clientInfo.get_player().ownertag());
 			return true;
 		}
+		else {
+			game_.sendToCurrentPlayer("Ongeldige input.");
+			onEnter();
+		}
 	}
 
 	return false;
