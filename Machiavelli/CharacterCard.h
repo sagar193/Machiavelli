@@ -2,11 +2,13 @@
 #include <string>
 #include "Owner.h"
 
-class CharacterCard
+class CharacterCard : public State
 {
 public:
 	CharacterCard();
-	virtual void act() = 0;
+	virtual void onEnter() override =0;
+	virtual bool act(ClientInfo& clientInfo, std::string cmd) override = 0;
+	virtual void onLeave() override = 0;
 	virtual void rank(int const rank) = 0;
 	virtual int const rank() const = 0;
 	virtual void name(std::string const name) = 0;

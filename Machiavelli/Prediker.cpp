@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Prediker.h"
-
+#include "ClientInfo.h"
 
 Prediker::Prediker() : CharacterCard()
 {
@@ -12,9 +12,11 @@ Prediker::~Prediker()
 {
 }
 
-void Prediker::act()
+bool Prediker::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Prediker::rank(int const rank)
 {

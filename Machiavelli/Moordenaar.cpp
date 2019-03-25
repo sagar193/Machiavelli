@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Moordenaar.h"
-
+#include "ClientInfo.h"
 
 Moordenaar::Moordenaar() : CharacterCard()
 {
@@ -12,9 +12,11 @@ Moordenaar::~Moordenaar()
 {
 }
 
-void Moordenaar::act()
+bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Moordenaar::rank(int const rank)
 {

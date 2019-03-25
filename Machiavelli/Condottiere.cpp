@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Condottiere.h"
-
+#include "ClientInfo.h"
 
 Condottiere::Condottiere()  : CharacterCard()
 {
@@ -12,8 +12,9 @@ Condottiere::~Condottiere()
 {
 }
 
-void Condottiere::act()
+bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
 
 void Condottiere::rank(int const rank)

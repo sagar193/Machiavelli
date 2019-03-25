@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Dief.h"
-
+#include "ClientInfo.h"
 
 Dief::Dief() : CharacterCard()
 {
@@ -12,9 +12,11 @@ Dief::~Dief()
 {
 }
 
-void Dief::act()
+bool Dief::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Dief::rank(int const rank)
 {
