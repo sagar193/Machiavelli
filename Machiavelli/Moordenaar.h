@@ -6,6 +6,7 @@ class Moordenaar : public CharacterCard
 private:
 	std::string name_;
 	int rank_;
+	bool inputState_;
 
 public:
 	Moordenaar();
