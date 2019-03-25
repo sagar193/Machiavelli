@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Bouwmeester.h"
+#include "ClientInfo.h"
 
-
-Bouwmeester::Bouwmeester() : CharacterCard()
+Bouwmeester::Bouwmeester(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Bouwmeester";
 }
@@ -12,8 +12,9 @@ Bouwmeester::~Bouwmeester()
 {
 }
 
-void Bouwmeester::act()
+bool Bouwmeester::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
 
 void Bouwmeester::rank(int const rank)

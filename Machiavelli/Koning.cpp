@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Koning.h"
+#include "ClientInfo.h"
 
-
-Koning::Koning() : CharacterCard()
+Koning::Koning(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koning";
 }
@@ -12,9 +12,11 @@ Koning::~Koning()
 {
 }
 
-void Koning::act()
+bool Koning::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Koning::rank(int const rank)
 {

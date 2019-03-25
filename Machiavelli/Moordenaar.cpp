@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Moordenaar.h"
+#include "ClientInfo.h"
 
-
-Moordenaar::Moordenaar() : CharacterCard()
+Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
 	this->inputState_ = false;
@@ -13,7 +13,7 @@ Moordenaar::~Moordenaar()
 {
 }
 
-void Moordenaar::act()
+bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (inputState_ == true)
 	{
@@ -31,7 +31,9 @@ void Moordenaar::act()
 			count++;
 		});
 	}
+	return false;
 }
+
 
 void Moordenaar::rank(int const rank)
 {

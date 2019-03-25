@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Magier.h"
+#include "ClientInfo.h"
 
-
-Magier::Magier() : CharacterCard()
+Magier::Magier(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Magier";
 }
@@ -12,9 +12,11 @@ Magier::~Magier()
 {
 }
 
-void Magier::act()
+bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Magier::rank(int const rank)
 {

@@ -2,6 +2,8 @@
 #include "PlayingState.h"
 #include "random.h"
 #include <algorithm>
+#include "ClientInfo.h"
+#include "Game.h"
 
 PlayingState::PlayingState(Game& game) : State(game)
 {

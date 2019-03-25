@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RemoveCharacterState.h"
 #include <algorithm>
+#include "ClientInfo.h"
+#include "Game.h"
 
 RemoveCharacterState::RemoveCharacterState(Game& game) : State(game)
 {

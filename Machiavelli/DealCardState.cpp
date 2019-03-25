@@ -1,7 +1,10 @@
+#include "State.h"
 #include "pch.h"
 #include "DealCardState.h"
 #include "Bouwmeester.h"
 #include <algorithm>
+#include "Game.h"
+#include "ClientInfo.h"
 
 DealCardState::DealCardState(Game& game) : State(game),chooseCharacterState(game), removeCharacterState(game)
 {
@@ -15,7 +18,7 @@ void DealCardState::onEnter()
 	//todo: setstate
 	//todo: setking
 	
-	if (game_.client1().get_player().isKing()) 
+	if (this->game_.client1().get_player().isKing()) 
 	{
 		game_.sendToAllPlayers("speler1 is de koning");
 		game_.sendToAllPlayers("speler1 is aan de beurt");

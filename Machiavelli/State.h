@@ -1,6 +1,7 @@
 #pragma once
-#include "Game.h"
-#include "ClientInfo.h"
+#include <string>
+class Game;
+class ClientInfo;
 class State
 {
 public:

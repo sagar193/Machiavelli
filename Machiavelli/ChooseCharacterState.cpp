@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "ChooseCharacterState.h"
 #include <algorithm>
-
+#include "ClientInfo.h"
+#include "Game.h"
 
 ChooseCharacterState::ChooseCharacterState(Game& game) : State(game)
 {

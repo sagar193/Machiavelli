@@ -19,14 +19,14 @@
 
 void Game::loadCharacterCards()
 {
-	characterCards_.push_back(std::make_unique<Moordenaar>());
-	characterCards_.push_back(std::make_unique<Dief>());
-	characterCards_.push_back(std::make_unique<Magier>());
-	characterCards_.push_back(std::make_unique<Koning>());
-	characterCards_.push_back(std::make_unique<Prediker>());
-	characterCards_.push_back(std::make_unique<Koopman>());
-	characterCards_.push_back(std::make_unique<Bouwmeester>());
-	characterCards_.push_back(std::make_unique<Condottiere>());
+	characterCards_.push_back(std::make_unique<Moordenaar>(*this));
+	characterCards_.push_back(std::make_unique<Dief>(*this));
+	characterCards_.push_back(std::make_unique<Magier>(*this));
+	characterCards_.push_back(std::make_unique<Koning>(*this));
+	characterCards_.push_back(std::make_unique<Prediker>(*this));
+	characterCards_.push_back(std::make_unique<Koopman>(*this));
+	characterCards_.push_back(std::make_unique<Bouwmeester>(*this));
+	characterCards_.push_back(std::make_unique<Condottiere>(*this));
 }
 
 void Game::loadBuildingCards()
@@ -156,6 +156,11 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	else {
 		clientInfo->get_socket() << "je bent niet aan de beurt\r\n";
 	}
+}
+
+Player & Game::currentPlayer()
+{
+	return currentClient_->get_player();
 }
 
 void Game::sendToCurrentPlayer(const std::string message) const

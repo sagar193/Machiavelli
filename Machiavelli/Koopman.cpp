@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Koopman.h"
+#include "ClientInfo.h"
 
-
-Koopman::Koopman() : CharacterCard()
+Koopman::Koopman(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koopman";
 }
@@ -12,9 +12,11 @@ Koopman::~Koopman()
 {
 }
 
-void Koopman::act()
+bool Koopman::act(ClientInfo & clientInfo, std::string cmd)
 {
+	return false;
 }
+
 
 void Koopman::rank(int const rank)
 {

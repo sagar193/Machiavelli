@@ -4,6 +4,8 @@
 #include "ChooseCharacterState.h"
 #include "RemoveCharacterState.h"
 
+class Game;
+class ClientInfo;
 class DealCardState : public State
 {
 private:

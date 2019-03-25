@@ -1,6 +1,6 @@
 #pragma once
 #include "CharacterCard.h"
-
+class ClientInfo;
 class Bouwmeester : public CharacterCard
 {
 private:
@@ -8,10 +8,13 @@ private:
 	int rank_;
 
 public:
-	Bouwmeester();
+	Bouwmeester(Game& game);
 	~Bouwmeester();
 
-	void act() override;
+	void onEnter() override {}
+	bool act(ClientInfo& clientInfo, std::string cmd) override;
+	void onLeave() override {}
+
 	void rank(int const rank) override;
 	int const rank() const override;
 	void name(std::string const name) override;
