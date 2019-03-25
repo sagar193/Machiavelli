@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Moordenaar.h"
 #include "ClientInfo.h"
+#include "Game.h"
+#include <algorithm>
 
 Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
@@ -17,21 +19,38 @@ bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (inputState_ == true)
 	{
+		if (!cmd.empty()) {
+			int cmdi = std::stoi(cmd) - 1;
+			if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
+				CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+				chosenCard.owner(Owner::None);
+				game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + "vermoord.");
+				return true;
+			}
+		}
+		this->game_.sendToCurrentPlayer("Ongeldige input.");
+		printAllCharacters();
 
+		return false;
 	}
 	else
 	{
 		this->game_.sendToCurrentPlayer("Welke karakter wil je vermoorden?");
-		
-		int count = 1;
-		std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
-		{
-			game_.sendToCurrentPlayer( std::to_string(count) + ": " + card->name());
-			
-			count++;
-		});
+		printAllCharacters();
+		inputState_ = true;
+		return false;
 	}
-	return false;
+}
+
+void Moordenaar::printAllCharacters() const
+{
+	int count = 1;
+	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
+	{
+		game_.sendToCurrentPlayer(std::to_string(count) + ": " + card->name());
+
+		count++;
+	});
 }
 
 
