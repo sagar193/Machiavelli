@@ -28,7 +28,7 @@ bool RemoveCharacterState::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd) - 1;
-		if (cmdi > 0 && cmdi < game_.characterCards().size() && game_.characterCards()[cmdi]->owner() == Owner::Deck) {
+		if (cmdi >= 0 && cmdi < game_.characterCards().size() && game_.characterCards()[cmdi]->owner() == Owner::Deck) {
 			game_.characterCards()[cmdi]->owner(Owner::None);
 			return true;
 		}

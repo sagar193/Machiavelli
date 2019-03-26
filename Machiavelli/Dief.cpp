@@ -7,6 +7,8 @@
 Dief::Dief(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Dief";
+	characterCardIdentifier_ = CharacterCardEnum::DIEF;
+	mugged_ = false;
 }
 
 

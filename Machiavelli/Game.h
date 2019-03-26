@@ -45,6 +45,8 @@ public:
 	void sendToCurrentPlayer(const std::string message) const;
 	void sendToAllPlayers(const std::string message) const;
 	void setState(States state);
+	ClientInfo& getPlayer(CharacterCardEnum characterCardEnum);
+	ClientInfo& getPlayer(Owner owner);
 
 	//void setPlayer(Player& const player);
 	//void handleCommand(Player& const player, std::string cmd);

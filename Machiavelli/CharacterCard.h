@@ -2,6 +2,7 @@
 #include <string>
 #include "Owner.h"
 #include "State.h"
+#include "CharacterCardEnum.h"
 
 class ClientInfo;
 class Game;
@@ -24,10 +25,12 @@ public:
 	virtual bool mugged(bool const mugged) { mugged_ = mugged; return true; }
 
 	virtual void removeBuildingCard(int index);
+	CharacterCardEnum characterCardIdentifier() { return characterCardIdentifier_; }
 private:
 	Owner owner_;
 
 protected:
 	bool mugged_;
+	CharacterCardEnum characterCardIdentifier_;
 };
 

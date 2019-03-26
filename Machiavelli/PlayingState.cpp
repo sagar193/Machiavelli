@@ -22,7 +22,7 @@ void PlayingState::onEnter()
 	int count = 0;
 	auto position = std::find_if(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 	{
-		if (card->owner() != Owner::Deck && card->owner() != Owner::None) {
+		if (card->owner() != Owner::Deck && card->owner() != Owner::None && Owner::Killed) {
 			return true;
 		}
 		count++;
@@ -48,6 +48,15 @@ void PlayingState::onEnter()
 			game_.setCurrentClient(Game::Players::Player2);
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " (speler2) is aan de beurt\r\n");
 		}
+
+		if (game_.characterCards()[currentCharacterIndex]->mugged() == true)
+		{
+			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " was bestolen dus geeft zijn geld af aan de dief");
+			//auto& player = game_.getPlayer(game_.characterCards()[currentCharacterIndex]->owner());
+			//player.get_player().gold(player.get_player().gold() + game_.currentPlayer().gold());
+			game_.currentPlayer().gold(0);
+		}
+
 		printChooseStateOptions();
 	}
 	else

@@ -5,6 +5,8 @@
 Koning::Koning(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koning";
+	characterCardIdentifier_ = CharacterCardEnum::KONING;
+	mugged_ = false;
 }
 
 

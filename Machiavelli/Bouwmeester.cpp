@@ -5,6 +5,8 @@
 Bouwmeester::Bouwmeester(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Bouwmeester";
+	characterCardIdentifier_ = CharacterCardEnum::BOUWMEESTER;
+	mugged_ = false;
 }
 
 

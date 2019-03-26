@@ -7,6 +7,7 @@
 Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
+	characterCardIdentifier_ = CharacterCardEnum::MOORDENAAR;
 	mugged_ = false;
 }
 

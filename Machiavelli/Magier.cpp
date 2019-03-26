@@ -5,6 +5,8 @@
 Magier::Magier(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Magier";
+	characterCardIdentifier_ = CharacterCardEnum::MAGIER;
+	mugged_ = false;
 }
 
 
