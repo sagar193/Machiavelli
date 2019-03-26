@@ -135,7 +135,7 @@ void PlayingState::onLeave()
 	int count = 0;
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
-		if (card.owner() == game_.currentClient().get_player().ownertag()) {
+		if (card.owner() == game_.currentClient().get_player().ownertag() && card.active()) {
 			count++;
 		}
 	});
@@ -153,9 +153,9 @@ void PlayingState::onLeave()
 
 	game_.characterCards()[currentCharacterIndex]->owner(Owner::None);
 	onEnter();
-	if (currentCharacterIndex == -1 && !lastround) 
+	if (currentCharacterIndex == -1) 
 	{
-		game_.setState(Game::DealCards);
+		
 		std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 		{
 			card->owner(Owner::Deck);
@@ -166,7 +166,13 @@ void PlayingState::onLeave()
 				card.owner(Owner::Deck);
 			}
 		});
-		game_.currentState().onEnter();
+		if (!lastround) {
+			game_.setState(Game::DealCards);
+			game_.currentState().onEnter();
+		}
+		else {
+			
+		}
 	}
 }
 
