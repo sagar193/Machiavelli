@@ -21,8 +21,10 @@ public:
 	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age } 
 	{ 
 		isKing_ = false; 
-		gold_ = 0; 
+		gold_ = 10; 
 		ownertag_ = None;
+		points_ = 0;
+		//playertag_ = Game::Players::None;
 	}
 
 	//todo: rule of fif
@@ -37,18 +39,24 @@ public:
 	void isKing(bool isKing) { this->isKing_ = isKing; }
 	int gold() { return gold_; }
 	void gold(int gold) { gold_ = gold; }
-	Owner ownertag() { return ownertag_; }
-	void ownertag(Owner owner) { ownertag_ = owner; }
+	Owner ownertag() const { return ownertag_; }
+	//Game::Players playertag() const { return playertag_; }
 
+	void ownertag(Owner owner) { ownertag_ = owner; }
+	//void playertag(Game::Players player) { playertag_ = player; }
+	int points() { return points_; }
+	void addPoints(int points) { points_ += points; }
 
 private:
 	//todo: socket pointer reference?
 	//todo: vector?
 	Owner ownertag_;
+	//Game::Players playertag_;
 	bool isKing_;
 	int gold_;
     std::string name_;
 	int age_;
+	int points_;
 };
 
 #endif /* Player_hpp */

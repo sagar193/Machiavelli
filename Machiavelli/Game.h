@@ -17,7 +17,8 @@ public:
 	enum Players
 	{
 		Player1,
-		Player2
+		Player2,
+		None
 	};
 
 	enum States

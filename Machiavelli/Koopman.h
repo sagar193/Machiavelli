@@ -6,13 +6,14 @@ class Koopman : public CharacterCard
 private:
 	std::string name_;
 	int rank_;
+	bool used_;
 
 public:
 	Koopman(Game& game);
 	~Koopman();
 
-	void onEnter() override {};
-	void onLeave() override {};
+	void onEnter() override;
+	void onLeave() override;
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 
 	void rank(int const rank) override;

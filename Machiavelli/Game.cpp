@@ -120,11 +120,13 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 		client_info1 = clientInfo;
 		client_info1->get_socket() << "jij bent speler1\r\n";
 		client_info1->get_player().ownertag(Owner::Player1);
+		//client_info1->get_player().playertag(Players::Player1);
 	}
 	else if (client_info2 == nullptr) {
 		client_info2 = clientInfo;
 		client_info2->get_socket() << "jij bent speler2\r\n";
 		client_info2->get_player().ownertag(Owner::Player2);
+		//client_info2->get_player().playertag(Players::Player2);
 	}
 	else {
 		//todo: je moet eerst iets schrijven is niet mooi nicht richtig
@@ -142,16 +144,7 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	if (currentClient_ == &(*clientInfo)) {
 		auto callback = currentState_->act(*clientInfo, cmd);
 		if (callback == true) {
-			//if ()
-			//{
-			//	currentState_ = states_[States::Playing].get();
-			//}
-			//else {
-			//	switchCurrentClientInfo();
-			//	currentState_->onEnter();
-			//}
 		}
-
 	}
 	else {
 		clientInfo->get_socket() << "je bent niet aan de beurt\r\n";
