@@ -14,6 +14,8 @@ public:
 	void onEnter() override;
 	void onLeave() override {};
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
+
+	bool mugged(bool const mugged) override;
 	void printAllCharacters() const;
 	void rank(int const rank) override;
 	int const rank() const override;

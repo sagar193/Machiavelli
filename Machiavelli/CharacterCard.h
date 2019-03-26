@@ -18,11 +18,16 @@ public:
 	virtual int const rank() const = 0;
 	virtual void name(std::string const name) = 0;
 	virtual std::string const name() const = 0;
-	Owner owner() { return owner_; }
+	Owner owner() const { return owner_; }
 	void owner(Owner owner) { owner_ = owner; }
+	bool mugged() const { return mugged_; };
+	virtual bool mugged(bool const mugged) { mugged_ = mugged; return true; }
 
 	virtual void removeBuildingCard(int index);
 private:
 	Owner owner_;
+
+protected:
+	bool mugged_;
 };
 

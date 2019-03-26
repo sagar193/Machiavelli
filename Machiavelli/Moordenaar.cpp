@@ -7,6 +7,7 @@
 Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
+	mugged_ = false;
 }
 
 
@@ -26,7 +27,7 @@ bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = std::stoi(cmd) - 1;
 		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
 			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
-			chosenCard.owner(Owner::None);
+			chosenCard.owner(Owner::Killed);
 			game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + " vermoord.");
 			return true;
 		}
@@ -37,13 +38,26 @@ bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 	return false;
 }
 
+bool Moordenaar::mugged(bool const mugged)
+{
+	if (mugged == true) {
+		game_.sendToCurrentPlayer("De moordenaar kan niet beroofd worden.");
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 void Moordenaar::printAllCharacters() const
 {
 	int count = 1;
-	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
+	std::for_each(game_.characterCards().begin()+1, game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
 	{
-		game_.sendToCurrentPlayer(std::to_string(count) + ": " + card->name());
+		if (card->owner() != Owner::Killed) {
+			game_.sendToCurrentPlayer(std::to_string(count) + ": " + card->name());
 
+		}
 		count++;
 	});
 }
