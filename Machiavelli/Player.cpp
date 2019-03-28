@@ -15,7 +15,7 @@ Player::Player() {
 	ownertag_ = Owner::None;
 	isKing_ = false;
 	gold_ = 10;
-	points_ = 0
+	points_ = 0;
 	//playertag_ = Game::Players::None;
 }
 
