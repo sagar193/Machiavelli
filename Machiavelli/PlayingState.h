@@ -39,6 +39,9 @@ private:
 	void printChooseStateOptions();
 
 	void printAvailableBuildingCards() const;
-
+	void printCurrentPlayerBuildingCardsNonActive() const;
+	void printCurrentPlayerBuildingCardsActive() const;
+	bool lastround;
+	//Game::Players endPlayer;
 };
 

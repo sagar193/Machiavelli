@@ -8,12 +8,15 @@
 
 #include "pch.h"
 #include "Player.h"
+#include "Game.h"
 using namespace std;
 
 Player::Player() {
 	ownertag_ = Owner::None;
 	isKing_ = false;
-	gold_ = 0;
+	gold_ = 10;
+	points_ = 0
+	//playertag_ = Game::Players::None;
 }
 
 std::string const Player::name() const

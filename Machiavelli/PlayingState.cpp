@@ -8,12 +8,13 @@
 PlayingState::PlayingState(Game& game) : State(game)
 {
 	currentState_ = States::InitState;
+	//endPlayer = Game::Players::None;
 	placedBuildingCard_ = false;
 	usedCharacterCard_ = false;
 	drawnBuildingCard1 = nullptr;
 	drawnBuildingCard2 = nullptr;
 	initState_ = false;
-
+	lastround = false;
 	currentCharacterIndex = 0;
 }
 
@@ -48,6 +49,12 @@ void PlayingState::onEnter()
 			game_.setCurrentClient(Game::Players::Player2);
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " (speler2) is aan de beurt\r\n");
 		}
+		//todo: print gebouwen
+		game_.sendToCurrentPlayer("je hebt op het moment deze kaarten in je hand");
+		printCurrentPlayerBuildingCardsNonActive();
+		game_.sendToCurrentPlayer("je stad bestaat op het moment uit deze gebouwen");
+		printCurrentPlayerBuildingCardsActive();
+		game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
 
 		if (game_.characterCards()[currentCharacterIndex]->mugged() == true)
 		{
@@ -97,15 +104,16 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 		case PlayingState::PlaceBuildingCard:
 			if (placeBuildingCard(clientInfo, cmd))
 			{
-				placedBuildingCard_ = true;
+				//placedBuildingCard_ = true;
 				currentState_ = ChooseState;
 			}
 			break;
 		case PlayingState::UseCharacterCard:
 			if (useCharacterCard(clientInfo, cmd))
 			{
-				usedCharacterCard_ = true;
+				//usedCharacterCard_ = true;
 				currentState_ = ChooseState;
+				//game_.characterCards()[currentCharacterIndex]->onLeave();
 			}
 			break;
 		case PlayingState::FoldBuildingCard:
@@ -133,12 +141,47 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 
 void PlayingState::onLeave()
 {
+	int count = 0;
+	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+	{
+		if (card.owner() == game_.currentClient().get_player().ownertag() && card.active()) {
+			count++;
+		}
+	});
+	if (count >= 8) {
+		if (game_.characterCards()[currentCharacterIndex]->owner() == Owner::Player1) {
+			game_.sendToAllPlayers("speler 1 heeft acht steden gebouwd en krijgt 4 punten");
+			game_.currentClient().get_player().addPoints(4);
+		}
+		else {
+			game_.sendToAllPlayers("speler 2 heeft acht steden gebouwd en krijgt 4 punten");
+		}
+		game_.sendToAllPlayers("na deze ronde zal het spel stoppen en bepaalt worden wie er gewonnen heeft");
+		lastround = true;
+	}
+
 	game_.characterCards()[currentCharacterIndex]->owner(Owner::None);
 	onEnter();
 	if (currentCharacterIndex == -1) 
 	{
-		game_.setState(Game::DealCards);
-		game_.currentState().onEnter();
+		
+		std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
+		{
+			card->owner(Owner::Deck);
+		});
+		std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+		{
+			if (card.owner() == Owner::None) {
+				card.owner(Owner::Deck);
+			}
+		});
+		if (!lastround) {
+			game_.setState(Game::DealCards);
+			game_.currentState().onEnter();
+		}
+		else {
+			
+		}
 	}
 }
 
@@ -193,7 +236,7 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 			//todo:text opties
 			printAvailableBuildingCards();
 		}
-		else if (cmdi == 3 && !usedCharacterCard_) {
+		else if (cmdi == 3 /*&& !usedCharacterCard_*/) {
 			currentState_ = UseCharacterCard;
 			//todo:text opties
 			game_.characterCards()[currentCharacterIndex]->onEnter();
@@ -215,27 +258,33 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		//todo: out of range error
+		if (cmdi < 0 || cmdi >= game_.buildingCards().size()) {
+			game_.sendToCurrentPlayer("you can't choose this card");
+			return false;
+		}
 		BuildingCard& chosenCard = game_.buildingCards().at(cmdi);
-		if (chosenCard.owner() != game_.currentPlayer().ownertag()) {
-			game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
+		if (chosenCard.owner() != game_.currentPlayer().ownertag() && chosenCard.active()) {
+			//game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
+			game_.sendToCurrentPlayer("you can't choose this card");
 			printAvailableBuildingCards();
 			return false;
 		}
 		else {
 			if (chosenCard.cost() > game_.currentPlayer().gold()) {
-				game_.sendToCurrentPlayer("You don't have enough gold for the chosen building card \r\n");
+				game_.sendToCurrentPlayer("You don't have enough gold for the chosen building card");
 				printAvailableBuildingCards();
 				return false;
 			}
 			else {
 				game_.currentPlayer().gold(game_.currentPlayer().gold() - chosenCard.cost());
 				chosenCard.active(true);
+				placedBuildingCard_ = true;
 				return true;
 			}
 		}
 	}
 }
-
+//todo: kan mooier?
 bool PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
 {
 	return game_.characterCards()[currentCharacterIndex]->act(clientInfo,cmd);
@@ -286,15 +335,32 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 void PlayingState::printAvailableBuildingCards() const
 {
 	game_.sendToCurrentPlayer("Available cards:");
+	printCurrentPlayerBuildingCardsNonActive();
+	game_.sendToCurrentPlayer("press 0 to don't place any buildings");
+}
+
+void PlayingState::printCurrentPlayerBuildingCardsActive() const
+{
 	int count = 1;
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
-		if (card.owner() == game_.currentPlayer().ownertag()) {
-			game_.sendToCurrentPlayer(std::to_string(count)+" cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
+		if (card.owner() == game_.currentPlayer().ownertag() && card.active()) {
+			game_.sendToCurrentPlayer(std::to_string(count) + " cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
 		}
 		count++;
 	});
-	game_.sendToCurrentPlayer("press 0 to don't place any buildings");
+}
+
+void PlayingState::printCurrentPlayerBuildingCardsNonActive() const
+{
+	int count = 1;
+	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+	{
+		if (card.owner() == game_.currentPlayer().ownertag() && !card.active()) {
+			game_.sendToCurrentPlayer(std::to_string(count) + " cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
+		}
+		count++;
+	});
 }
 
 void PlayingState::drawBuildingCards()
@@ -312,14 +378,15 @@ void PlayingState::drawBuildingCards()
 
 void PlayingState::printChooseStateOptions()
 {
+
 	if (!initState_) {
 		game_.sendToCurrentPlayer("1: pak 2 munten of pak 1 en leg 1 gebouwkaart weg");
 	}
 	if (!placedBuildingCard_) {
 		game_.sendToCurrentPlayer("2: plaats gebouw");
 	}
-	if (!usedCharacterCard_) {
-		game_.sendToCurrentPlayer("3: gebuik karakterkaart");
-	}
+	//if (!usedCharacterCard_) {
+	game_.sendToCurrentPlayer("3: gebuik karakterkaart");
+	//}
 	game_.sendToCurrentPlayer("0: stop beurt");
 }
