@@ -330,7 +330,7 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 		count++;
 	});
 	int randomint = random_int(0, unused.size() -1);
-	return game_.buildingCards().at(randomint);
+	return game_.buildingCards().at(unused.at(randomint));
 
 }
 
