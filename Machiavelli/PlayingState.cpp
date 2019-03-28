@@ -168,6 +168,7 @@ void PlayingState::onLeave()
 		std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 		{
 			card->owner(Owner::Deck);
+			card->onLeave();
 		});
 		std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 		{
