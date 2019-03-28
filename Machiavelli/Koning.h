@@ -11,7 +11,7 @@ public:
 	Koning(Game& game);
 	~Koning();
 
-	void onEnter() override {};
+	void onEnter() override;
 	void onLeave() override {};
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 
