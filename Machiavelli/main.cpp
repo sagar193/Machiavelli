@@ -140,6 +140,7 @@ void handle_client(Socket client) // this function runs in a separate thread
 
 int main(int argc, const char * argv[])
 {
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
     // start command consumer thread
     vector<thread> all_threads;
     all_threads.emplace_back(consume_command);
@@ -166,6 +167,8 @@ int main(int argc, const char * argv[])
     for (auto &t : all_threads) {
         t.join();
     }
+	
+	//_CrtDumpMemoryLeaks();
 
     return 0;
 }

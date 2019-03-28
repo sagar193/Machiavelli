@@ -26,6 +26,8 @@ public:
 
 	virtual void removeBuildingCard(int index);
 	CharacterCardEnum characterCardIdentifier() { return characterCardIdentifier_; }
+	virtual ~CharacterCard() {};
+
 private:
 	Owner owner_;
 

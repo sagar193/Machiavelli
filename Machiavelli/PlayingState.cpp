@@ -75,8 +75,6 @@ void PlayingState::onEnter()
 		initState_ = true;
 		currentCharacterIndex = -1;
 	}
-
-	calcPoints();
 }
 
 bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
@@ -170,6 +168,7 @@ void PlayingState::onLeave()
 		std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 		{
 			card->owner(Owner::Deck);
+			card->onLeave();
 		});
 		std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 		{
