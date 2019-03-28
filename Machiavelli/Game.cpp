@@ -212,6 +212,11 @@ void Game::startGame()
 	
 }
 
+void Game::endGame()
+{
+	return;
+}
+
 
 Game::~Game()
 {
