@@ -48,19 +48,18 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 			std::for_each(player2Cards.begin(), player2Cards.end(), [&](BuildingCard* card) {
 				card->owner(Player1);
 			});
+			return true;
 
 		}
 		else if (cmdi == 2) {
-			int numberOfHandCards = std::count_if(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card) {
+			std::vector<BuildingCard*> activePlayerBuildings;
+			std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card){
 				if (card.owner() == game_.currentPlayer().ownertag() && card.active() == false)
 				{
-					return true;
-				}
-				else {
-					return false;
+					activePlayerBuildings.push_back(&card);
 				}
 			});
-			for (size_t i = 0; i < numberOfHandCards; i++)
+			for (size_t i = 0; i < activePlayerBuildings.size(); i++)
 			{
 				std::vector<int> unused;
 				int count = 0;
@@ -74,6 +73,11 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 				int randomint = random_int(0, unused.size() - 1);
 				game_.buildingCards().at(randomint).owner(game_.currentPlayer().ownertag());
 			}
+			std::for_each(activePlayerBuildings.begin(), activePlayerBuildings.end(), [&](BuildingCard* card) {
+				card->owner(None);
+			});
+
+			return true;
 		}
 	}
 	this->game_.sendToCurrentPlayer("Ongeldige input.");
