@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Magier.h"
 #include "ClientInfo.h"
+#include "Game.h"
+#include <algorithm>
 
 Magier::Magier(Game& game) : CharacterCard(game)
 {
@@ -14,8 +16,46 @@ Magier::~Magier()
 {
 }
 
+void Magier::onEnter()
+{
+	this->game_.sendToCurrentPlayer("Toets 1 om alle handkaarten om te ruilen met de andere speler");
+	this->game_.sendToCurrentPlayer("Toets 2 om je kaarten handkaarten weg te doen en een even aantal gebouwenkaarten te trekken");
+}
+
 bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 {
+	if (!cmd.empty()) {
+		int cmdi = std::stoi(cmd);
+		if (cmdi == 1) {
+			std::vector<BuildingCard*> player1Cards;
+			int count = 1;
+			std::vector<BuildingCard*> player2Cards;
+			std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+			{
+				if (card.owner() == Player1 && card.active() == false)
+				{
+					player1Cards.push_back(&card);
+				}
+				if (card.owner() == Player2 && card.active() == false)
+				{
+					player2Cards.push_back(&card);
+				}
+			});
+			std::for_each(player1Cards.begin(), player1Cards.end(), [&](BuildingCard* card) {
+				card->owner(Player2);
+			});
+			std::for_each(player2Cards.begin(), player2Cards.end(), [&](BuildingCard* card) {
+				card->owner(Player1);
+			});
+
+		}
+		else if (cmdi == 2) {
+
+		}
+	}
+	this->game_.sendToCurrentPlayer("Ongeldige input.");
+	onEnter();
+
 	return false;
 }
 
