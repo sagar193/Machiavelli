@@ -39,7 +39,7 @@ public:
 
 	Game();
 	void setPlayer(std::shared_ptr<ClientInfo> const clientInfo);
-	void handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
+	bool handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd);
 
 	ClientInfo& currentClient() { return *currentClient_; }
 	Player& currentPlayer();
@@ -64,6 +64,7 @@ private:
 	//Player* player1_;
 	//Player* player2_;
 	ClientInfo* currentClient_;
+	bool running;
 
 	std::vector<std::unique_ptr<CharacterCard>> characterCards_;
 	std::vector<BuildingCard> buildingCards_;

@@ -104,9 +104,7 @@ Game::Game()
 {
 	client_info1 = nullptr;
 	client_info2 = nullptr;
-	//player1_ = nullptr;
-	//player2_ = nullptr;
-	
+	running = true;
 
 	states_[Game::States::DealCards] = std::make_unique<DealCardState>(*this);
 	states_[Game::States::Playing] = std::make_unique<PlayingState>(*this);
@@ -140,8 +138,10 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 	}
 }
 
-void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd)
+bool Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd)
 {
+		endGame();
+		return running;
 	if (currentClient_ == &(*clientInfo)) {
 		auto callback = currentState_->act(*clientInfo, cmd);
 		if (callback == true) {
@@ -150,6 +150,7 @@ void Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::stri
 	else {
 		clientInfo->get_socket() << "je bent niet aan de beurt\r\n";
 	}
+	return running;
 }
 
 Player & Game::currentPlayer()
@@ -214,7 +215,8 @@ void Game::startGame()
 
 void Game::endGame()
 {
-	return;
+	sendToAllPlayers("Game has ended");
+	running = false;
 }
 
 
