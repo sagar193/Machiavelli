@@ -5,6 +5,7 @@ todo:
 3. memory leak detectie
 6. exceptionsafe
 7. betere ui
+8. bouwmeester plaatsen van gebouwen en ui beter
 
 klaar
 2. alle charactercard act

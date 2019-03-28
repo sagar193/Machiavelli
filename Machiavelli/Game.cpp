@@ -140,8 +140,6 @@ void Game::setPlayer(std::shared_ptr<ClientInfo> const clientInfo)
 
 bool Game::handleCommand(std::shared_ptr<ClientInfo> const clientInfo, std::string cmd)
 {
-		endGame();
-		return running;
 	if (currentClient_ == &(*clientInfo)) {
 		auto callback = currentState_->act(*clientInfo, cmd);
 		if (callback == true) {
