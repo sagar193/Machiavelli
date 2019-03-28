@@ -216,7 +216,7 @@ void Game::startGame()
 void Game::endGame()
 {
 	sendToAllPlayers("Game has ended");
-	running == false;
+	running = false;
 }
 
 
