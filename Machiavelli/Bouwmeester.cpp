@@ -23,7 +23,7 @@ BuildingCard & Bouwmeester::getRandomBuildingCardFromDeck() const
 
 void Bouwmeester::printAllBuidlingCards()
 {
-	int count = 0;
+	int count = 1;
 	auto& player = game_.currentClient();
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card) 
 	{
@@ -57,7 +57,7 @@ void Bouwmeester::onEnter()
 		auto drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
 		drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
 		game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n" +
-			drawnBuildingCard1->name() + " \r\n" +
+			drawnBuildingCard1->name() + "\r\n" +
 			drawnBuildingCard2->name() + "\r\n");
 		hasdrawn_ = true;
 	}
@@ -68,6 +68,7 @@ void Bouwmeester::onEnter()
 	game_.sendToCurrentPlayer("je mag nog " + std::to_string(countPlacableBuildings) + " kaarten plaatsen");
 	game_.sendToCurrentPlayer("je bezit op het moment deze kaarten");
 	printAllBuidlingCards();
+	game_.sendToCurrentPlayer("druk op 0 om terug te gaan");
 }
 
 bool Bouwmeester::act(ClientInfo & clientInfo, std::string cmd)
@@ -76,7 +77,7 @@ bool Bouwmeester::act(ClientInfo & clientInfo, std::string cmd)
 		return true;
 	}
 	if (!cmd.empty()) {
-		int cmdi = std::stoi(cmd) - 1;
+		int cmdi = std::stoi(cmd);
 		int cardIndex = cmdi - 1;
 		if (cmdi == 0) {
 			return true;

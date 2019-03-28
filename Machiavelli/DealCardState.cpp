@@ -48,7 +48,7 @@ void DealCardState::onEnter()
 	}
 	
 	//todo: reset all charactercards
-	const int toRemove = random_int(0, 7);
+	const int toRemove = random_int(0, game_.characterCards().size()-1);
 	game_.characterCards()[toRemove]->owner(None);
 	game_.sendToCurrentPlayer(game_.characterCards()[toRemove]->name() + " (" + std::to_string(toRemove+1) + ") is weggelegd en doet deze ronde niet mee.");
 	currentState->onEnter();

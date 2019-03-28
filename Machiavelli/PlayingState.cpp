@@ -75,8 +75,6 @@ void PlayingState::onEnter()
 		initState_ = true;
 		currentCharacterIndex = -1;
 	}
-
-	calcPoints();
 }
 
 bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
