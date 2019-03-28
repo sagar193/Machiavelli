@@ -66,6 +66,8 @@ void PlayingState::onEnter()
 		initState_ = true;
 		currentCharacterIndex = -1;
 	}
+
+	calcPoints();
 }
 
 bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
@@ -171,7 +173,8 @@ void PlayingState::onLeave()
 			game_.currentState().onEnter();
 		}
 		else {
-			
+			//todo: stop spel
+			endGame();
 		}
 	}
 }
@@ -340,6 +343,76 @@ void PlayingState::printCurrentPlayerBuildingCardsActive() const
 		}
 		count++;
 	});
+}
+
+void PlayingState::calcPoints()
+{
+	calcColorPoints();
+	calcBuildingPoints();
+}
+
+void PlayingState::calcColorPoints()
+{
+	auto& p1 = game_.client1().get_player();
+	auto& p2 = game_.client2().get_player();
+	if (p1.hasAllColors(game_)) {
+		game_.sendToAllPlayers("speler1 bezit van alle kleuren minstens 1 gebouw en krijgt daarmee 3 punten");
+		p1.addPoints(3);
+	}
+	if (p2.hasAllColors(game_)) {
+		game_.sendToAllPlayers("speler2 bezit van alle kleuren minstens 1 gebouw en krijgt daarmee 3 punten");
+		p2.addPoints(3);
+	}
+}
+
+void PlayingState::calcBuildingPoints()
+{
+	//todo: calc point for building;
+	auto& player1 = game_.client1().get_player();
+	auto& player2 = game_.client2().get_player();
+
+	int countP1 = player1.countBuildings(game_);
+	int countP2 = player2.countBuildings(game_);
+
+
+	if (countP1 >= 8) {
+		game_.sendToAllPlayers("speler 1 heeft 8 gebouwen en krijgt daarmee 2 punten");
+		player1.addPoints(2);
+	}
+
+	if (countP2 >= 8) {
+		game_.sendToAllPlayers("speler 2 heeft 8 gebouwen en krijgt daarmee 2 punten");
+		player2.addPoints(2);
+	}
+	//todo: correct?
+	int bp1 = player1.countBuidlingPounts(game_);
+	int bp2 = player2.countBuidlingPounts(game_);
+	game_.sendToAllPlayers("de volgende punten worden berekent op basis van de kosten van de geplaatste gebouwen");
+	game_.sendToAllPlayers("speler 1 krijgt " + std::to_string(bp1) + " punten");
+	player1.addPoints(bp1);
+	game_.sendToAllPlayers("speler 2 krijgt " + std::to_string(bp2) + " punten");
+	player2.addPoints(bp2);
+}
+
+void PlayingState::endGame()
+{
+	calcPoints();
+	int p1 = game_.client1().get_player().points();
+	int p2 = game_.client2().get_player().points();
+
+	game_.sendToAllPlayers("speler 1 heeft " + std::to_string(p1) + "punten");
+	game_.sendToAllPlayers("speler 2 heeft " + std::to_string(p2) + "punten");
+
+	if (p1 > p2) {
+		game_.sendToAllPlayers("speler 1 heeft de meeste punten en wint daarmee het spel");
+	}
+	else if (p2 > p1) {
+		game_.sendToAllPlayers("speler 2 heeft de meeste punten en wint daarmee het spel");
+	}
+	else {
+		game_.sendToAllPlayers("gelijk spel");
+	}
+	game_.endGame();
 }
 
 void PlayingState::printCurrentPlayerBuildingCardsNonActive() const

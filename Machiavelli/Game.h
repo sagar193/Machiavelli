@@ -50,6 +50,7 @@ public:
 	//void setPlayer(Player& const player);
 	//void handleCommand(Player& const player, std::string cmd);
 	void startGame();
+	void endGame();
 	~Game();
 private:
 

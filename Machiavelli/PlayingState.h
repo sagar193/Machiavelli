@@ -42,6 +42,10 @@ private:
 	void printCurrentPlayerBuildingCardsNonActive() const;
 	void printCurrentPlayerBuildingCardsActive() const;
 	bool lastround;
+	void calcPoints();
+	void calcColorPoints();
+	void calcBuildingPoints();
+	void endGame();
 	//Game::Players endPlayer;
 };
 

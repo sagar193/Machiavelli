@@ -13,7 +13,7 @@
 #include "Socket.h"
 #include "CharacterCard.h"
 #include "Owner.h"
-
+//class Game;
 class Player {
 public:
 	Player();
@@ -46,7 +46,9 @@ public:
 	//void playertag(Game::Players player) { playertag_ = player; }
 	int points() { return points_; }
 	void addPoints(int points) { points_ += points; }
-
+	int countBuildings(Game& game);
+	int countBuidlingPounts(Game& game);
+	bool hasAllColors(Game& game);
 private:
 	//todo: socket pointer reference?
 	//todo: vector?
