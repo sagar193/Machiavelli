@@ -7,6 +7,8 @@
 Prediker::Prediker(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Prediker";
+	characterCardIdentifier_ = CharacterCardEnum::PREDIKER;
+	mugged_ = false;
 	used_ = false;
 }
 

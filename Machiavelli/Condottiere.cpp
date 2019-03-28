@@ -21,6 +21,8 @@ void Condottiere::printOtherPlayerBuildingCards()
 Condottiere::Condottiere(Game& game)  : CharacterCard(game)
 {
 	this->name_ = "Condonttiere";
+	characterCardIdentifier_ = CharacterCardEnum::CONDOTTIERE;
+	mugged_ = false;
 	canChoose = true;
 }
 

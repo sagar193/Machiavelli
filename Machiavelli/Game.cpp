@@ -14,6 +14,7 @@
 #include "Condottiere.h"
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 //todo: player1 leave 
 
@@ -170,6 +171,33 @@ void Game::sendToAllPlayers(const std::string message) const
 void Game::setState(States state)
 {
 	currentState_ = states_[state].get();
+}
+
+ClientInfo & Game::getPlayer(CharacterCardEnum characterCardEnum)
+{
+	std::for_each(characterCards_.begin(), characterCards_.end(), [&](const std::unique_ptr<CharacterCard>& card)
+	{
+		if (card->characterCardIdentifier() == characterCardEnum) {
+			return &getPlayer(card->owner());
+		}
+	});
+	throw "getting non existing character";
+
+}
+
+ClientInfo & Game::getPlayer(Owner owner)
+{
+	if (client_info1->get_player().ownertag() == owner)
+	{
+		return *client_info1;
+	}
+	else if (client_info2->get_player().ownertag() == owner)
+	{
+		return *client_info2;
+	}
+	else {
+		throw "getting non existing owner";
+	}
 }
 
 

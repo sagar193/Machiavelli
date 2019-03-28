@@ -7,6 +7,8 @@
 Koopman::Koopman(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Koopman";
+	characterCardIdentifier_ = CharacterCardEnum::KOOPMAN;
+	mugged_ = false;
 	used_ = false;
 }
 

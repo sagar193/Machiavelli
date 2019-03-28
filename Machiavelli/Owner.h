@@ -5,5 +5,6 @@ enum Owner
 	Player1,
 	Player2,
 	Deck,
-	None
+	None,
+	Killed
 };

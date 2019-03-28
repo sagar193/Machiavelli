@@ -37,6 +37,8 @@ void Bouwmeester::printAllBuidlingCards()
 Bouwmeester::Bouwmeester(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Bouwmeester";
+	characterCardIdentifier_ = CharacterCardEnum::BOUWMEESTER;
+	mugged_ = false;
 	countPlacableBuildings = 3;
 	hasdrawn_ = false;
 }

@@ -102,6 +102,9 @@
     <ClInclude Include="Owner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterCardEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

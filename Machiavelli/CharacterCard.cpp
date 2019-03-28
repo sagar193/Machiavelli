@@ -6,6 +6,7 @@
 CharacterCard::CharacterCard(Game& game) : State(game)
 {
 	owner_ = Deck;
+	mugged_ = false;
 }
 
 void CharacterCard::removeBuildingCard(int index)

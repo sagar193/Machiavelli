@@ -7,7 +7,8 @@
 Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 {
 	this->name_ = "Moordenaar";
-	this->inputState_ = false;
+	characterCardIdentifier_ = CharacterCardEnum::MOORDENAAR;
+	mugged_ = false;
 }
 
 
@@ -15,40 +16,49 @@ Moordenaar::~Moordenaar()
 {
 }
 
+void Moordenaar::onEnter()
+{
+	this->game_.sendToCurrentPlayer("Welke karakter wil je vermoorden?");
+	printAllCharacters();
+}
+
 bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
-	if (inputState_ == true)
-	{
-		if (!cmd.empty()) {
-			int cmdi = std::stoi(cmd) - 1;
-			if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
-				CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
-				chosenCard.owner(Owner::None);
-				game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + "vermoord.");
-				return true;
-			}
+	if (!cmd.empty()) {
+		int cmdi = std::stoi(cmd) - 1;
+		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
+			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+			chosenCard.owner(Owner::Killed);
+			game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + " vermoord.");
+			return true;
 		}
-		this->game_.sendToCurrentPlayer("Ongeldige input.");
-		printAllCharacters();
+	}
+	this->game_.sendToCurrentPlayer("Ongeldige input.");
+	printAllCharacters();
 
+	return false;
+}
+
+bool Moordenaar::mugged(bool const mugged)
+{
+	if (mugged == true) {
+		game_.sendToCurrentPlayer("De moordenaar kan niet beroofd worden.");
 		return false;
 	}
-	else
-	{
-		this->game_.sendToCurrentPlayer("Welke karakter wil je vermoorden?");
-		printAllCharacters();
-		inputState_ = true;
-		return false;
+	else {
+		return true;
 	}
 }
 
 void Moordenaar::printAllCharacters() const
 {
 	int count = 1;
-	std::for_each(game_.characterCards().begin(), game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
+	std::for_each(game_.characterCards().begin()+1, game_.characterCards().end(), [&](const std::unique_ptr<CharacterCard>& card)
 	{
-		game_.sendToCurrentPlayer(std::to_string(count) + ": " + card->name());
+		if (card->owner() != Owner::Killed) {
+			game_.sendToCurrentPlayer(std::to_string(count) + ": " + card->name());
 
+		}
 		count++;
 	});
 }
