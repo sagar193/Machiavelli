@@ -3,6 +3,7 @@
 #include "ClientInfo.h"
 #include "Game.h"
 #include <algorithm>
+#include "random.h"
 
 Magier::Magier(Game& game) : CharacterCard(game)
 {
@@ -50,7 +51,29 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 
 		}
 		else if (cmdi == 2) {
-
+			int numberOfHandCards = std::count_if(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card) {
+				if (card.owner() == game_.currentPlayer().ownertag() && card.active() == false)
+				{
+					return true;
+				}
+				else {
+					return false;
+				}
+			});
+			for (size_t i = 0; i < numberOfHandCards; i++)
+			{
+				std::vector<int> unused;
+				int count = 0;
+				std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
+				{
+					if (card.owner() == Owner::Deck) {
+						unused.push_back(count);
+					}
+					count++;
+				});
+				int randomint = random_int(0, unused.size() - 1);
+				game_.buildingCards().at(randomint).owner(game_.currentPlayer().ownertag());
+			}
 		}
 	}
 	this->game_.sendToCurrentPlayer("Ongeldige input.");
