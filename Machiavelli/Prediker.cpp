@@ -48,6 +48,7 @@ bool Prediker::act(ClientInfo & clientInfo, std::string cmd)
 void Prediker::onLeave()
 {
 	used_ = false;
+	mugged_ = false;
 }
 
 

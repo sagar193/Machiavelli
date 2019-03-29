@@ -12,7 +12,7 @@ public:
 	~Magier();
 
 	void onEnter() override;
-	void onLeave() override {};
+	void onLeave() override;
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 
 	void rank(int const rank) override;

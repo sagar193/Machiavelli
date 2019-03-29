@@ -22,6 +22,11 @@ void Moordenaar::onEnter()
 	printAllCharacters();
 }
 
+void Moordenaar::onLeave()
+{
+	mugged_ = false;
+}
+
 bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {

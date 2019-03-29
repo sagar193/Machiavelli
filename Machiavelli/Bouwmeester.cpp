@@ -97,6 +97,7 @@ void Bouwmeester::onLeave()
 {
 	hasdrawn_ = false;
 	countPlacableBuildings = 3;
+	mugged_ = false;
 }
 
 void Bouwmeester::rank(int const rank)

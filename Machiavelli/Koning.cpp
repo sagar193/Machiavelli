@@ -24,6 +24,11 @@ void Koning::onEnter()
 	game_.sendToCurrentPlayer("Druk een toets om door te gaan.");
 }
 
+void Koning::onLeave()
+{
+	mugged_ = false;
+}
+
 bool Koning::act(ClientInfo & clientInfo, std::string cmd)
 {
 	return true;

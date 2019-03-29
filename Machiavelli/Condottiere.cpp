@@ -56,6 +56,7 @@ void Condottiere::onEnter()
 void Condottiere::onLeave()
 {
 	canChoose = true;
+	mugged_ = false;
 }
 
 bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)

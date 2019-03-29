@@ -12,7 +12,7 @@ public:
 	~Moordenaar();
 
 	void onEnter() override;
-	void onLeave() override {};
+	void onLeave() override;
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 
 	bool mugged(bool const mugged) override;

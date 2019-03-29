@@ -42,6 +42,7 @@ void Koopman::onEnter()
 void Koopman::onLeave()
 {
 	used_ = false;
+	mugged_ = false;
 }
 
 bool Koopman::act(ClientInfo & clientInfo, std::string cmd)

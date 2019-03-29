@@ -23,6 +23,11 @@ void Magier::onEnter()
 	this->game_.sendToCurrentPlayer("Toets 2 om je kaarten handkaarten weg te doen en een even aantal gebouwenkaarten te trekken");
 }
 
+void Magier::onLeave()
+{
+	mugged_ = false;
+}
+
 bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
