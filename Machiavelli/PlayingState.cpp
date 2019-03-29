@@ -113,8 +113,8 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 		case PlayingState::FoldBuildingCard:
 			if (foldBuildingCard(clientInfo, cmd))
 			{
-				game_.sendToCurrentPlayer("je hebt nu deze kaarten in je hand");
-				printCurrentPlayerBuildingCardsNonActive();
+				//game_.sendToCurrentPlayer("je hebt nu deze kaarten in je hand");
+				//printCurrentPlayerBuildingCardsNonActive();
 				initState_ = true;
 				currentState_ = ChooseState;
 			}

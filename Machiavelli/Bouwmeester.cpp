@@ -83,10 +83,14 @@ bool Bouwmeester::act(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		if (cardIndex >= 0 && cardIndex < game_.buildingCards().size()) {
-			auto card = game_.buildingCards()[cardIndex];
-			if (card.owner() == game_.currentClient().get_player().ownertag() && !card.active()) {
+			auto& card = game_.buildingCards()[cardIndex];
+			auto& player = game_.currentClient().get_player();
+			auto gold = player.gold();
+			auto cost = card.cost();
+			if (card.owner() == game_.currentClient().get_player().ownertag() && !card.active() && gold>=cost) {
 				card.active(true);
 				countPlacableBuildings--;
+				player.gold(gold - cost);
 				return true;
 			}
 		}

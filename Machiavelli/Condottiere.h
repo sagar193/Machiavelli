@@ -7,7 +7,11 @@ private:
 	std::string name_;
 	int rank_;
 	bool canChoose;
+	bool gotGold;
 	void printOtherPlayerBuildingCards();
+	bool prediker();
+	bool eightBuildings();
+	int calcBuilding();
 public:
 	Condottiere(Game& game);
 	~Condottiere();
