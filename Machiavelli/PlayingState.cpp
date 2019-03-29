@@ -263,19 +263,19 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 		}
 		//todo: out of range error
 		if (cmdi < 0 || cmdi >= game_.buildingCards().size()) {
-			game_.sendToCurrentPlayer("you can't choose this card");
+			game_.sendToCurrentPlayer("Je kunt deze kaart niet kiezen.");
 			return false;
 		}
 		BuildingCard& chosenCard = game_.buildingCards().at(cmdi);
 		if (chosenCard.owner() != game_.currentPlayer().ownertag() && chosenCard.active()) {
 			//game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
-			game_.sendToCurrentPlayer("you can't choose this card");
+			game_.sendToCurrentPlayer("Je kan deze kaart niet kiezen.");
 			printAvailableBuildingCards();
 			return false;
 		}
 		else {
 			if (chosenCard.cost() > game_.currentPlayer().gold()) {
-				game_.sendToCurrentPlayer("You don't have enough gold for the chosen building card");
+				game_.sendToCurrentPlayer("Je hebt niet genoeg goud voor de gekozen gebouwenkaart.");
 				printAvailableBuildingCards();
 				return false;
 			}
@@ -287,6 +287,10 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			}
 		}
 	}
+
+	game_.sendToCurrentPlayer("Ongeldige input.");
+	printAvailableBuildingCards();
+	return false;
 }
 //todo: kan mooier?
 bool PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
@@ -338,9 +342,9 @@ BuildingCard & PlayingState::getRandomBuildingCardFromDeck() const
 
 void PlayingState::printAvailableBuildingCards() const
 {
-	game_.sendToCurrentPlayer("Available cards:");
+	game_.sendToCurrentPlayer("Beschikbare kaarten: ");
 	printCurrentPlayerBuildingCardsNonActive();
-	game_.sendToCurrentPlayer("press 0 to don't place any buildings");
+	game_.sendToCurrentPlayer("Toets 0 om geen gebouwen te plaatsen.");
 }
 
 void PlayingState::printCurrentPlayerBuildingCardsActive() const
@@ -349,7 +353,7 @@ void PlayingState::printCurrentPlayerBuildingCardsActive() const
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
 		if (card.owner() == game_.currentPlayer().ownertag() && card.active()) {
-			game_.sendToCurrentPlayer(std::to_string(count) + " cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
+			game_.sendToCurrentPlayer(std::to_string(count) + " Kaartnaam: " + card.name() + "Kosten: " + std::to_string(card.cost()));
 		}
 		count++;
 	});

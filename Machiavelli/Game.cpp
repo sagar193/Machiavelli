@@ -181,7 +181,6 @@ ClientInfo & Game::getPlayer(CharacterCardEnum characterCardEnum)
 		}
 	});
 	throw "getting non existing character";
-
 }
 
 ClientInfo & Game::getPlayer(Owner owner)
