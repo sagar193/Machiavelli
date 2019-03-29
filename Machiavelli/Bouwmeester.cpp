@@ -87,6 +87,7 @@ bool Bouwmeester::act(ClientInfo & clientInfo, std::string cmd)
 			if (card.owner() == game_.currentClient().get_player().ownertag() && !card.active()) {
 				card.active(true);
 				countPlacableBuildings--;
+				return true;
 			}
 		}
 	}
