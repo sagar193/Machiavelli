@@ -31,8 +31,8 @@ bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd) - 1;
-		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
-			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+		if (cmdi >= 0 && cmdi < game_.characterCards().size() - 1) {
+			CharacterCard& chosenCard = *game_.characterCards().at(cmdi + 1);
 			chosenCard.owner(Owner::Killed);
 			game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + " vermoord.");
 			return true;

@@ -23,7 +23,7 @@ void PlayingState::onEnter()
 	int count = 0;
 	auto position = std::find_if(game_.characterCards().begin(), game_.characterCards().end(), [&](std::unique_ptr<CharacterCard>& card) 
 	{
-		if (card->owner() != Owner::Deck && card->owner() != Owner::None && Owner::Killed) {
+		if (card->owner() != Owner::Deck && card->owner() != Owner::None && card->owner() != Owner::Killed) {
 			return true;
 		}
 		count++;
