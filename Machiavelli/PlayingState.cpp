@@ -49,13 +49,7 @@ void PlayingState::onEnter()
 			game_.setCurrentClient(Game::Players::Player2);
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " (speler2) is aan de beurt\r\n");
 		}
-		//todo: print gebouwen
-		game_.sendToCurrentPlayer("je hebt op het moment deze kaarten in je hand");
-		printCurrentPlayerBuildingCardsNonActive();
-		game_.sendToCurrentPlayer("je stad bestaat op het moment uit deze gebouwen");
-		printCurrentPlayerBuildingCardsActive();
-		game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
-
+		
 		if (game_.characterCards()[currentCharacterIndex]->mugged() == true)
 		{
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " was bestolen dus geeft zijn geld af aan de dief");
@@ -120,8 +114,8 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 		case PlayingState::FoldBuildingCard:
 			if (foldBuildingCard(clientInfo, cmd))
 			{
-				game_.sendToCurrentPlayer("je hebt nu deze kaarten in je hand");
-				printCurrentPlayerBuildingCardsNonActive();
+				//game_.sendToCurrentPlayer("je hebt nu deze kaarten in je hand");
+				//printCurrentPlayerBuildingCardsNonActive();
 				initState_ = true;
 				currentState_ = ChooseState;
 			}
@@ -135,7 +129,6 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 		}
 		else if (currentState_ == ChooseState) {
 			//todo: print options
-			game_.currentClient().get_socket() << "kies uit een van de volgende mogelijkheden\r\n";
 			printChooseStateOptions();
 		}
 	}
@@ -454,7 +447,13 @@ void PlayingState::drawBuildingCards()
 
 void PlayingState::printChooseStateOptions()
 {
+	game_.sendToCurrentPlayer("je hebt op het moment deze kaarten in je hand");
+	printCurrentPlayerBuildingCardsNonActive();
+	game_.sendToCurrentPlayer("je stad bestaat op het moment uit deze gebouwen");
+	printCurrentPlayerBuildingCardsActive();
+	game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
 
+	game_.currentClient().get_socket() << "kies uit een van de volgende mogelijkheden\r\n";
 	if (!initState_) {
 		game_.sendToCurrentPlayer("1: pak 2 munten of pak 1 en leg 1 gebouwkaart weg");
 	}

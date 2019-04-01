@@ -21,7 +21,7 @@ public:
 	Player(const std::string& name_, const int age) : name_{ name_ }, age_{ age } 
 	{ 
 		isKing_ = false; 
-		gold_ = 10; 
+		gold_ = 100; 
 		ownertag_ = None;
 		points_ = 0;
 		//playertag_ = Game::Players::None;

@@ -6,7 +6,11 @@ class Condottiere : public CharacterCard
 private:
 	std::string name_;
 	bool canChoose;
+	bool gotGold;
 	void printOtherPlayerBuildingCards();
+	bool prediker();
+	bool eightBuildings();
+	int calcBuilding();
 
 public:
 	Condottiere(Game& game);
