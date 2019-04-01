@@ -59,6 +59,7 @@ void PlayingState::onEnter()
 		if (game_.characterCards()[currentCharacterIndex]->mugged() == true)
 		{
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " was bestolen dus geeft zijn geld af aan de dief");
+			game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
 			auto& player = game_.getPlayer(game_.characterCards()[currentCharacterIndex]->owner());
 			player.get_player().gold(player.get_player().gold() + game_.currentPlayer().gold());
 			game_.currentPlayer().gold(0);
