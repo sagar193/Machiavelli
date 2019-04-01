@@ -22,7 +22,6 @@ public:
 private:
 	States currentState_;
 	bool initState(ClientInfo& clientInfo, std::string cmd);
-	bool chooseState(ClientInfo& clientInfo, std::string cmd);  ///todo: remove
 	bool placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
 	bool useCharacterCard(ClientInfo& clientInfo, std::string cmd);
 	bool foldBuildingCard(ClientInfo& clientInfo, std::string cmd);
@@ -32,16 +31,18 @@ private:
 	BuildingCard& getRandomBuildingCardFromDeck() const;
 	BuildingCard* drawnBuildingCard1;
 	BuildingCard* drawnBuildingCard2;
+	void printBuildingCards() const;
 	void drawBuildingCards();
+
 	int currentCharacterIndex;
 	void printHandMessage();
 
 	void printAvailableBuildingCards() const;
 	void printCurrentPlayerBuildingCardsNonActive() const;
 	void printCurrentPlayerBuildingCardsActive() const;
-	void printAndSwitchToCharacterCardState();
+	void printEndStateOptions() const;
 
-	void printOrDontCharacterCard() const;
+	void printOrDontCharacterCardOption() const;
 	void printInitState() const;
 	bool lastround;
 	void calcPoints();
