@@ -14,10 +14,10 @@ PlayingState::PlayingState(Game& game) : State(game)
 	lastround = false;
 	currentCharacterIndex = 0;
 
-	bool initStateDone_ = false;
-	bool placeBuildingCardDone_ = false;
-	bool inFoldState_ = false;
-	bool endStateDone_ = false;
+	initStateDone_ = false;
+	placeBuildingCardDone_ = false;
+	inFoldState_ = false;
+	endStateDone_ = false;
 }
 
 void PlayingState::onEnter()
@@ -34,11 +34,11 @@ void PlayingState::onEnter()
 
 	if (position != game_.characterCards().end()) {
 		currentCharacterIndex = count;
+		initStateDone_ = false;
+		placeBuildingCardDone_ = false;
+		inFoldState_ = false;
+		endStateDone_ = false;
 
-		bool initStateDone_ = false;
-		bool placeBuildingCardDone_ = false;
-		bool inFoldState_ = false;
-		bool endStateDone_ = false;
 		currentState_ = InitState;
 
 		//todo: set current player lelijk
@@ -85,6 +85,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 		case PlayingState::InitState:
 			if (initState(clientInfo, cmd)) {
 				initStateDone_ = true;
+				printHandMessage();
 				printAvailableBuildingCards();
 				currentState_ = PlaceBuildingCard;
 			};
@@ -94,12 +95,14 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			{
 				placeBuildingCardDone_ = true;
 				currentState_ = EndState;
+				printHandMessage();
 				printEndStateOptions();
 			}
 			break;
 		case PlayingState::UseCharacterCard:
 			if (useCharacterCard(clientInfo, cmd))
 			{
+				printHandMessage();
 				returnToLastState();
 			}
 			break;
@@ -108,6 +111,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			{
 				initStateDone_ = true;
 				inFoldState_ = false;
+				printHandMessage();
 				printAvailableBuildingCards();
 				currentState_ = PlaceBuildingCard;
 			}
@@ -218,7 +222,6 @@ bool PlayingState::endState(ClientInfo & clientInfo, std::string cmd)
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
 		if (cmdi == 0) {
-			endStateDone_ = true;
 			return true;
 		}
 		else if (cmdi == -1 && game_.characterCards()[currentCharacterIndex]->usable()) {
@@ -485,6 +488,8 @@ void PlayingState::printCurrentPlayerBuildingCardsNonActive() const
 
 void PlayingState::printBuildingCards() const
 {
+	game_.sendToCurrentPlayer("");
+	game_.sendToCurrentPlayer("");
 	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken:");
 	game_.sendToCurrentPlayer("1| Kaartnaam: " + drawnBuildingCard1->name() + "| Kosten: " + std::to_string(drawnBuildingCard1->cost()) +
 		"| kleur: " + drawnBuildingCard1->colorString());
@@ -504,6 +509,8 @@ void PlayingState::drawBuildingCards()
 
 void PlayingState::printHandMessage()
 {
+	game_.sendToCurrentPlayer("");
+	game_.sendToCurrentPlayer("");
 	game_.sendToCurrentPlayer("je hebt op het moment deze kaarten in je hand");
 	printCurrentPlayerBuildingCardsNonActive();
 	game_.sendToCurrentPlayer("je stad bestaat op het moment uit deze gebouwen");
