@@ -44,7 +44,8 @@ void consume_command() // runs in its own thread
                 auto &player = clientInfo->get_player();
                 try {
                     // TODO handle command here
-					running = game.handleCommand(clientInfo, command.get_cmd());
+					if (running == true)
+						running = game.handleCommand(clientInfo, command.get_cmd());
 
                     //client << player.name() << ", you wrote: '" << command.get_cmd() << "', but I'll ignore that for now.\r\n" << machiavelli::prompt;
                 } catch (const exception& ex) {
@@ -117,6 +118,7 @@ void handle_client(Socket client) // this function runs in a separate thread
                     }
                     else if (cmd == "quit_server") {
                         running = false;
+						auto pause = 0;
                     }
 
                     ClientCommand command {cmd, client_info};
@@ -210,7 +212,7 @@ int main(int argc, const char * argv[])
     for (auto &t : all_threads) {
         t.join();
     }
-	
+	std::cout << "hat";
 	//_CrtDumpMemoryLeaks();
 
     return 0;

@@ -74,37 +74,11 @@ void Game::loadBuildingCards()
 			std::istringstream ss(line);
 			BuildingCard b;
 			ss >> b;
-			buffer.push_back(b);
-			
-			/*
-			std::string name;
-			std::string costString;
-			std::string colorString;
-			std::getline(ss, name, ';');
-			std::getline(ss, costString, ';');
-			std::getline(ss, colorString, ';');
-
-			auto color = BuildingCard::getCollor(colorString);
-			if (color != BuildingCard::NONE) {
-				BuildingCard card(name, std::stoi(costString), color);
-				//std::cout << card;
-				buffer.push_back(card);
+			if (b.color() != BuildingCard::NONE) {
+				buffer.push_back(b);
 			}
-			else
-			{
-				std::cout << "color :" << colorString << " does not exist \n";
-			}*/
-			//else
-			//{
-			//	throw std::exception("color does not exist");
-			//}
 		}
 		this->buildingCards_ = buffer;
-		//} 
-		//catch (std::exception &e)
-		//{
-		//	int k = 0;
-		//}
 	}
 	else
 	{
