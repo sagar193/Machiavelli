@@ -198,7 +198,7 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd);
-		if (cmdi == -1) {
+		if (cmdi == -1 && game_.characterCards()[currentCharacterIndex]->usable()) {
 			currentState_ = UseCharacterCard;
 			chooseState();
 		}
@@ -208,8 +208,8 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		else if (cmdi == 2) {
-			drawBuildingCards();
 			currentState_ = FoldBuildingCard;
+			chooseState();
 			return false;
 		}
 		else
@@ -242,10 +242,21 @@ void PlayingState::chooseState()
 			game_.currentClient().get_socket() << "kies een van de volgende opties\r\n";
 			game_.currentClient().get_socket() << "1: pak 2 goudstukken\r\n";
 			game_.currentClient().get_socket() << "2: pak 1 gebouwkaart en leg een weg\r\n";
-			game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
+			if (game_.characterCards()[currentCharacterIndex]->usable()) {
+				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
+			}
+		}
+		else if (currentState_ == FoldBuildingCard) {
+			drawBuildingCards();
+			if (game_.characterCards()[currentCharacterIndex]->usable()) {
+				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
+			}
 		}
 		else if (currentState_ == PlaceBuildingCard) {
 			printAvailableBuildingCards();
+			if (game_.characterCards()[currentCharacterIndex]->usable()) {
+				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
+			}
 		}
 		else if (currentState_ == UseCharacterCard) {
 			game_.characterCards()[currentCharacterIndex]->onEnter();
@@ -270,7 +281,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			return true;
 		}
 		
-		if (cmdi == -2)
+		if (cmdi == -2 && game_.characterCards()[currentCharacterIndex]->usable())
 		{
 			currentState_ = UseCharacterCard;
 			chooseState();
@@ -307,6 +318,9 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 	printAvailableBuildingCards();
 	return false;
 }
+
+
+
 //todo: kan mooier?
 bool PlayingState::useCharacterCard(ClientInfo & clientInfo, std::string cmd)
 {
@@ -317,7 +331,7 @@ bool PlayingState::foldBuildingCard(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = stoi(cmd);
-		if (cmdi == -1) {
+		if (cmdi == -1 && game_.characterCards()[currentCharacterIndex]->usable()) {
 			currentState_ = UseCharacterCard;
 			chooseState();
 		}
@@ -475,7 +489,6 @@ void PlayingState::drawBuildingCards()
 	game_.sendToCurrentPlayer("2| Kaartnaam: " + drawnBuildingCard2->name() + "| Kosten: " + std::to_string(drawnBuildingCard2->cost()) +
 		"| kleur: " + drawnBuildingCard2->colorString());
 	game_.sendToCurrentPlayer("Kies een van de 2 kaarten om te houden, de andere word weggelegd");
-
 	foldBuildingCard_ = true;
 }
 
