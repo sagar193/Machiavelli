@@ -12,7 +12,8 @@ public:
 		ChooseState,
 		PlaceBuildingCard,
 		UseCharacterCard,
-		FoldBuildingCard
+		FoldBuildingCard,
+		OptCharacterState
 	};
 	PlayingState(Game& game);
 	void onEnter() override;
@@ -21,8 +22,10 @@ public:
 	~PlayingState();
 private:
 	States currentState_;
+	States prevState_;
 	bool initState(ClientInfo& clientInfo, std::string cmd);
-	bool chooseState(ClientInfo& clientInfo, std::string cmd);
+	bool optCharacterState(ClientInfo& clientInfo, std::string cmd);
+	void chooseState();
 	bool placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
 	bool useCharacterCard(ClientInfo& clientInfo, std::string cmd);
 	bool foldBuildingCard(ClientInfo& clientInfo, std::string cmd);
@@ -37,6 +40,7 @@ private:
 	void drawBuildingCards();
 	int currentCharacterIndex;
 	void printChooseStateOptions();
+
 
 	void printAvailableBuildingCards() const;
 	void printCurrentPlayerBuildingCardsNonActive() const;
