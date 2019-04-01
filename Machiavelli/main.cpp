@@ -137,10 +137,53 @@ void handle_client(Socket client) // this function runs in a separate thread
         cerr << "handle_client crashed\n";
     }
 }
+/*
+ostream& operator<<(ostream& os,BuildingCard& card) {
+	return os << card.name() << card.cost();
+}
+
+std::istream &operator>>(std::istream& is, BuildingCard& card) {
+
+	std::string name;
+	std::string costString;
+	std::string colorString;
+
+	std::getline(is, name, ';');
+	std::getline(is, costString, ';');
+	std::getline(is, colorString, ';');
+
+	BuildingCard::colorTypes color = BuildingCard::getCollor(colorString);
+	int cost;
+	if (color != BuildingCard::NONE && std::istringstream(costString) >> cost) {
+		card.name(name);
+		card.cost(cost);
+		card.color(color);
+	}
+	else
+	{
+		std::cout << "something went wrong\r\n";
+	}
+
+	return is;
+}*/
+
 
 int main(int argc, const char * argv[])
 {
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+
+	//BuildingCard b;
+	//b.name("hello");
+	//b.color(BuildingCard::BLAUW);
+	//b.cost(5);
+
+	//std::istringstream s("Landgoed;3;geel");
+	//s >> b;
+	//std::cout << b;
+	//b.operator<<(std::cout);
+
+
+
     // start command consumer thread
     vector<thread> all_threads;
     all_threads.emplace_back(consume_command);

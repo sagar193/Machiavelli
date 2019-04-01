@@ -30,6 +30,38 @@ void Game::loadCharacterCards()
 	characterCards_.push_back(std::make_unique<Condottiere>(*this));
 }
 
+
+std::ostream& operator<<(std::ostream& os, BuildingCard& card) {
+	return os << card.name() << card.cost();
+}
+
+std::istream &operator>>(std::istream& is, BuildingCard& card) {
+
+	std::string name;
+	std::string costString;
+	std::string colorString;
+
+	std::getline(is, name, ';');
+	std::getline(is, costString, ';');
+	std::getline(is, colorString, ';');
+
+	BuildingCard::colorTypes color = BuildingCard::getCollor(colorString);
+	int cost;
+	if (color != BuildingCard::NONE && std::istringstream(costString) >> cost) {
+		card.name(name);
+		card.cost(cost);
+		card.color(color);
+	}
+	else
+	{
+		std::cout << "something went wrong\r\n";
+		std::cout << "building " << name <<" could not be read\r\n";
+	}
+
+	return is;
+}
+
+
 void Game::loadBuildingCards()
 {
 	std::ifstream is("..\\Files\\Bouwkaarten.csv", std::ifstream::binary);
@@ -40,7 +72,11 @@ void Game::loadBuildingCards()
 		//try {
 		while (std::getline(is, line)) {
 			std::istringstream ss(line);
-
+			BuildingCard b;
+			ss >> b;
+			buffer.push_back(b);
+			
+			/*
 			std::string name;
 			std::string costString;
 			std::string colorString;
@@ -57,7 +93,7 @@ void Game::loadBuildingCards()
 			else
 			{
 				std::cout << "color :" << colorString << " does not exist \n";
-			}
+			}*/
 			//else
 			//{
 			//	throw std::exception("color does not exist");
