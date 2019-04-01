@@ -37,7 +37,7 @@ public:
 	void owner(Owner const owner) { owner_ = owner; }
 	void active(bool const active) { active_ = active; }
 	bool const active() { return active_; }
-
+	std::string colorString() const;
 
 private:
 	colorTypes color_;

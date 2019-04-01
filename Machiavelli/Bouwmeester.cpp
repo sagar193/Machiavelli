@@ -28,7 +28,8 @@ void Bouwmeester::printAllBuidlingCards()
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card) 
 	{
 		if (card.owner() == player.get_player().ownertag() && !card.active()) {
-			game_.sendToCurrentPlayer(std::to_string(count) + ": " + card.name());
+			game_.sendToCurrentPlayer("\t" + std::to_string(count) + "| Kaartnaam: " + card.name() + "| Kosten: " + std::to_string(card.cost()) +
+				"| kleur: " + card.colorString());
 		}
 		count++;
 	});

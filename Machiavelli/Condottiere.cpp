@@ -4,7 +4,6 @@
 #include "Game.h"
 #include <algorithm>
 
-//todo
 void Condottiere::printOtherPlayerBuildingCards()
 {
 	int count = 1;
@@ -14,7 +13,8 @@ void Condottiere::printOtherPlayerBuildingCards()
 		auto b1 = player.get_player().ownertag() == Owner::Player1 && card.owner() == Owner::Player2;
 		auto b2 = player.get_player().ownertag() == Owner::Player2 && card.owner() == Owner::Player1;
 		if ((b1||b2)&& card.active()) {
-			game_.sendToCurrentPlayer(std::to_string(count) + ": " + card.name() + " |kost: "+ std::to_string(card.cost()-1) + " goustukken om te vernietigen");
+			game_.sendToCurrentPlayer("\t" + std::to_string(count) + "| Kaartnaam: " + card.name() + "| Kosten: " + std::to_string(card.cost() -1) +
+				"| kleur: " + card.colorString());
 		}
 		count++;
 	});

@@ -78,6 +78,21 @@ BuildingCard::colorTypes BuildingCard::getCollor(std::string color)
 	}
 	return NONE;
 }
+std::string BuildingCard::colorString() const
+{
+	switch (color_) {
+	case GEEL:
+		return "GEEL";
+	case ROOD:
+		return "ROOD";
+	case BLAUW:
+		return "BLAUW";
+	case GROEN:
+		return "GROEN";
+	default :
+		return "NONE";
+	}
+}
 /*
 std::istream & operator>>(std::istream & strm,BuildingCard & card)
 {

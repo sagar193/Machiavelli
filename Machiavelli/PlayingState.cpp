@@ -122,10 +122,11 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			onLeave();
 			return true;
 		}
-		//else if (currentState_ == Init) {
-		//	//todo: print options
-		//	printInitState();
-		//}
+		else if (currentState_ == ChooseState) {
+			//todo: print options
+			game_.sendToCurrentPlayer("\r\n\r\n\r\n");
+			printChooseStateOptions();
+		}
 	}
 	return false;
 }
@@ -378,7 +379,8 @@ void PlayingState::printCurrentPlayerBuildingCardsActive() const
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
 		if (card.owner() == game_.currentPlayer().ownertag() && card.active()) {
-			game_.sendToCurrentPlayer(std::to_string(count) + " Kaartnaam: " + card.name() + "Kosten: " + std::to_string(card.cost()));
+			game_.sendToCurrentPlayer("\t" + std::to_string(count) + "| Kaartnaam: " + card.name() + "| Kosten: " + std::to_string(card.cost()) +
+				"| kleur: " + card.colorString());
 		}
 		count++;
 	});
@@ -481,7 +483,8 @@ void PlayingState::printCurrentPlayerBuildingCardsNonActive() const
 	std::for_each(game_.buildingCards().begin(), game_.buildingCards().end(), [&](BuildingCard& card)
 	{
 		if (card.owner() == game_.currentPlayer().ownertag() && !card.active()) {
-			game_.sendToCurrentPlayer(std::to_string(count) + " cardname: " + card.name() + "cost: " + std::to_string(card.cost()));
+			game_.sendToCurrentPlayer("\t" + std::to_string(count) + "| Kaartnaam: " + card.name() + "| Kosten: " + std::to_string(card.cost()) +
+				"| kleur: " + card.colorString());
 		}
 		count++;
 	});
@@ -493,10 +496,13 @@ void PlayingState::drawBuildingCards()
 	drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
 	drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
 	drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
-	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken: \r\n"
-		"1 " + drawnBuildingCard1->name() + " \r\n"
-		"2 " + drawnBuildingCard2->name() + "\r\n"
-		"Kies een van de 2 kaarten om te houden, de andere word weggelegd");
+	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken:");
+	game_.sendToCurrentPlayer("1| Kaartnaam: " + drawnBuildingCard1->name() + "| Kosten: " + std::to_string(drawnBuildingCard1->cost()) +
+		"| kleur: " + drawnBuildingCard1->colorString());
+	game_.sendToCurrentPlayer("2| Kaartnaam: " + drawnBuildingCard2->name() + "| Kosten: " + std::to_string(drawnBuildingCard2->cost()) +
+		"| kleur: " + drawnBuildingCard2->colorString());
+	game_.sendToCurrentPlayer("Kies een van de 2 kaarten om te houden, de andere word weggelegd");
+
 	inFoldState_ = false;
 }
 

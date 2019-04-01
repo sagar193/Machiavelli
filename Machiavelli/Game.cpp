@@ -65,52 +65,32 @@ std::istream &operator>>(std::istream& is, BuildingCard& card) {
 void Game::loadBuildingCards()
 {
 	std::ifstream is("..\\Files\\Bouwkaarten.csv", std::ifstream::binary);
-	if (is) {
+	try {
+		if (is) {
 
-		std::vector<BuildingCard> buffer;
-		std::string line;
-		//try {
-		while (std::getline(is, line)) {
-			std::istringstream ss(line);
-			BuildingCard b;
-			ss >> b;
-			buffer.push_back(b);
-			
-			/*
-			std::string name;
-			std::string costString;
-			std::string colorString;
-			std::getline(ss, name, ';');
-			std::getline(ss, costString, ';');
-			std::getline(ss, colorString, ';');
-
-			auto color = BuildingCard::getCollor(colorString);
-			if (color != BuildingCard::NONE) {
-				BuildingCard card(name, std::stoi(costString), color);
-				//std::cout << card;
-				buffer.push_back(card);
+			std::vector<BuildingCard> buffer;
+			std::string line;
+			//try {
+			while (std::getline(is, line)) {
+				std::istringstream ss(line);
+				BuildingCard b;
+				ss >> b;
+				if (b.color() != BuildingCard::NONE) {
+					buffer.push_back(b);
+				}
 			}
-			else
-			{
-				std::cout << "color :" << colorString << " does not exist \n";
-			}*/
-			//else
-			//{
-			//	throw std::exception("color does not exist");
-			//}
+			this->buildingCards_ = buffer;
 		}
-		this->buildingCards_ = buffer;
-		//} 
-		//catch (std::exception &e)
-		//{
-		//	int k = 0;
-		//}
+		else
+		{
+			std::cout << "file could not be loaded" << std::endl;
+		}
+		is.close();
 	}
-	else
-	{
+	catch (std::exception e) {
 		std::cout << "file could not be loaded" << std::endl;
+		std::cout << e.what() << std::endl;
 	}
-	is.close();
 }
 
 void Game::switchCurrentClientInfo()
@@ -199,8 +179,12 @@ void Game::sendToCurrentPlayer(const std::string message) const
 
 void Game::sendToAllPlayers(const std::string message) const
 {
-	client_info1->get_socket() << message << "\r\n";
-	client_info2->get_socket() << message << "\r\n";
+	if (client_info1 != nullptr) {
+		client_info1->get_socket() << message << "\r\n";
+	}
+	if (client_info2 != nullptr) {
+		client_info2->get_socket() << message << "\r\n";
+	}
 }
 
 void Game::setState(States state)
