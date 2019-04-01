@@ -100,14 +100,9 @@ void Bouwmeester::onLeave()
 	mugged_ = false;
 }
 
-void Bouwmeester::rank(int const rank)
+bool Bouwmeester::usable() const
 {
-	rank_ = rank;
-}
-
-int const Bouwmeester::rank() const
-{
-	return rank_;
+	return false;
 }
 
 void Bouwmeester::name(std::string const name)

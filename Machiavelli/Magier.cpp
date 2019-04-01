@@ -91,17 +91,6 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 	return false;
 }
 
-
-void Magier::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Magier::rank() const
-{
-	return rank_;
-}
-
 void Magier::name(std::string const name)
 {
 	name_ = name;
@@ -110,5 +99,10 @@ void Magier::name(std::string const name)
 std::string const Magier::name() const
 {
 	return name_;
+}
+
+bool Magier::usable() const
+{
+	return false;
 }
 

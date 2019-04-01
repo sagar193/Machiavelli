@@ -6,7 +6,6 @@ class Bouwmeester : public CharacterCard
 {
 private:
 	std::string name_;
-	int rank_;
 
 	BuildingCard & getRandomBuildingCardFromDeck() const;
 	int countPlacableBuildings;
@@ -20,8 +19,7 @@ public:
 	bool act(ClientInfo& clientInfo, std::string cmd) override;
 	void onLeave() override;
 
-	void rank(int const rank) override;
-	int const rank() const override;
+	bool usable() const override;
 	void name(std::string const name) override;
 	std::string const name() const override;
 

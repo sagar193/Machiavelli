@@ -45,17 +45,6 @@ bool Koning::act(ClientInfo & clientInfo, std::string cmd)
 	return true;
 }
 
-
-void Koning::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Koning::rank() const
-{
-	return rank_;
-}
-
 void Koning::name(std::string const name)
 {
 	name_ = name;
@@ -64,5 +53,10 @@ void Koning::name(std::string const name)
 std::string const Koning::name() const
 {
 	return name_;
+}
+
+bool Koning::usable() const
+{
+	return false;
 }
 

@@ -51,17 +51,6 @@ void Prediker::onLeave()
 	mugged_ = false;
 }
 
-
-void Prediker::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Prediker::rank() const
-{
-	return rank_;
-}
-
 void Prediker::name(std::string const name)
 {
 	name_ = name;
@@ -70,6 +59,11 @@ void Prediker::name(std::string const name)
 std::string const Prediker::name() const
 {
 	return name_;
+}
+
+bool Prediker::usable() const
+{
+	return false;
 }
 
 void Prediker::removeBuildingCard(int index)

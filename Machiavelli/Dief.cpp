@@ -67,17 +67,6 @@ void Dief::printAllCharacters() const
 	});
 }
 
-
-void Dief::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Dief::rank() const
-{
-	return rank_;
-}
-
 void Dief::name(std::string const name)
 {
 	name_ = name;
@@ -86,5 +75,10 @@ void Dief::name(std::string const name)
 std::string const Dief::name() const
 {
 	return name_;
+}
+
+bool Dief::usable() const
+{
+	return false;
 }
 

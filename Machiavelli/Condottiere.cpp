@@ -89,14 +89,9 @@ bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)
 	return true;
 }
 
-void Condottiere::rank(int const rank)
+bool Condottiere::usable() const
 {
-	rank_ = rank;
-}
-
-int const Condottiere::rank() const
-{
-	return rank_;
+	return false;
 }
 
 void Condottiere::name(std::string const name)

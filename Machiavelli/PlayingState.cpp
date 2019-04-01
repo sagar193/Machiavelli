@@ -231,19 +231,16 @@ bool PlayingState::chooseState(ClientInfo & clientInfo, std::string cmd)
 		}
 		else if (cmdi == 1 && !initState_) {
 			currentState_ = InitState;
-			//todo:text opties
 			game_.currentClient().get_socket() << "kies een van de volgende opties\r\n";
 			game_.currentClient().get_socket() << "1: pak 2 goudstukken\r\n";
 			game_.currentClient().get_socket() << "2: pak 1 gebouwkaart en leg een weg\r\n";
 		}
 		else if (cmdi == 2 && !placedBuildingCard_) {
 			currentState_ = PlaceBuildingCard;
-			//todo:text opties
 			printAvailableBuildingCards();
 		}
-		else if (cmdi == 3 /*&& !usedCharacterCard_*/) {
+		else if (cmdi == 3 && game_.characterCards()[currentCharacterIndex]->usable()) {
 			currentState_ = UseCharacterCard;
-			//todo:text opties
 			game_.characterCards()[currentCharacterIndex]->onEnter();
 		}
 		else {
@@ -464,8 +461,8 @@ void PlayingState::printChooseStateOptions()
 	if (!placedBuildingCard_) {
 		game_.sendToCurrentPlayer("2: plaats gebouw");
 	}
-	//if (!usedCharacterCard_) {
+	if (game_.characterCards()[currentCharacterIndex]->usable()) {
 	game_.sendToCurrentPlayer("3: gebuik karakterkaart");
-	//}
+	}
 	game_.sendToCurrentPlayer("0: stop beurt");
 }
