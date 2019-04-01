@@ -102,7 +102,10 @@ void Bouwmeester::onLeave()
 
 bool Bouwmeester::usable() const
 {
-	return false;
+	if (hasdrawn_ == true && countPlacableBuildings == 0)
+		return false;
+	else
+		return true;
 }
 
 void Bouwmeester::name(std::string const name)

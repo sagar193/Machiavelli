@@ -63,7 +63,7 @@ std::string const Prediker::name() const
 
 bool Prediker::usable() const
 {
-	return false;
+	return !used_;
 }
 
 void Prediker::removeBuildingCard(int index)

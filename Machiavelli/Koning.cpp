@@ -9,6 +9,7 @@ Koning::Koning(Game& game) : CharacterCard(game)
 	this->name_ = "Koning";
 	characterCardIdentifier_ = CharacterCardEnum::KONING;
 	mugged_ = false;
+	usable_ = true;
 }
 
 
@@ -38,10 +39,12 @@ void Koning::onEnter()
 void Koning::onLeave()
 {
 	mugged_ = false;
+	usable_ = true;
 }
 
 bool Koning::act(ClientInfo & clientInfo, std::string cmd)
 {
+	usable_ = false;
 	return true;
 }
 
@@ -57,6 +60,6 @@ std::string const Koning::name() const
 
 bool Koning::usable() const
 {
-	return false;
+	return usable_;
 }
 

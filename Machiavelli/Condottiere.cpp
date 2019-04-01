@@ -91,7 +91,7 @@ bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)
 
 bool Condottiere::usable() const
 {
-	return false;
+	return canChoose;
 }
 
 void Condottiere::name(std::string const name)

@@ -47,6 +47,7 @@ void Koopman::onLeave()
 
 bool Koopman::act(ClientInfo & clientInfo, std::string cmd)
 {
+	used_ = true;
 	return true;
 }
 
@@ -62,6 +63,6 @@ std::string const Koopman::name() const
 
 bool Koopman::usable() const
 {
-	return false;
+	return !used_;
 }
 

@@ -9,6 +9,7 @@ Dief::Dief(Game& game) : CharacterCard(game)
 	this->name_ = "Dief";
 	characterCardIdentifier_ = CharacterCardEnum::DIEF;
 	mugged_ = false;
+	usable_ = true;
 }
 
 
@@ -25,6 +26,7 @@ void Dief::onEnter()
 void Dief::onLeave()
 {
 	mugged_ = false;
+	usable_ = true;
 }
 
 bool Dief::act(ClientInfo & clientInfo, std::string cmd)
@@ -42,6 +44,7 @@ bool Dief::act(ClientInfo & clientInfo, std::string cmd)
 			bool success = chosenCard.mugged(true);
 			if (success == true) {
 				game_.sendToAllPlayers("De dief heeft de " + chosenCard.name() + " beroofd.");
+				usable_ = false;
 				return true;
 			}
 			else {
@@ -79,6 +82,6 @@ std::string const Dief::name() const
 
 bool Dief::usable() const
 {
-	return false;
+	return usable_;
 }
 
