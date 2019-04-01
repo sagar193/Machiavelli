@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "BuildingCard.h"
 
+BuildingCard::BuildingCard()
+{
+	cost_ = 0;
+	color_ = colorTypes::NONE;
+	active_ = false;
+	owner_ = Deck;
+}
+
 BuildingCard::BuildingCard(std::string name, int cost, colorTypes color)
 {
 	name_ = name;

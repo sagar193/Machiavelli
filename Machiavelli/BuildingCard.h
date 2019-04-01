@@ -14,7 +14,7 @@ public:
 		ROOD,
 		NONE
 	};
-	BuildingCard() = default;
+	BuildingCard();
 	BuildingCard(std::string name,int cost,colorTypes color);
 	//BuildingCard(const BuildingCard& other) = delete;
 	//BuildingCard& operator =(const BuildingCard& other) = delete;
@@ -37,6 +37,8 @@ public:
 	void owner(Owner const owner) { owner_ = owner; }
 	void active(bool const active) { active_ = active; }
 	bool const active() { return active_; }
+
+
 private:
 	colorTypes color_;
 	std::string name_;
