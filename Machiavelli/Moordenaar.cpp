@@ -9,6 +9,7 @@ Moordenaar::Moordenaar(Game& game) : CharacterCard(game)
 	this->name_ = "Moordenaar";
 	characterCardIdentifier_ = CharacterCardEnum::MOORDENAAR;
 	mugged_ = false;
+	usable_ = true;
 }
 
 
@@ -22,14 +23,21 @@ void Moordenaar::onEnter()
 	printAllCharacters();
 }
 
+void Moordenaar::onLeave()
+{
+	mugged_ = false;
+	usable_ = true;
+}
+
 bool Moordenaar::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd) - 1;
-		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
-			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+		if (cmdi >= 0 && cmdi < game_.characterCards().size() - 1) {
+			CharacterCard& chosenCard = *game_.characterCards().at(cmdi + 1);
 			chosenCard.owner(Owner::Killed);
 			game_.sendToAllPlayers("De moordenaar heeft de " + chosenCard.name() + " vermoord.");
+			usable_ = false;
 			return true;
 		}
 	}
@@ -63,17 +71,6 @@ void Moordenaar::printAllCharacters() const
 	});
 }
 
-
-void Moordenaar::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Moordenaar::rank() const
-{
-	return rank_;
-}
-
 void Moordenaar::name(std::string const name)
 {
 	name_ = name;
@@ -82,4 +79,9 @@ void Moordenaar::name(std::string const name)
 std::string const Moordenaar::name() const
 {
 	return name_;
+}
+
+bool Moordenaar::usable() const
+{
+	return usable_;
 }

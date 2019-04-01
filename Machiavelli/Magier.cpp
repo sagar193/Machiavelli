@@ -10,6 +10,7 @@ Magier::Magier(Game& game) : CharacterCard(game)
 	this->name_ = "Magier";
 	characterCardIdentifier_ = CharacterCardEnum::MAGIER;
 	mugged_ = false;
+	usable_ = true;
 }
 
 
@@ -21,6 +22,12 @@ void Magier::onEnter()
 {
 	this->game_.sendToCurrentPlayer("Toets 1 om alle handkaarten om te ruilen met de andere speler");
 	this->game_.sendToCurrentPlayer("Toets 2 om je kaarten handkaarten weg te doen en een even aantal gebouwenkaarten te trekken");
+}
+
+void Magier::onLeave()
+{
+	mugged_ = false;
+	usable_ = true;
 }
 
 bool Magier::act(ClientInfo & clientInfo, std::string cmd)
@@ -48,6 +55,7 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 			std::for_each(player2Cards.begin(), player2Cards.end(), [&](BuildingCard* card) {
 				card->owner(Player1);
 			});
+			usable_ = false;
 			return true;
 
 		}
@@ -77,6 +85,7 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 				card->owner(None);
 			});
 
+			usable_ = false;
 			return true;
 		}
 	}
@@ -84,17 +93,6 @@ bool Magier::act(ClientInfo & clientInfo, std::string cmd)
 	onEnter();
 
 	return false;
-}
-
-
-void Magier::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Magier::rank() const
-{
-	return rank_;
 }
 
 void Magier::name(std::string const name)
@@ -105,5 +103,10 @@ void Magier::name(std::string const name)
 std::string const Magier::name() const
 {
 	return name_;
+}
+
+bool Magier::usable() const
+{
+	return usable_;
 }
 

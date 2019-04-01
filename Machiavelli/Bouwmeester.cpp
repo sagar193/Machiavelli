@@ -102,16 +102,15 @@ void Bouwmeester::onLeave()
 {
 	hasdrawn_ = false;
 	countPlacableBuildings = 3;
+	mugged_ = false;
 }
 
-void Bouwmeester::rank(int const rank)
+bool Bouwmeester::usable() const
 {
-	rank_ = rank;
-}
-
-int const Bouwmeester::rank() const
-{
-	return rank_;
+	if (hasdrawn_ == true && countPlacableBuildings == 0)
+		return false;
+	else
+		return true;
 }
 
 void Bouwmeester::name(std::string const name)

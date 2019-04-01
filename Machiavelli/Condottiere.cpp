@@ -117,6 +117,7 @@ void Condottiere::onEnter()
 void Condottiere::onLeave()
 {
 	canChoose = true;
+	mugged_ = false;
 	gotGold = false;
 }
 
@@ -152,14 +153,12 @@ bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)
 	return true;
 }
 
-void Condottiere::rank(int const rank)
+bool Condottiere::usable() const
 {
-	rank_ = rank;
-}
-
-int const Condottiere::rank() const
-{
-	return rank_;
+	if (canChoose == true && gotGold == false)
+		return true;
+	else
+		return false;
 }
 
 void Condottiere::name(std::string const name)

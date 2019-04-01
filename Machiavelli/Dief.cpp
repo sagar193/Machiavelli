@@ -9,6 +9,7 @@ Dief::Dief(Game& game) : CharacterCard(game)
 	this->name_ = "Dief";
 	characterCardIdentifier_ = CharacterCardEnum::DIEF;
 	mugged_ = false;
+	usable_ = true;
 }
 
 
@@ -22,18 +23,32 @@ void Dief::onEnter()
 	printAllCharacters();
 }
 
+void Dief::onLeave()
+{
+	mugged_ = false;
+	usable_ = true;
+}
+
 bool Dief::act(ClientInfo & clientInfo, std::string cmd)
 {
 	if (!cmd.empty()) {
 		int cmdi = std::stoi(cmd) - 1;
 		if (cmdi >= 0 && cmdi < game_.characterCards().size()) {
 			CharacterCard& chosenCard = *game_.characterCards().at(cmdi);
+			if (chosenCard.owner() == Killed) {
+				game_.sendToCurrentPlayer("Deze speler is deze ronde al vermoord, kies een andere character.");
+				printAllCharacters();
+				return false;
+			}
+				
 			bool success = chosenCard.mugged(true);
 			if (success == true) {
 				game_.sendToAllPlayers("De dief heeft de " + chosenCard.name() + " beroofd.");
+				usable_ = false;
 				return true;
 			}
 			else {
+				printAllCharacters();
 				return false;
 			}
 		}
@@ -55,17 +70,6 @@ void Dief::printAllCharacters() const
 	});
 }
 
-
-void Dief::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Dief::rank() const
-{
-	return rank_;
-}
-
 void Dief::name(std::string const name)
 {
 	name_ = name;
@@ -74,5 +78,10 @@ void Dief::name(std::string const name)
 std::string const Dief::name() const
 {
 	return name_;
+}
+
+bool Dief::usable() const
+{
+	return usable_;
 }
 

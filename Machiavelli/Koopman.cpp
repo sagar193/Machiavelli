@@ -42,22 +42,13 @@ void Koopman::onEnter()
 void Koopman::onLeave()
 {
 	used_ = false;
+	mugged_ = false;
 }
 
 bool Koopman::act(ClientInfo & clientInfo, std::string cmd)
 {
+	used_ = true;
 	return true;
-}
-
-
-void Koopman::rank(int const rank)
-{
-	rank_ = rank;
-}
-
-int const Koopman::rank() const
-{
-	return rank_;
 }
 
 void Koopman::name(std::string const name)
@@ -68,5 +59,10 @@ void Koopman::name(std::string const name)
 std::string const Koopman::name() const
 {
 	return name_;
+}
+
+bool Koopman::usable() const
+{
+	return !used_;
 }
 
