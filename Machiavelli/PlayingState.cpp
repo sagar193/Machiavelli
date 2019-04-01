@@ -55,13 +55,16 @@ void PlayingState::onEnter()
 		if (game_.characterCards()[currentCharacterIndex]->mugged() == true)
 		{
 			game_.sendToAllPlayers("de " + game_.characterCards()[currentCharacterIndex]->name() + " was bestolen dus geeft zijn geld af aan de dief");
-			game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
 			auto& player = game_.getPlayer(game_.characterCards()[currentCharacterIndex]->owner());
 			player.get_player().gold(player.get_player().gold() + game_.currentPlayer().gold());
 			game_.currentPlayer().gold(0);
+			game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
 		}
 
+
+		//printChooseStateOptions();
 		chooseState();
+		drawBuildingCards();
 	}
 	else
 	{
@@ -88,6 +91,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			if (initState(clientInfo, cmd)) {
 				initState_ = true;
 				currentState_ = PlaceBuildingCard;
+				prevState_ = PlaceBuildingCard;
 				chooseState();
 			};
 			break;
@@ -96,6 +100,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			{
 				if (game_.characterCards()[currentCharacterIndex]->usable()) {
 					currentState_ = OptCharacterState;
+					prevState_ = OptCharacterState;
 					chooseState();
 					return true;
 				}
@@ -112,7 +117,7 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			if (useCharacterCard(clientInfo, cmd))
 			{
 				currentState_ = prevState_;
-				if (currentState_ == OptCharacterState) {
+				if (currentState_ == OptCharacterState && !game_.characterCards()[currentCharacterIndex]->usable()) {
 					onLeave();
 					return true;
 				}
@@ -123,13 +128,15 @@ bool PlayingState::act(ClientInfo& clientInfo,std::string cmd)
 			if (foldBuildingCard(clientInfo, cmd))
 			{
 				currentState_ = PlaceBuildingCard;
+				prevState_ = PlaceBuildingCard;
+				chooseState();
 			}
 			break;
 		}
 
 		//todo:leave
 		if (placedBuildingCard_ && usedCharacterCard_ && initState_) {
-			onLeave();
+			//onLeave();
 			return true;
 		}
 		else {
@@ -209,6 +216,7 @@ bool PlayingState::initState(ClientInfo & clientInfo, std::string cmd)
 		}
 		else if (cmdi == 2) {
 			currentState_ = FoldBuildingCard;
+			prevState_ = FoldBuildingCard;
 			chooseState();
 			return false;
 		}
@@ -227,6 +235,7 @@ bool PlayingState::optCharacterState(ClientInfo & clientInfo, std::string cmd)
 		int cmdi = stoi(cmd);
 		if (cmdi == 1) {
 			currentState_ = UseCharacterCard;
+			chooseState();
 		}
 		else {
 			return true;
@@ -237,38 +246,40 @@ bool PlayingState::optCharacterState(ClientInfo & clientInfo, std::string cmd)
 
 void PlayingState::chooseState()
 {
-	
-		if (currentState_ == InitState) {
-			game_.currentClient().get_socket() << "kies een van de volgende opties\r\n";
-			game_.currentClient().get_socket() << "1: pak 2 goudstukken\r\n";
-			game_.currentClient().get_socket() << "2: pak 1 gebouwkaart en leg een weg\r\n";
-			if (game_.characterCards()[currentCharacterIndex]->usable()) {
-				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
-			}
+	game_.sendToCurrentPlayer("");
+	printChooseStateOptions();
+	if (currentState_ == InitState) {
+		game_.currentClient().get_socket() << "kies een van de volgende opties\r\n";
+		game_.currentClient().get_socket() << "1: pak 2 goudstukken\r\n";
+		game_.currentClient().get_socket() << "2: pak 1 gebouwkaart en leg een weg\r\n";
+		if (game_.characterCards()[currentCharacterIndex]->usable()) {
+			game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
 		}
-		else if (currentState_ == FoldBuildingCard) {
-			drawBuildingCards();
-			if (game_.characterCards()[currentCharacterIndex]->usable()) {
-				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
-			}
+	}
+	else if (currentState_ == FoldBuildingCard) {
+		//drawBuildingCards();
+		printDrawnBuildingCards();
+		if (game_.characterCards()[currentCharacterIndex]->usable()) {
+			game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
 		}
-		else if (currentState_ == PlaceBuildingCard) {
-			printAvailableBuildingCards();
-			if (game_.characterCards()[currentCharacterIndex]->usable()) {
-				game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
-			}
+	}
+	else if (currentState_ == PlaceBuildingCard) {
+		printAvailableBuildingCards();
+		if (game_.characterCards()[currentCharacterIndex]->usable()) {
+			game_.currentClient().get_socket() << "-1: gebruik karakterkaart\r\n";
 		}
-		else if (currentState_ == UseCharacterCard) {
-			game_.characterCards()[currentCharacterIndex]->onEnter();
-		}
-		else if (currentState_ == OptCharacterState) {
-			game_.sendToCurrentPlayer("de characterkaart is nog niet gebruikt wilt u deze nog gebruiken?");
-			game_.sendToCurrentPlayer("1: ja");
-			game_.sendToCurrentPlayer("2: nee");
-		}
-		else {
-			game_.currentClient().get_socket() << "ongeldige keuze\r\n";
-		}
+	}
+	else if (currentState_ == UseCharacterCard) {
+		game_.characterCards()[currentCharacterIndex]->onEnter();
+	}
+	else if (currentState_ == OptCharacterState) {
+		game_.sendToCurrentPlayer("de karakterkaart kan nog gebruikt worden wil je de kaart nu gebruiken?");
+		game_.sendToCurrentPlayer("1: ja");
+		game_.sendToCurrentPlayer("2: nee");
+	}
+	else {
+		game_.currentClient().get_socket() << "ongeldige keuze\r\n";
+	}
 	
 }
 
@@ -285,7 +296,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 		{
 			currentState_ = UseCharacterCard;
 			chooseState();
-			
+			return false;
 		}
 		//todo: out of range error
 		else if (cmdi < 0 || cmdi >= game_.buildingCards().size()) {
@@ -293,7 +304,7 @@ bool PlayingState::placeBuildingCard(ClientInfo & clientInfo, std::string cmd)
 			return false;
 		}
 		BuildingCard& chosenCard = game_.buildingCards().at(cmdi);
-		if (chosenCard.owner() != game_.currentPlayer().ownertag() && chosenCard.active()) {
+		if (chosenCard.owner() != game_.currentPlayer().ownertag() || chosenCard.active()) {
 			//game_.sendToCurrentPlayer("Chosen card is not in your possession, please choose a card in your possession \r\n");
 			game_.sendToCurrentPlayer("Je kan deze kaart niet kiezen.");
 			printAvailableBuildingCards();
@@ -378,7 +389,6 @@ void PlayingState::printAvailableBuildingCards() const
 	game_.sendToCurrentPlayer("Beschikbare kaarten: ");
 	printCurrentPlayerBuildingCardsNonActive();
 	game_.sendToCurrentPlayer("Toets 0 om geen gebouwen te plaatsen.");
-	game_.sendToCurrentPlayer("Toets -1 om karakterkaart te gebruiken.");
 }
 
 void PlayingState::printCurrentPlayerBuildingCardsActive() const
@@ -477,12 +487,7 @@ void PlayingState::printCurrentPlayerBuildingCardsNonActive() const
 	});
 }
 
-void PlayingState::drawBuildingCards()
-{
-	drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
-	drawnBuildingCard1->owner(game_.currentPlayer().ownertag());
-	drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
-	drawnBuildingCard2->owner(game_.currentPlayer().ownertag());
+void PlayingState::printDrawnBuildingCards() {
 	game_.sendToCurrentPlayer("Je hebt de volgende kaarten getrokken:");
 	game_.sendToCurrentPlayer("1| Kaartnaam: " + drawnBuildingCard1->name() + "| Kosten: " + std::to_string(drawnBuildingCard1->cost()) +
 		"| kleur: " + drawnBuildingCard1->colorString());
@@ -492,6 +497,14 @@ void PlayingState::drawBuildingCards()
 	foldBuildingCard_ = true;
 }
 
+void PlayingState::drawBuildingCards()
+{
+	drawnBuildingCard1 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard1->owner(Owner::None);
+	drawnBuildingCard2 = &getRandomBuildingCardFromDeck();
+	drawnBuildingCard2->owner(Owner::None);
+}
+
 void PlayingState::printChooseStateOptions()
 {
 	game_.sendToCurrentPlayer("je hebt op het moment deze kaarten in je hand");
@@ -499,16 +512,4 @@ void PlayingState::printChooseStateOptions()
 	game_.sendToCurrentPlayer("je stad bestaat op het moment uit deze gebouwen");
 	printCurrentPlayerBuildingCardsActive();
 	game_.sendToCurrentPlayer("je hebt op het moment " + std::to_string(game_.currentClient().get_player().gold()) + " goudstukken");
-
-	game_.currentClient().get_socket() << "kies uit een van de volgende mogelijkheden\r\n";
-	if (!initState_) {
-		game_.sendToCurrentPlayer("1: pak 2 munten of pak 1 en leg 1 gebouwkaart weg");
-	}
-	if (!placedBuildingCard_) {
-		game_.sendToCurrentPlayer("2: plaats gebouw");
-	}
-	if (game_.characterCards()[currentCharacterIndex]->usable()) {
-	game_.sendToCurrentPlayer("3: gebuik karakterkaart");
-	}
-	game_.sendToCurrentPlayer("0: stop beurt");
 }

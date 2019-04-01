@@ -13,7 +13,7 @@ public:
 		PlaceBuildingCard,
 		UseCharacterCard,
 		FoldBuildingCard,
-		OptCharacterState
+		OptCharacterState,
 	};
 	PlayingState(Game& game);
 	void onEnter() override;
@@ -38,6 +38,7 @@ private:
 	BuildingCard* drawnBuildingCard1;
 	BuildingCard* drawnBuildingCard2;
 	void drawBuildingCards();
+	void printDrawnBuildingCards();
 	int currentCharacterIndex;
 	void printChooseStateOptions();
 
