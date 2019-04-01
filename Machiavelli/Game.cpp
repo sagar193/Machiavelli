@@ -65,26 +65,32 @@ std::istream &operator>>(std::istream& is, BuildingCard& card) {
 void Game::loadBuildingCards()
 {
 	std::ifstream is("..\\Files\\Bouwkaarten.csv", std::ifstream::binary);
-	if (is) {
+	try {
+		if (is) {
 
-		std::vector<BuildingCard> buffer;
-		std::string line;
-		//try {
-		while (std::getline(is, line)) {
-			std::istringstream ss(line);
-			BuildingCard b;
-			ss >> b;
-			if (b.color() != BuildingCard::NONE) {
-				buffer.push_back(b);
+			std::vector<BuildingCard> buffer;
+			std::string line;
+			//try {
+			while (std::getline(is, line)) {
+				std::istringstream ss(line);
+				BuildingCard b;
+				ss >> b;
+				if (b.color() != BuildingCard::NONE) {
+					buffer.push_back(b);
+				}
 			}
+			this->buildingCards_ = buffer;
 		}
-		this->buildingCards_ = buffer;
+		else
+		{
+			std::cout << "file could not be loaded" << std::endl;
+		}
+		is.close();
 	}
-	else
-	{
+	catch (std::exception e) {
 		std::cout << "file could not be loaded" << std::endl;
+		std::cout << e.what() << std::endl;
 	}
-	is.close();
 }
 
 void Game::switchCurrentClientInfo()
