@@ -9,7 +9,7 @@ class PlayingState : public State
 public:
 	enum States {
 		InitState,
-		ChooseState,
+		EndState,
 		PlaceBuildingCard,
 		UseCharacterCard,
 		FoldBuildingCard
@@ -22,30 +22,37 @@ public:
 private:
 	States currentState_;
 	bool initState(ClientInfo& clientInfo, std::string cmd);
-	bool chooseState(ClientInfo& clientInfo, std::string cmd);
+	bool chooseState(ClientInfo& clientInfo, std::string cmd);  ///todo: remove
 	bool placeBuildingCard(ClientInfo& clientInfo, std::string cmd);
 	bool useCharacterCard(ClientInfo& clientInfo, std::string cmd);
 	bool foldBuildingCard(ClientInfo& clientInfo, std::string cmd);
-	bool initState_;
-	bool placedBuildingCard_;
-	bool usedCharacterCard_;
-	bool foldBuildingCard_;
+	bool endState(ClientInfo& clientInfo, std::string cmd);
+	void returnToLastState();
+
 	BuildingCard& getRandomBuildingCardFromDeck() const;
-	//BuildingCard& getBuildingCardFromPlayer() const;
 	BuildingCard* drawnBuildingCard1;
 	BuildingCard* drawnBuildingCard2;
 	void drawBuildingCards();
 	int currentCharacterIndex;
-	void printChooseStateOptions();
+	void printHandMessage();
 
 	void printAvailableBuildingCards() const;
 	void printCurrentPlayerBuildingCardsNonActive() const;
 	void printCurrentPlayerBuildingCardsActive() const;
+	void printAndSwitchToCharacterCardState();
+
+	void printOrDontCharacterCard() const;
+	void printInitState() const;
 	bool lastround;
 	void calcPoints();
 	void calcColorPoints();
 	void calcBuildingPoints();
 	void endGame();
+
+	bool initStateDone_;
+	bool placeBuildingCardDone_;
+	bool inFoldState_;
+	bool endStateDone_;
 	//Game::Players endPlayer;
 };
 
