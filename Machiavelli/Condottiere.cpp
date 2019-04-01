@@ -155,7 +155,10 @@ bool Condottiere::act(ClientInfo & clientInfo, std::string cmd)
 
 bool Condottiere::usable() const
 {
-	return canChoose;
+	if (canChoose == true && gotGold == false)
+		return true;
+	else
+		return false;
 }
 
 void Condottiere::name(std::string const name)
